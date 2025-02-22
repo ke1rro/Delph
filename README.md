@@ -15,7 +15,7 @@
 
 6. ```pip install -r requirements.txt```
 
-7. Run - `main.py`
+7. Run - `app.py`
 
 > [!IMPORTANT]
 > To work with repository create new branch from `dev` and submit pull request
