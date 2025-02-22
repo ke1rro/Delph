@@ -1,0 +1,163 @@
+"""User models(PostgreSQL)"""
+
+import enum
+import os
+import uuid
+
+from dotenv import load_dotenv
+from sqlalchemy import UUID, Enum, ForeignKey, Integer, String
+from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+load_dotenv()
+POSTGRES_HOST = os.getenv("POSTGRES_HOST")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT")
+POSTGRES_DB = os.getenv("POSTGRES_DB")
+POSTGRES_USER = os.getenv("POSTGRES_USER")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+
+DATABASE_URL = (
+    f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
+    f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+)
+
+engine = create_async_engine(url=DATABASE_URL, pool_pre_ping=True)
+# Session factory
+SessionLocal = async_sessionmaker(autoflush=False, bind=engine)
+
+
+class Base(AsyncAttrs, DeclarativeBase):
+    """Base class for models instantiating"""
+
+    ...
+
+
+class PermissionAction(enum.Enum):
+    """
+    Defines the constants values for user's basic actions
+    """
+
+    READ = "read"
+    WRITE = "write"
+    DELETE = "delete"
+
+
+class ResourceType(enum.Enum):
+    """
+    Defines the constants of resource user can interact with via
+    permissions.
+    """
+
+    REPORT = "report"
+    # TODO More resources
+
+
+class Role(Base):
+    """
+    Represents a role in the system with a unique identifier and a name.
+
+    Attributes:
+        id (int): The unique identifier for the role (primary key).
+        name (str): The name of the role, must be unique and not null.
+        permissions (list): A many-to-many
+        relationship with the `Permission` model,
+        representing the permissions associated with the role.
+    """
+
+    __tablename__ = "roles"
+
+    id: Mapped[int] = mapped_column(Integer,
+                                    primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+
+    permissions: Mapped["Permission"] = relationship(
+        "Permission", secondary="role_permissions", back_populates="roles"
+    )
+
+
+class User(Base):
+    """
+    Represents user in the system and an associated role.
+
+        Attributes:
+        id (int): The unique identifier for the user in database(primary key).
+        user_id (uuid.UUID): A unique identifier for the user,
+        stored as a UUID.
+        name (str): The first name of the user.
+        surname (str): The last name of the user.
+        role_id (int): The identifier for the user's role,
+        a foreign key to the `roles` table.
+        role (Role): A relationship with the `Role` model,
+        representing the user's assigned role.
+    """
+
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    user_id: Mapped[uuid] = mapped_column(
+        UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4
+    )
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    surname: Mapped[str] = mapped_column(String(64), nullable=False)
+    email: Mapped[str] = mapped_column(String(320), nullable=False)
+    role_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("roles.id"), nullable=False
+    )
+
+    role: Mapped[Role] = relationship("Role")
+
+
+class Permission(Base):
+    """
+    Represents a permission that defines an allowed action on a specific resource.
+
+    Attributes:
+        id (int): The unique identifier for the permission (primary key).
+        action (PermissionAction): The type of action allowed, such as "read", "write", or "delete".
+        resource (ResourceType): The resource on which the action is performed,
+        such as "user", "mission", or "report".
+        roles (list[Role]): A many-to-many relationship with the `Role` model,
+                            representing roles that have this permission.
+    """
+
+    __tablename__ = "permissions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    action: Mapped[PermissionAction] = mapped_column(
+        Enum(PermissionAction), nullable=False
+    )
+    resource: Mapped[ResourceType] = mapped_column(Enum(ResourceType), nullable=False)
+
+    roles: Mapped[list["Role"]] = relationship(
+        "Role", secondary="role_permissions", back_populates="permissions"
+    )
+
+
+class RolePermission(Base):
+    """
+    Represents the association between roles and permissions in a many-to-many relationship.
+
+    This table links the `roles` and `permissions` tables, defining which roles have
+    access to specific permissions.
+
+    Attributes:
+        id (int): The unique identifier for the role-permission association (primary key).
+        role_id (int): The foreign key referencing the `roles` table.
+        permission_id (int): The foreign key referencing the `permissions` table.
+    """
+
+    __tablename__ = "role_permissions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    role_id: Mapped[int] = mapped_column(ForeignKey("roles.id"), nullable=False)
+    permission_id: Mapped[int] = mapped_column(
+        ForeignKey("permissions.id"), nullable=False
+    )
+
+
+async def init_models() -> None:
+    """
+    Instantiates tables in the database
+    """
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
