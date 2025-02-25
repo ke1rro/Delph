@@ -19,3 +19,17 @@
 
 > [!IMPORTANT]
 > To work with repository create new branch from `dev` and submit pull request
+
+## Front end
+
+### **Routers**
+
+- `login` - `http://localhost:5173/`
+- `map` - `http://localhost:5173/map`
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+

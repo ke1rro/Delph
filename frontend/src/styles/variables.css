@@ -1,0 +1,8 @@
+:root {
+    --color-primary: #272b41;
+    --color-secondary: #747896;
+    --color-white: #ffffff;
+    --transition-duration: 0.3s;
+    --transition-timing-function: ease-in-out;
+    --font-family: "Inria Sans", sans-serif;
+}
