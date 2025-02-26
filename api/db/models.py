@@ -6,7 +6,8 @@ import uuid
 
 from dotenv import load_dotenv
 from sqlalchemy import UUID, Enum, ForeignKey, Integer, String
-from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (AsyncAttrs, async_sessionmaker,
+                                    create_async_engine)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 load_dotenv()
@@ -18,7 +19,7 @@ POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 
 DATABASE_URL = (
     f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+    f"@db:{POSTGRES_PORT}/{POSTGRES_DB}"
 )
 
 engine = create_async_engine(url=DATABASE_URL, pool_pre_ping=True)
@@ -28,8 +29,6 @@ SessionLocal = async_sessionmaker(autoflush=False, bind=engine)
 
 class Base(AsyncAttrs, DeclarativeBase):
     """Base class for models instantiating"""
-
-    ...
 
 
 class PermissionAction(enum.Enum):
@@ -66,8 +65,7 @@ class Role(Base):
 
     __tablename__ = "roles"
 
-    id: Mapped[int] = mapped_column(Integer,
-                                    primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
     permissions: Mapped["Permission"] = relationship(

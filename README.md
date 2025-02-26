@@ -1,21 +1,22 @@
 # Step-by-step
 
 > [!CAUTION]
-> Install requirements from `requirements.txt` and setup PostgreSQL
+> Install requirements docker to work with repo
 
-1. Link[https://www.postgresql.org/download/] - download PostgreSQL
+1. Link[https://www.pgadmin.org/download/] - download and install pgAdmin4
 
-2. Link[https://www.pgadmin.org/download/] - download and install pgAdmin4
+2. Rename `.env_example(rename -this-to-.env)` -> `.env`
 
-3. Setup postgres user password
+3. Download docker
 
-4. Rename `.env_example(rename -this-to-.env)` -> `.env`
+4. Setup Docker Desktop [optional]
 
-5. Put your postgres password insted of POSTGRES_PASSWORD
+5. Start docker deamon
 
-6. ```pip install -r requirements.txt```
-
-7. Run - `app.py`
+6.
+    ```bash
+    docker-compose up -d --build
+    ````
 
 > [!IMPORTANT]
 > To work with repository create new branch from `dev` and submit pull request
