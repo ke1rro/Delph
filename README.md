@@ -1,31 +1,13 @@
-# Step-by-step
+# Front end
 
-> [!CAUTION]
-> Install requirements from `requirements.txt` and setup PostgreSQL
+## **Routers**
 
-1. Link[https://www.postgresql.org/download/] - download PostgreSQL
+- `login` - `http://localhost:3000/`
+- `map` - `http://localhost:3000/map`
 
-2. Link[https://www.pgadmin.org/download/] - download and install pgAdmin4
+### To run
 
-3. Setup postgres user password
-
-4. Rename `.env_example(rename -this-to-.env)` -> `.env`
-
-5. Put your postgres password insted of POSTGRES_PASSWORD
-
-6. ```pip install -r requirements.txt```
-
-7. Run - `main.py`
-
-> [!IMPORTANT]
-> To work with repository create new branch from `dev` and submit pull request
-
-## Front end
-
-### **Routers**
-
-- `login` - `http://localhost:5173/`
-- `map` - `http://localhost:5173/map`
+#### locally
 
 ```bash
 cd frontend
@@ -33,3 +15,8 @@ npm install
 npm run dev
 ```
 
+#### docker container
+
+```bash
+docker-compose up -d --build
+```
