@@ -11,7 +11,7 @@ html, body {
 }
 
 .component {
-  background-color: #262b35;
+  background-color: var(--color-primary);
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -22,8 +22,8 @@ html, body {
 }
 
 .logo_login {
-  width: 15%; /* Adjust percentage as needed */
-  max-width: 300px; /* Prevents it from becoming too large */
+  width: 15%;
+  max-width: 300px;
   height: auto;
   margin-bottom: 20px;
 }
@@ -75,10 +75,22 @@ html, body {
 
 .auth-links {
   display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Inter", sans-serif;
   justify-content: space-between;
   width: 300px;
   margin-top: 15px;
+}
+
+.reg-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  margin-top: 15px;
+  margin: 15px auto;
+  font-family: "Inter", sans-serif;
 }
 
 .link {
