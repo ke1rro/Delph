@@ -33,6 +33,18 @@ services:
       - "8080:8080"
     command: >
       uvicorn api.app:app --host 0.0.0.0 --port 8080 --reload
+   
+   frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - app-network
+
+networks:
+  app-network:
 
 volumes:
   pgdata:

@@ -1,7 +1,9 @@
-# Step-by-step
+## Backend
 
 > [!CAUTION]
-> Install requirements docker to work with repo
+> Install requirements to work with repo
+> [!IMPORTANT]
+> To work with repository create new branch from `dev` and submit pull request
 
 1. Link[https://www.pgadmin.org/download/] - download and install pgAdmin4
 
@@ -14,9 +16,26 @@
 5. Start docker deamon
 
 6.
-    ```bash
+   ```bash
     docker-compose up -d --build
-    ````
+   ````
 
-> [!IMPORTANT]
-> To work with repository create new branch from `dev` and submit pull request
+----
+
+## Frontend
+
+
+## **Routers**
+
+- `login` - `http://localhost:3000/`
+- `map` - `http://localhost:3000/map`
+
+### To run
+
+#### locally
+
+```bash
+cd frontend
+npm install
+npm run dev
+```

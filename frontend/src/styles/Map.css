@@ -1,0 +1,18 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+}
+
+.map-container {
+  display: flex;
+  height: 100vh; /* Ensure the container takes full height */
+  width: 100vw;  /* Ensure the container takes full width */
+  background-color: #262b35; /* Ensure the background color is applied */
+}
