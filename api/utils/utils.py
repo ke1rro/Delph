@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 
 import bcrypt
 import jwt
-
 from core.config import settings
 
 PR_KEY = settings.auth_jwt.private_key_path.read_text()

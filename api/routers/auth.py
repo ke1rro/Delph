@@ -2,17 +2,21 @@
 Module for JWT authentication
 """
 
+from core.postgres_database import database
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from schemas.token import TokenInfo
 from schemas.user import UserSchema
+from sqlalchemy.ext.asyncio import AsyncSession
 from utils.utils import encode_jwt, validate_password
-
-from queries.users import get_user_by_username
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-async def validate_user_auth(username: str = Form(), password: str = Form()) -> bool:
+async def validate_user_auth(
+    username: str = Form(),
+    password: str = Form(),
+    session: AsyncSession = Depends(database.get_session),
+) -> bool:
     """
     Validates a user's credentials.
     """
@@ -22,11 +26,12 @@ async def validate_user_auth(username: str = Form(), password: str = Form()) -> 
     )
     if not username:
         raise unauthed_exc
-    user = await get_user_by_username(username)
+
+    user = await database.user_repo.get_user_by_username(username, session)
     if not user:
         raise unauthed_exc
+
     if validate_password(password, hashed_password=password):
-        print("User authenticated")
         return user
 
     raise unauthed_exc
@@ -45,5 +50,4 @@ async def auth_user(
         # "email": user.email,
     }
     token = await encode_jwt(jwt_payload)
-    print(token)
     return TokenInfo(access_token=token, token_type="Bearer", expires_in=300)

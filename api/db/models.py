@@ -1,30 +1,11 @@
 """User models(PostgreSQL)"""
 
 import enum
-import os
 import uuid
 
-from dotenv import load_dotenv
 from sqlalchemy import UUID, Enum, ForeignKey, Integer, LargeBinary, String
-from sqlalchemy.ext.asyncio import (AsyncAttrs, async_sessionmaker,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
-load_dotenv()
-POSTGRES_HOST = os.getenv("POSTGRES_HOST")
-POSTGRES_PORT = os.getenv("POSTGRES_PORT")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-
-DATABASE_URL = (
-    f"postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@db:{POSTGRES_PORT}/{POSTGRES_DB}"
-)
-
-engine = create_async_engine(url=DATABASE_URL, pool_pre_ping=True)
-# Session factory
-SessionLocal = async_sessionmaker(autoflush=False, bind=engine)
 
 
 class Base(AsyncAttrs, DeclarativeBase):
@@ -150,11 +131,3 @@ class RolePermission(Base):
     permission_id: Mapped[int] = mapped_column(
         ForeignKey("permissions.id"), nullable=False
     )
-
-
-async def init_models() -> None:
-    """
-    Instantiates tables in the database
-    """
-    async with engine.begin() as connection:
-        await connection.run_sync(Base.metadata.create_all)
