@@ -3,10 +3,10 @@ Config file
 """
 
 from pathlib import Path
+from typing import ClassVar
 
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
-from typing import ClassVar
 
 BASE_DIR = Path(__file__).parent.parent
 
