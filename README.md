@@ -1,3 +1,5 @@
+# Documentation
+
 ## Backend
 
 > [!CAUTION]
@@ -15,17 +17,25 @@
 
 5. Start docker deamon
 
-6.
-   ```bash
-    docker-compose up -d --build
-   ````
+6. Run command below
+
+```bash
+docker-compose up -d --build
+```
+
+### Generate Private and Public key
+
+```bash
+cd certificates
+openssl genrsa -out jwt-private.pem 2048
+openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
+```
 
 ----
 
 ## Frontend
 
-
-## **Routers**
+### **Routers**
 
 - `login` - `http://localhost:3000/`
 - `map` - `http://localhost:3000/map`
