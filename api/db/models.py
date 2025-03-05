@@ -5,7 +5,7 @@ import os
 import uuid
 
 from dotenv import load_dotenv
-from sqlalchemy import UUID, Enum, ForeignKey, Integer, String
+from sqlalchemy import UUID, Enum, ForeignKey, Integer, LargeBinary, String
 from sqlalchemy.ext.asyncio import (AsyncAttrs, async_sessionmaker,
                                     create_async_engine)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -48,7 +48,6 @@ class ResourceType(enum.Enum):
     """
 
     REPORT = "report"
-    # TODO More resources
 
 
 class Role(Base):
@@ -92,17 +91,17 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    user_id: Mapped[uuid] = mapped_column(
+    user_id: Mapped[UUID] = mapped_column(
         UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4
     )
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     surname: Mapped[str] = mapped_column(String(64), nullable=False)
     email: Mapped[str] = mapped_column(String(320), nullable=False)
-    role_id: Mapped[int] = mapped_column(
-        Integer, ForeignKey("roles.id"), nullable=False
-    )
-
-    role: Mapped[Role] = relationship("Role")
+    # role_id: Mapped[int] = mapped_column(
+    #     Integer, ForeignKey("roles.id"), nullable=True
+    # )
+    password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    # role: Mapped[Role] = relationship("Role")
 
 
 class Permission(Base):

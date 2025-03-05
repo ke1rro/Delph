@@ -197,3 +197,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+node_modules/
+
+jwt-private.pem
+jwt-public.pem

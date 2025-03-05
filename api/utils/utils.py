@@ -1,0 +1,88 @@
+"""Utils to work with JWT"""
+
+import asyncio
+from datetime import datetime, timedelta
+
+import bcrypt
+import jwt
+
+from core.config import settings
+
+PR_KEY = settings.auth_jwt.private_key_path.read_text()
+PUB_KEY = settings.auth_jwt.public_key_path.read_text()
+ALGORITHM = settings.auth_jwt.algorithm
+EXPIRES = settings.auth_jwt.access_token_expire
+
+
+async def encode_jwt(
+    payload: dict[str,],
+    expires: int = EXPIRES,
+    expire_timedelta: timedelta | None = None,
+) -> str:
+    """
+    Creates a JWT token.
+
+    Args:
+        payload (Dict[str, Any]): The data to encode into the JWT.
+        key (str): The secret key used to sign the JWT.
+        algorithm (str): The algorithm used to encode the JWT.
+
+    Returns:
+        str: The encoded JWT token.
+    """
+    to_encode = payload.copy()
+    time_now = datetime.utcnow()
+    if expire_timedelta:
+        expires = time_now + expire_timedelta
+    else:
+        expires = time_now + timedelta(minutes=expires)
+    to_encode.update(exp=expires, iat=time_now)
+    return jwt.encode(to_encode, PR_KEY, ALGORITHM)
+
+
+async def decode_jwt(
+    token: str | bytes,
+) -> dict[str,]:
+    """
+    Decodes a JWT token.
+
+    Args:
+        token (str | bytes): The JWT token to decode.
+        key (str): The public key used to verify the JWT.
+        algorithm (str): The algorithm used to decode the JWT.
+
+    Returns:
+        Dict[str, Any]: The decoded payload of the JWT.
+    """
+    return jwt.decode(
+        token,
+        PUB_KEY,
+        algorithms=[ALGORITHM],
+    )
+
+
+async def hash_password(password: str) -> bytes:
+    """
+    Hashes a password using bcrypt.
+
+    Args:
+        password (str): The password to hash.
+
+    Returns:
+        bytes: The hashed password.
+    """
+    salt = bcrypt.gensalt()
+    return await asyncio.to_thread(bcrypt.hashpw, password.encode(), salt)
+
+
+async def validate_password(password: str, hashed_password: bytes) -> bool:
+    """
+    Validates a password against a hashed password.
+    Args:
+        password (str): a password to validate
+        hashed_password (bytes): a hashed password to validate against
+
+    Returns:
+        bool: True if the password is valid, False otherwise.
+    """
+    return await asyncio.to_thread(bcrypt.checkpw, password.encode(), hashed_password)

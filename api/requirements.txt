@@ -10,14 +10,12 @@ dotenv==0.9.9
 fastapi==0.115.8
 greenlet==3.1.1
 h11==0.14.0
-httpcore==1.0.7
-httpie==3.2.4
-httpx==0.28.1
 idna==3.10
 markdown-it-py==3.0.0
 mdurl==0.1.2
 multidict==6.1.0
 pydantic==2.10.6
+pydantic-settings==2.8.1
 pydantic_core==2.27.2
 Pygments==2.19.1
 PySocks==1.7.1
@@ -33,3 +31,7 @@ starlette==0.45.3
 typing_extensions==4.12.2
 urllib3==2.3.0
 uvicorn==0.34.0
+PyJWT[crypto]==2.10.1
+bcrypt==4.3.0
+pydantic[email]==2.10.6
+python-multipart==0.0.5

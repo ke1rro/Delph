@@ -1,4 +1,6 @@
-# Backend
+# Documentation
+
+## Backend
 
 > [!CAUTION]
 > Install requirements to work with repo
@@ -16,15 +18,25 @@
 
 5. Start docker deamon
 
-6.
+6. Run command below
 
 ```bash
 docker-compose up -d --build
 ```
 
+### Generate Private and Public key
+
+```bash
+cd certificates
+openssl genrsa -out jwt-private.pem 2048
+openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
+```
+
 ----
 
-## **Routers**
+## Frontend
+
+### **Routers**
 
 🔹 Frontend: http://localhost:3000
 
@@ -49,3 +61,4 @@ cd frontend
 npm install
 npm run dev
 ```
+
