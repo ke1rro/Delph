@@ -1,10 +1,9 @@
 """Database interface for the API."""
 
 import os
-from abc import ABC, abstractmethod
 
 from dotenv import load_dotenv
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase
 
 load_dotenv()
@@ -20,17 +19,5 @@ DATABASE_URL = (
 )
 
 
-class Base(DeclarativeBase):
+class Base(AsyncAttrs, DeclarativeBase):
     """Base class for models instantiating"""
-
-
-class Database(ABC):
-    """Abstract class for database interface"""
-
-    @abstractmethod
-    def get_session(self) -> AsyncSession:
-        """Get a new session"""
-
-    @abstractmethod
-    async def init_db(self) -> None:
-        """Initialize the database"""

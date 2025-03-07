@@ -1,7 +1,7 @@
 """Utils to work with JWT"""
 
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import bcrypt
 import jwt
@@ -30,7 +30,7 @@ async def encode_jwt(
         str: The encoded JWT token.
     """
     to_encode = payload.copy()
-    time_now = datetime.utcnow()
+    time_now = datetime.now(timezone.utc)
     if expire_timedelta:
         expires = time_now + expire_timedelta
     else:

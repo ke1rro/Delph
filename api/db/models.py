@@ -3,13 +3,9 @@
 import enum
 import uuid
 
+from core.database import Base
 from sqlalchemy import UUID, Enum, ForeignKey, Integer, LargeBinary, String
-from sqlalchemy.ext.asyncio import AsyncAttrs
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-
-
-class Base(AsyncAttrs, DeclarativeBase):
-    """Base class for models instantiating"""
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class PermissionAction(enum.Enum):
@@ -35,7 +31,7 @@ class Role(Base):
     """
     Represents a role in the system with a unique identifier and a name.
 
-    Attributes:
+    Args:
         id (int): The unique identifier for the role (primary key).
         name (str): The name of the role, must be unique and not null.
         permissions (list): A many-to-many
@@ -57,7 +53,7 @@ class User(Base):
     """
     Represents user in the system and an associated role.
 
-        Attributes:
+    Args:
         id (int): The unique identifier for the user in database(primary key).
         user_id (uuid.UUID): A unique identifier for the user,
         stored as a UUID.
@@ -77,7 +73,6 @@ class User(Base):
     )
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     surname: Mapped[str] = mapped_column(String(64), nullable=False)
-    email: Mapped[str] = mapped_column(String(320), nullable=False)
     # role_id: Mapped[int] = mapped_column(
     #     Integer, ForeignKey("roles.id"), nullable=True
     # )
@@ -89,7 +84,7 @@ class Permission(Base):
     """
     Represents a permission that defines an allowed action on a specific resource.
 
-    Attributes:
+    Args:
         id (int): The unique identifier for the permission (primary key).
         action (PermissionAction): The type of action allowed, such as "read", "write", or "delete".
         resource (ResourceType): The resource on which the action is performed,
@@ -118,7 +113,7 @@ class RolePermission(Base):
     This table links the `roles` and `permissions` tables, defining which roles have
     access to specific permissions.
 
-    Attributes:
+    Args:
         id (int): The unique identifier for the role-permission association (primary key).
         role_id (int): The foreign key referencing the `roles` table.
         permission_id (int): The foreign key referencing the `permissions` table.
