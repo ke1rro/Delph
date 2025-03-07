@@ -1,13 +1,12 @@
 """Module for PostgreSQL database implementation"""
 
-from repositories.user_repo import UserRepository
 from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
                                     create_async_engine)
 
-from .database import DATABASE_URL, Base, Database
+from .database import DATABASE_URL, Base
 
 
-class PostgresDatabase(Database):
+class PostgresDatabase:
     """PostgreSQL database implementation"""
 
     def __init__(self):
@@ -15,7 +14,6 @@ class PostgresDatabase(Database):
         self.session_factory = async_sessionmaker(
             bind=self.engine, autocommit=False, autoflush=False
         )
-        self.user_repo = UserRepository(self)
 
     async def get_session(self) -> AsyncSession:
         """Return a new session"""
@@ -25,7 +23,9 @@ class PostgresDatabase(Database):
     async def init_db(self) -> None:
         """Create the database tables"""
         async with self.engine.begin() as connection:
-            await connection.run_sync(Base.metadata.create_all)
+            await connection.run_sync(
+                lambda sync_conn: Base.metadata.create_all(sync_conn)
+            )
 
 
 database = PostgresDatabase()

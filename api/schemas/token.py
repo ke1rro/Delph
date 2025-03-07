@@ -5,7 +5,10 @@ from pydantic import BaseModel
 
 class TokenInfo(BaseModel):
     """
-    Token information
+    Token Scheme
+
+    Args:
+        BaseModel: Pydantic BaseModel
     """
 
     access_token: str

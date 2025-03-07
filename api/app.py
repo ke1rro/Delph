@@ -1,5 +1,7 @@
 """Main FastAPI application file"""
 
+import asyncio
+
 from core.postgres_database import database
 from fastapi import FastAPI
 from routers.auth import router as auth_router
