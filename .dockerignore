@@ -1,3 +1,13 @@
+# Kafka has its own Dockerfile
+kafka/
+
+# License & Readme
+LICENSE
+README.md
+
+# frontend has its own Dockerfile
+frontend/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -26,13 +36,3 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
-# Kafka has its own Dockerfile 
-kafka/
-
-# License & Readme
-LICENSE
-README.md
-
-# frontend has its own Dockerfile
-frontend/

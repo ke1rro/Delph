@@ -2,11 +2,11 @@
 User service for authentication and checking permissions.
 """
 
-from models.user import User
-from repositories.user import UserRepository
+from schemas.message import Source
 from shapely import Point
 
-from schemas.message import Source
+from models.user import User
+from repositories.user import UserRepository
 
 
 class AuthenticationError(Exception):

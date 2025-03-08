@@ -70,9 +70,34 @@ async def get_queue_subscribe_service() -> QueueSubscribeService:
 
 
 @asynccontextmanager
+async def user_repository_lifespan():
+    """
+    Manage the user repository lifespan.
+    """
+    await user_repository.connect()
+    try:
+        yield
+    finally:
+        await user_repository.disconnect()
+
+
+@asynccontextmanager
+async def queue_publish_repository_lifespan():
+    """
+    Manage the queue publish repository lifespan.
+    """
+    await queue_publish_repository.connect()
+    try:
+        yield
+    finally:
+        await queue_publish_repository.disconnect()
+
+
+@asynccontextmanager
 async def dependencies_lifespans(_):
     """
     Manage the dependencies lifespans.
     """
-    async with user_repository, queue_publish_repository:
-        yield
+    async with user_repository_lifespan():
+        async with queue_publish_repository_lifespan():
+            yield

@@ -6,14 +6,12 @@ import logging
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 from pydantic import ValidationError
-from repositories.base import Repository
-
 from schemas.message import Message
 
-logger = logging.getLogger("delta")
+logger = logging.Logger("delta")
 
 
-class QueuePublishRepository(Repository):
+class QueuePublishRepository:
     """
     Repository to publish messages to the message queue.
 
@@ -51,7 +49,7 @@ class QueuePublishRepository(Repository):
         Args:
             message: Message to publish.
         """
-        logger.debug("New message: %s", message)
+        logging.debug("New message: %s", message)
         await self.producer.send_and_wait(
             self.topic,
             message.model_dump_json().encode(),
@@ -59,7 +57,7 @@ class QueuePublishRepository(Repository):
         )
 
 
-class QueueSubscription(Repository):
+class QueueSubscription:
     """
     Subscription to the message queue.
 
@@ -76,19 +74,24 @@ class QueueSubscription(Repository):
             auto_offset_reset="earliest",
         )
 
+    async def __aenter__(self):
+        await self.connect()
+        return self
+
+    async def __aexit__(self, *_):
+        await self.disconnect()
+
     async def connect(self):
         """
         Connect repository to the message queue.
         """
         await self.consumer.start()
-        logger.info("Queue consumer connected")
 
     async def disconnect(self):
         """
         Disconnect repository from the message queue.
         """
         await self.consumer.stop()
-        logger.info("Queue consumer disconnected")
 
     def __aiter__(self):
         return self
@@ -103,7 +106,7 @@ class QueueSubscription(Repository):
                 )
 
 
-class QueueSubscribeRepository(Repository):
+class QueueSubscribeRepository:
     """
     Repository to subscribe to the message queue.
 
@@ -117,21 +120,9 @@ class QueueSubscribeRepository(Repository):
         self.topic = topic
         self.config = config
 
-    async def connect(self):
-        """
-        Connect repository to the message queue.
-        """
-        logger.info("Queue subscription connected")
-
-    async def disconnect(self):
-        """
-        Disconnect repository from the message queue.
-        """
-        logger.info("Queue subscription disconnected")
-
     def subscribe(self):
         """
         Subscribe to the message queue.
         """
-        logger.info("New subscription to the queue")
+        logging.info("New subscription to the queue")
         return QueueSubscription(self.topic, self.config)
