@@ -10,6 +10,13 @@ from routers.auth import router as auth_router
 from routers.blacklist import router as blacklist_router
 from starlette.middleware.authentication import AuthenticationMiddleware
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @asynccontextmanager
 async def lifespan(_):
