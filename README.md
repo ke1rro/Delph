@@ -1,10 +1,7 @@
-# Documentation
-
-## Backend
+# Backend
 
 > [!CAUTION]
 > Install requirements to work with repo
-
 > [!IMPORTANT]
 > To work with repository create new branch from `dev` and submit pull request
 
@@ -18,25 +15,15 @@
 
 5. Start docker deamon
 
-6. Run command below
+6.
 
 ```bash
 docker-compose up -d --build
 ```
 
-### Generate Private and Public key
-
-```bash
-cd certificates
-openssl genrsa -out jwt-private.pem 2048
-openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
-```
-
 ----
 
-## Frontend
-
-### **Routers**
+## **Routers**
 
 🔹 Frontend: http://localhost:3000
 
@@ -61,4 +48,3 @@ cd frontend
 npm install
 npm run dev
 ```
-
