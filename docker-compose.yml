@@ -135,10 +135,10 @@ services:
     ports:
       - 8081:8080
 
-
 networks:
   app-network:
 
 volumes:
   pgdata:
   redisdata:
+
