@@ -1,13 +1,19 @@
 """Main FastAPI application file"""
 
-import asyncio
-
 from core.postgres_database import database
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from routers.auth import router as auth_router
 
 app = FastAPI()
 app.include_router(auth_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")

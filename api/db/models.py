@@ -73,11 +73,7 @@ class User(Base):
     )
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     surname: Mapped[str] = mapped_column(String(64), nullable=False)
-    # role_id: Mapped[int] = mapped_column(
-    #     Integer, ForeignKey("roles.id"), nullable=True
-    # )
     password: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    # role: Mapped[Role] = relationship("Role")
 
 
 class Permission(Base):

@@ -3,9 +3,7 @@ version: '3.9'
 services:
 
   nginx:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    build: server
     container_name: nginx
     ports:
       - "8080:8080"
@@ -35,9 +33,7 @@ services:
 
   api:
     container_name: fastapi
-    build:
-      context: .
-      dockerfile: api/Dockerfile
+    build: api
     env_file:
       - .env
     restart: always
@@ -45,13 +41,10 @@ services:
       - db
     ports:
       - "8000:8000"
-    command: >
-      uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
     container_name: frontend
-    build:
-      context: ./frontend
+    build: frontend
     ports:
       - "3000:3000"
     environment:
