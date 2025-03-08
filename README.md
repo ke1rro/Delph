@@ -21,7 +21,6 @@
 ```bash
 docker-compose up -d --build
 ```
-
 ## Generating jwt keys
 
 ```bash
@@ -30,7 +29,6 @@ cd certificates
 openssl genrsa -out jwt-private.pem 2048
 openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
 ```
-
 ----
 
 ## **Routers**
