@@ -1,4 +1,4 @@
-## Backend
+# Backend
 
 > [!CAUTION]
 > Install requirements to work with repo
@@ -16,21 +16,30 @@
 5. Start docker deamon
 
 6.
-   ```bash
-    docker-compose up -d --build
-   ````
+
+```bash
+docker-compose up -d --build
+```
 
 ----
 
-## Frontend
-
-
 ## **Routers**
 
-- `login` - `http://localhost:3000/`
-- `map` - `http://localhost:3000/map`
+🔹 Frontend: http://localhost:3000
 
-### To run
+🔹 signup: http://localhost:3000/signup
+
+🔹 login: http://localhost:3000/login
+
+🔹 map: http://localhost:3000/map
+
+🔹 FastAPI: http://localhost:8000/docs
+
+🔹 Hello world test (via NGINX): http://localhost:8080/greet
+
+🔹 FastAPI (via NGINX): http://localhost:8080/api
+
+### To run Frontend
 
 #### locally
 
