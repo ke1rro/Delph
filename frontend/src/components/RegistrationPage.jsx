@@ -1,30 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Auth.css";
 
 const Registration = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const validatePassword = (password) => {
+    return /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    if (!validatePassword(formData.password)) {
+      setError("Password must have at least one uppercase, one number, and one special character.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.firstName,
+          surname: formData.lastName,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
+
+      alert("Registration successful!");
+    } catch (error) {
+      setError("Error during registration. Try again.");
+    }
+  };
+
   return (
     <div className="component">
       <img className="logo_login" src="logo_login.webp" alt="Delta Logo" />
       <h1 className="title">DELTA</h1>
 
-      <form className="login-form">
-        <input className="input-field" type="text" placeholder="First name" />
-        <input className="input-field" type="text" placeholder="Last Name" />
-        <input className="input-field" type="password" placeholder="Password" />
-        <input
-          className="input-field"
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button className="login-button" type="submit">
-          Register
-        </button>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <input className="input-field" type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
+        <input className="input-field" type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
+        <input className="input-field" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
+        <input className="input-field" type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
+        {error && <p className="error">{error}</p>}
+        <button className="login-button" type="submit">Register</button>
       </form>
 
       <div className="reg-link">
-        <a href="/login" className="link">
-          Already have an account?
-        </a>
+        <a href="/login" className="link">Already have an account?</a>
       </div>
     </div>
   );
