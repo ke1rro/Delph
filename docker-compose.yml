@@ -1,5 +1,18 @@
 version: '3.9'
+
 services:
+
+  nginx:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+      - frontend
+
   db:
     image: postgres:latest
     container_name: db
@@ -21,21 +34,28 @@ services:
       start_period: 10s
 
   api:
-    build: api
+    container_name: fastapi
+    build:
+      context: .
+      dockerfile: api/Dockerfile
     env_file:
       - .env
     restart: always
     depends_on:
-        - db
+      - db
     ports:
-      - "8080:8080"
+      - "8000:8000"
+    command: >
+      uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
-    build: frontend
+    container_name: frontend
+    build:
+      context: ./frontend
     ports:
       - "3000:3000"
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://localhost:8080/api
     networks:
       - app-network
 

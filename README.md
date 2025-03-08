@@ -1,6 +1,4 @@
-# Documentation
-
-## Backend
+# Backend
 
 > [!CAUTION]
 > Install requirements to work with repo
@@ -18,30 +16,31 @@
 
 5. Start docker deamon
 
-6. Run command below
+6.
 
 ```bash
 docker-compose up -d --build
 ```
 
-### Generate Private and Public key
-
-```bash
-cd certificates
-openssl genrsa -out jwt-private.pem 2048
-openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
-```
-
 ----
 
-## Frontend
+## **Routers**
 
-### **Routers**
+🔹 Frontend: http://localhost:3000
 
-- `login` - `http://localhost:3000/`
-- `map` - `http://localhost:3000/map`
+🔹 signup: http://localhost:3000/signup
 
-### To run
+🔹 login: http://localhost:3000/login
+
+🔹 map: http://localhost:3000/map
+
+🔹 FastAPI: http://localhost:8000/docs
+
+🔹 Hello world test (via NGINX): http://localhost:8080/greet
+
+🔹 FastAPI (via NGINX): http://localhost:8080/api
+
+### To run Frontend
 
 #### locally
 
