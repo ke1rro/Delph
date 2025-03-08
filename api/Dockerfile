@@ -9,6 +9,6 @@ RUN pip3 install -r requirements.txt
 
 RUN chmod 755 .
 
-EXPOSE 8080
+EXPOSE 8000
 
 COPY . .
