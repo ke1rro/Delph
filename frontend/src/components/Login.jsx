@@ -8,7 +8,7 @@ const Login = () => {
       <h1 className="title">DELTA</h1>
 
       <form className="login-form">
-        <input className="input-field" type="text" placeholder="User Login" />
+        <input className="input-field" type="text" placeholder="Unique Identifier" />
         <input className="input-field" type="password" placeholder="Password" />
         <button className="login-button" type="submit">
           Login

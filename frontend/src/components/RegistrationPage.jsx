@@ -10,7 +10,6 @@ const Registration = () => {
       <form className="login-form">
         <input className="input-field" type="text" placeholder="First name" />
         <input className="input-field" type="text" placeholder="Last Name" />
-        <input className="input-field" type="email" placeholder="Email" />
         <input className="input-field" type="password" placeholder="Password" />
         <input
           className="input-field"
