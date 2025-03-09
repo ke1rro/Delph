@@ -66,7 +66,7 @@ const Login = () => {
         </button>
       </form>
 
-      {error && <p className="error">{error}</p>}
+      {error && <div className="popup error-popup">{error}</div>}
 
       <div className="auth-links">
         <a href="/signup" className="link">
