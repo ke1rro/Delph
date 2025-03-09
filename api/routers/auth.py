@@ -8,7 +8,7 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from repositories.user_repo import UserRepository
 from schemas.token import TokenInfo
-from schemas.user import UserReg, UserSchema
+from schemas.user import UserLogin, UserReg
 from services.user_service import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils.utils import encode_jwt, validate_password
@@ -41,7 +41,7 @@ async def get_user_service(
 
 
 async def validate_user_auth(
-    username: str = Form(),
+    user_id: str = Form(),
     password: str = Form(),
     user_service: UserService = Depends(get_user_service),
 ) -> bool:
@@ -52,14 +52,14 @@ async def validate_user_auth(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials",
     )
-    if not username:
+    if not user_id:
         raise unauthed_exc
 
-    user = await user_service.get_user(username)
+    user = await user_service.check_user(user_id)
     if not user:
         raise unauthed_exc
 
-    if validate_password(password, hashed_password=password):
+    if await validate_password(password, hashed_password=user.password):
         return user
 
     raise unauthed_exc
@@ -67,15 +67,16 @@ async def validate_user_auth(
 
 @router.post("/login", response_model=TokenInfo)
 async def auth_user(
-    user: UserSchema = Depends(validate_user_auth),
+    user: UserLogin = Depends(validate_user_auth),
 ):
     """
     Authenticates a user and returns a JWT token.
     """
     jwt_payload = {
-        # "sub": user.id,
-        "username": user.name,
-        # "email": user.email,
+        "sub": user.id,
+        "user_id": user.user_id.hex,
+        "user_name": user.name,
+        "user_surname": user.surname,
     }
     token = await encode_jwt(jwt_payload)
     return TokenInfo(access_token=token, token_type="Bearer", expires_in=300)

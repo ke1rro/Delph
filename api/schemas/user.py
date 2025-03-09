@@ -67,3 +67,5 @@ class UserLogin(UserSchema):
     """
 
     password: str
+    name: str
+    surname: str
