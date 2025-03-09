@@ -48,3 +48,18 @@ class UserRepository:
         await self.session.commit()
         await self.session.refresh(user_obj)
         return user_obj
+
+    async def check_if_user_exists(self, user_data: UserReg):
+        """
+        Check if the user already exists.
+
+        Args:
+            user_data (UserReg): The user data to check.
+
+        Returns:
+            bool: True if user exists, False otherwise.
+        """
+        user = await self.session.scalars(
+            select(User).where(User.name == user_data.name, User.surname == user_data.surname)
+        )
+        return user.one_or_none()

@@ -120,3 +120,24 @@ html, body {
 .footer-link:hover {
   text-decoration: underline;
 }
+
+.popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #ffffff;
+  color: #000;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: "Inter", sans-serif;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.error-popup {
+  border-left: 6px solid #ff4d4d;
+}
+
+.success-popup {
+  border-left: 6px solid #4caf50;
+}

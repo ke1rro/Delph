@@ -9,6 +9,7 @@ const Registration = () => {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,7 +48,7 @@ const Registration = () => {
         throw new Error("Registration failed");
       }
 
-      alert("Registration successful!");
+      setSuccess("Registration successful!");
     } catch (error) {
       setError("Error during registration. Try again.");
     }
@@ -63,7 +64,8 @@ const Registration = () => {
         <input className="input-field" type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
         <input className="input-field" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
         <input className="input-field" type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
-        {error && <p className="error">{error}</p>}
+        {error && <div className="popup error-popup">{error}</div>}
+        {success && <div className="popup success-popup">{success}</div>}
         <button className="login-button" type="submit">Register</button>
       </form>
 

@@ -26,6 +26,18 @@ class UserService:
         """
         return await self.user_repository.get_user_by_id(user_id)
 
+    async def check_if_already_exists(self, user_data: UserReg) -> bool:
+        """
+        Check if the user already exists.
+
+        Args:
+            user_id (uuid.UUID.hex): _description_
+
+        Returns:
+            bool: The user if exists, None otherwise.
+        """
+        return await self.user_repository.check_if_user_exists(user_data)
+
     async def create_user(self, user_data: UserReg) -> User:
         """Create a user."""
         return await self.user_repository.write_user(user_data)
