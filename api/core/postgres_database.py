@@ -16,12 +16,22 @@ class PostgresDatabase:
         )
 
     async def get_session(self) -> AsyncSession:
-        """Return a new session"""
+        """
+        Return a new session
+
+        Yields:
+            Iterator[AsyncSession]: The new session connection
+        """
         async with self.session_factory() as session:
             yield session
 
     async def init_db(self) -> None:
-        """Create the database tables"""
+        """
+        Create the database tables
+
+        Returns:
+            None
+        """
         async with self.engine.begin() as connection:
             await connection.run_sync(
                 lambda sync_conn: Base.metadata.create_all(sync_conn)

@@ -4,7 +4,6 @@ anyio==4.8.0
 async-timeout==5.0.1
 asyncpg==0.30.0
 certifi==2025.1.31
-charset-normalizer==3.4.1
 click==8.1.8
 defusedxml==0.7.1
 dotenv==0.9.9
@@ -13,8 +12,6 @@ greenlet==3.1.1
 h11==0.14.0
 idna==3.10
 markdown-it-py==3.0.0
-mdurl==0.1.2
-multidict==6.1.0
 pydantic==2.10.6
 pydantic-settings==2.8.1
 pydantic_core==2.27.2
