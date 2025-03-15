@@ -31,7 +31,7 @@ class UserService:
         Check if the user already exists.
 
         Args:
-            user_id (uuid.UUID.hex): _description_
+            user_id (uuid.UUID.hex): The id of the user stored in the database
 
         Returns:
             bool: The user if exists, None otherwise.
@@ -39,5 +39,13 @@ class UserService:
         return await self.user_repository.check_if_user_exists(user_data)
 
     async def create_user(self, user_data: UserReg) -> User:
-        """Create a user."""
+        """
+        Create a user.
+
+        Args:
+            user_data (UserReg): The user data to create Pydantic scheme.
+
+        Returns:
+            User: The created user object - sqlachemy User model.
+        """
         return await self.user_repository.write_user(user_data)

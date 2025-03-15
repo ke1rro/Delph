@@ -20,7 +20,7 @@ class AuthJWT(BaseModel):
     private_key_path: Path = BASE_DIR / "certificates" / "jwt-private.pem"
     public_key_path: Path = BASE_DIR / "certificates" / "jwt-public.pem"
     algorithm: str = "RS256"
-    access_token_expire: int = 3
+    access_token_expire: int = 900
 
 
 class Settings(BaseSettings):

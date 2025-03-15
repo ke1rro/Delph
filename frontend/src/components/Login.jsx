@@ -18,6 +18,7 @@ const Login = () => {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
+        credentials: "include",
         body: new URLSearchParams({
           user_id: identifier,
           password: password,
@@ -28,12 +29,8 @@ const Login = () => {
         throw new Error("Invalid credentials");
       }
 
-      const data = await response.json();
-      console.log("Login successful:", data);
-      // Store the token in localStorage/sessionStorage
-      localStorage.setItem("token", data.access_token);
-      navigate("/map")
-
+      console.log("Login successful.");
+      navigate("/map");
     } catch (err) {
       setError(err.message);
     }
