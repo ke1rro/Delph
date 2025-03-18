@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 const ProtectedRoute = ({ element }) => {
   const [isTokenValid, setIsTokenValid] = useState(null);
 
+  // TODO Client to server communication
   useEffect(() => {
     const validateToken = async () => {
       try {

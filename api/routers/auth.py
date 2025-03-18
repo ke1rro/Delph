@@ -1,15 +1,22 @@
 """
 Module provides user authentication via JWT
 """
+
 from typing import Any
-from dependencies.auth import (create_jwt_token, get_user_service,
-                               validate_jwt_token, validate_user_auth)
+
+from dependencies.auth import (
+    create_jwt_token,
+    get_user_service,
+    validate_jwt_token,
+    validate_user_auth,
+)
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 from schemas.token import TokenInfo
 from schemas.user import UserLogin, UserReg
 from services.user_service import UserService
+from starlette.authentication import requires
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -29,6 +36,9 @@ async def preflight(request: Request, full_path: str):
     return JSONResponse(content=request, headers=headers, status_code=204)
 
 
+# Should not be used
+# This used due to the fact the frontend do not have client side routing
+# This will be removed once the frontend is updated
 @router.get("/validate_token")
 async def validate_token(payload=Depends(validate_jwt_token)) -> dict[str, Any]:
     """
@@ -82,8 +92,29 @@ async def write_user(
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already exists",
+            detail="User already exists",
         )
 
     new_user = await user_service.create_user(user_data)
     return new_user
+
+
+# Will be removed
+@router.get("/user")
+@requires(["authenticated"])
+async def get_user(
+    request: Request,
+):
+    """
+    Test route will be removed.
+    """
+    return {"request": request.headers}
+
+
+# Will be removed
+@router.get("/check")
+async def check(request: Request):
+    """
+    Test route will be removed.
+    """
+    return {"Hello": 200}

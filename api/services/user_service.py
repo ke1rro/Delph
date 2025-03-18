@@ -14,7 +14,7 @@ class UserService:
         """Constructor."""
         self.user_repository = user_repository
 
-    async def check_user(self, user_id: uuid.UUID.hex) -> User | None:
+    async def get_user(self, user_id: uuid.UUID) -> User | None:
         """
         Get the user by his id.
 
