@@ -3,20 +3,12 @@
 from contextlib import asynccontextmanager
 
 from core.postgres_database import database
+from dependencies.auth import get_user_service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from middleware.jwt_auth import JWTAuthBackend
 from routers.auth import router as auth_router
-from routers.blacklist import router as blacklist_router
 from starlette.middleware.authentication import AuthenticationMiddleware
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_methods=["POST", "GET", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
-    allow_credentials=True,
-)
 
 
 @asynccontextmanager
@@ -28,8 +20,7 @@ async def lifespan(_):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(auth_router)
-app.include_router(blacklist_router)
-app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend())
+app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend(get_user_service))
 
 app.add_middleware(
     CORSMiddleware,
