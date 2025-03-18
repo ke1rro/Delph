@@ -56,7 +56,7 @@ async def validate_user_auth(
     if not user_id:
         raise unauthed_exc
 
-    user = await user_service.check_user(user_id)
+    user = await user_service.get_user(user_id)
     if not user:
         raise unauthed_exc
 
@@ -91,7 +91,7 @@ async def validate_jwt_token(
 
     try:
         payload = await decode_jwt(token)
-        user = await user_service.check_user(payload["sub"])
+        user = await user_service.get_user(payload["sub"])
 
         if not user:
             raise HTTPException(status_code=401, detail="Invalid token")

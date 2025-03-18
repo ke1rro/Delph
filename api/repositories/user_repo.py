@@ -1,5 +1,6 @@
 """User repository module."""
 
+import logging
 import uuid
 
 from db.models import User
@@ -8,6 +9,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import validates
 from utils.utils import hash_password
+
+logging.basicConfig(
+    level=logging.INFO, filename="app.log", format="%(asctime)s - %(message)s"
+)
 
 
 class UserRepository:
@@ -49,7 +54,7 @@ class UserRepository:
             user = await self.session.scalars(
                 select(User).where(User.user_id == user_id)
             )
-            return user.first()
+            return user.one_or_none()
         return None
 
     async def write_user(self, user: UserReg) -> User:

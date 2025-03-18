@@ -6,6 +6,7 @@ from datetime import datetime, timedelta, timezone
 import bcrypt
 import jwt
 from core.config import settings
+from fastapi import HTTPException
 
 PR_KEY = settings.auth_jwt.private_key_path.read_text()
 PUB_KEY = settings.auth_jwt.public_key_path.read_text()
@@ -43,21 +44,30 @@ async def decode_jwt(
     token: str | bytes,
 ) -> dict[str,]:
     """
-    Decodes a JWT token.
+    Decodes a JWT token and verifies its validity.
 
     Args:
         token (str | bytes): The JWT token to decode.
-        key (str): The public key used to verify the JWT.
-        algorithm (str): The algorithm used to decode the JWT.
 
     Returns:
         Dict[str, Any]: The decoded payload of the JWT.
+
+    Raises:
+        jwt.ExpiredSignatureError: If the token has expired.
+        jwt.InvalidTokenError: If the token is invalid.
     """
-    return jwt.decode(
-        token,
-        PUB_KEY,
-        algorithms=[ALGORITHM],
-    )
+    try:
+        payload = jwt.decode(
+            token,
+            PUB_KEY,
+            algorithms=[ALGORITHM],
+            options={"require": ["exp", "iat"]},
+        )
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError as e:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
 
 
 async def hash_password(password: str) -> bytes:
