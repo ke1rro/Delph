@@ -11,6 +11,27 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 BASE_DIR = Path(__file__).parent.parent
 
 
+class Redis(BaseSettings):
+    """
+    Base setting for Redis
+    """
+
+    redis_host: str
+    redis_port: int
+    redis_db: int
+    redis_password: str
+    redis_user: str
+
+    model_config = SettingsConfigDict(env_file=f"{BASE_DIR}/.env")
+
+    @property
+    def redis_url(self) -> str:
+        """
+        Return the Redis URL for connection.
+        """
+        return f"redis://{self.redis_user}:{self.redis_password}@{self.redis_host}:{self.redis_port}/{self.redis_db}"
+
+
 class Database(BaseSettings):
     """
     Base setting for database
@@ -51,6 +72,7 @@ class Settings(BaseSettings):
 
     auth_jwt: ClassVar[AuthJWT] = AuthJWT()
     database: ClassVar[Database] = Database()
+    redis: ClassVar[Redis] = Redis()
 
 
 settings = Settings()
