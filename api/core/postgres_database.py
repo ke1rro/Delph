@@ -1,20 +1,25 @@
 """Module for PostgreSQL database implementation"""
 
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from typing import AsyncIterator
 
-from .database import DATABASE_URL, Base
+from core.config import settings
+from core.database import Base
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
 
 
 class PostgresDatabase:
     """PostgreSQL database implementation"""
 
     def __init__(self):
-        self.engine = create_async_engine(url=DATABASE_URL, pool_pre_ping=True)
+        self.engine = create_async_engine(
+            url=settings.database.postgres_url, pool_pre_ping=True
+        )
         self.session_factory = async_sessionmaker(
             bind=self.engine, autocommit=False, autoflush=False
         )
 
-    async def get_session(self) -> AsyncSession:
+    async def get_session(self) -> AsyncIterator:
         """
         Return a new session
 

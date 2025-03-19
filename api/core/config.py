@@ -6,9 +6,30 @@ from pathlib import Path
 from typing import ClassVar
 
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).parent.parent
+
+
+class Database(BaseSettings):
+    """
+    Base setting for database
+    """
+
+    postgres_host: str
+    postgres_port: int
+    postgres_db: str
+    postgres_user: str
+    postgres_password: str
+
+    model_config = SettingsConfigDict(env_file=f"{BASE_DIR}/.env")
+
+    @property
+    def postgres_url(self) -> str:
+        """
+        Return the postgres url
+        """
+        return f"postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}"
 
 
 class AuthJWT(BaseModel):
@@ -29,6 +50,7 @@ class Settings(BaseSettings):
     """
 
     auth_jwt: ClassVar[AuthJWT] = AuthJWT()
+    database: ClassVar[Database] = Database()
 
 
 settings = Settings()

@@ -1,7 +1,8 @@
 import logging
 
 from services.user_service import UserService
-from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
+from starlette.authentication import (AuthCredentials, AuthenticationBackend,
+                                      SimpleUser)
 from starlette.requests import Request
 from utils.utils import decode_jwt
 
