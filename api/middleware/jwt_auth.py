@@ -1,5 +1,6 @@
 import logging
 
+from services.cache_service import CacheService
 from services.user_service import UserService
 from starlette.authentication import (AuthCredentials, AuthenticationBackend,
                                       SimpleUser)
@@ -15,6 +16,7 @@ class JWTAuthBackend(AuthenticationBackend):
 
     def __init__(self, get_user_service: UserService):
         self.get_user_service: UserService = get_user_service
+        self.cache_service = CacheService()
 
     async def authenticate(self, request: Request):
         """
@@ -26,6 +28,9 @@ class JWTAuthBackend(AuthenticationBackend):
         if not token:
             return None
 
+        if await self.cache_service.is_token_blacklisted(token):
+            logging.warning("Token is blacklisted")
+            return None
         try:
             # TODO fix issues with thread blocking
             payload = await decode_jwt(token)
