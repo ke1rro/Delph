@@ -1,7 +1,7 @@
 """
 Module provides user authentication via JWT
 """
-
+import uuid
 from typing import Any
 
 from dependencies.auth import (create_jwt_token, get_user_service,
@@ -102,7 +102,7 @@ async def logout(response: Response):
     return {"message": "Successfully logged out"}
 
 
-@router.post("/signup", response_model=UserReg)
+@router.post("/signup", response_model=uuid.UUID)
 async def write_user(
     user_data: UserReg,
     user_service: UserService = Depends(get_user_service),
