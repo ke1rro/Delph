@@ -57,7 +57,7 @@ class UserRepository:
             return user.one_or_none()
         return None
 
-    async def write_user(self, user: UserReg) -> User:
+    async def write_user(self, user_obj: User) -> uuid.UUID:
         """
         Write a user to the database.
 
@@ -65,16 +65,12 @@ class UserRepository:
             user (UserReg): The user to write.
 
         Returns:
-            User: The written user object.
+            uuid.UUID: The user id.
         """
-        hashed_password = await hash_password(user.password)
-        user_obj = User(
-            **user.model_dump(exclude={"password"}), password=hashed_password
-        )
         self.session.add(user_obj)
         await self.session.commit()
         await self.session.refresh(user_obj)
-        return user_obj
+        return user_obj.user_id
 
     async def check_if_user_exists(self, user_data: UserReg):
         """

@@ -16,10 +16,10 @@ class UserSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
-    user_id: uuid.UUID = Field(default_factory=uuid.uuid4)
+    user_id: uuid.UUID
 
 
-class UserReg(UserSchema):
+class UserReg(BaseModel):
     """
     User Schema for registration
 

@@ -5,6 +5,8 @@ import uuid
 from db.models import User
 from repositories.user_repo import UserRepository
 from schemas.user import UserReg
+from utils.utils import hash_password
+from db.models import User
 
 
 class UserService:
@@ -38,7 +40,7 @@ class UserService:
         """
         return await self.user_repository.check_if_user_exists(user_data)
 
-    async def create_user(self, user_data: UserReg) -> User:
+    async def create_user(self, user_data: UserReg) -> uuid.UUID:
         """
         Create a user.
 
@@ -46,6 +48,10 @@ class UserService:
             user_data (UserReg): The user data to create Pydantic scheme.
 
         Returns:
-            User: The created user object - sqlachemy User model.
+            : The created user object - sqlachemy User model.
         """
-        return await self.user_repository.write_user(user_data)
+        hashed_password = await hash_password(user_data.password)
+        user_obj = User(
+            **user_data.model_dump(exclude={"password"}), password=hashed_password
+        )
+        return await self.user_repository.write_user(user_obj)
