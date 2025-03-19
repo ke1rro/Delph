@@ -1,7 +1,6 @@
 """
 Module provides user authentication via JWT
 """
-
 import uuid
 from typing import Any
 
