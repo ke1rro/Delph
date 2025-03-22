@@ -6,12 +6,12 @@ import time
 import uuid
 from typing import AsyncGenerator
 
-from schemas.message import Entity, Location, Message, Velocity
-from shapely import Point
-
 from models.user import User
 from repositories.queue import QueuePublishRepository, QueueSubscribeRepository
 from services.user import UserService
+from shapely import Point
+
+from schemas.message import Entity, Location, Message, Velocity
 
 
 class NoPermissionError(Exception):

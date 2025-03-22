@@ -6,9 +6,10 @@ import logging
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 from pydantic import ValidationError
+
 from schemas.message import Message
 
-logger = logging.Logger("delta")
+logger = logging.getLogger("delta")
 
 
 class QueuePublishRepository:
@@ -49,7 +50,7 @@ class QueuePublishRepository:
         Args:
             message: Message to publish.
         """
-        logging.debug("New message: %s", message)
+        logger.debug("New message: %s", message)
         await self.producer.send_and_wait(
             self.topic,
             message.model_dump_json().encode(),
@@ -86,12 +87,14 @@ class QueueSubscription:
         Connect repository to the message queue.
         """
         await self.consumer.start()
+        logger.info("Queue consumer connected")
 
     async def disconnect(self):
         """
         Disconnect repository from the message queue.
         """
         await self.consumer.stop()
+        logger.info("Queue consumer disconnected")
 
     def __aiter__(self):
         return self
@@ -124,5 +127,5 @@ class QueueSubscribeRepository:
         """
         Subscribe to the message queue.
         """
-        logging.info("New subscription to the queue")
+        logger.info("New subscription to the queue")
         return QueueSubscription(self.topic, self.config)

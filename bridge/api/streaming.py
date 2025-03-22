@@ -2,20 +2,39 @@
 Streaming service to stream messages from Kafka to the client.
 """
 
+import asyncio
+
 from fastapi import (
     APIRouter,
     Depends,
     Header,
     HTTPException,
     WebSocket,
-    WebSocketDisconnect,
 )
-
-from api.dependencies import get_queue_subscribe_service, get_user_service
+from models.user import User
 from services.queue import QueueSubscribeService
 from services.user import AuthenticationError, UserService
 
+from api.dependencies import get_queue_subscribe_service, get_user_service
+
 router = APIRouter()
+
+
+async def websocket_consume(
+    websocket: WebSocket,
+    user: User,
+    queue_service: QueueSubscribeService,
+):
+    """
+    Consume messages from Kafka and send them to the client.
+
+    Args:
+        websocket: WebSocket object.
+        user: User object.
+        queue_service: Queue subscribe service.
+    """
+    async for message in queue_service.subscribe(user):
+        await websocket.send_json(message.model_dump())
 
 
 @router.websocket("/readMessages")
@@ -42,9 +61,9 @@ async def websocket_endpoint(
 
     await websocket.accept()
 
-    # TODO: Handle disconnection while no messages are being sent
+    task = asyncio.create_task(websocket_consume(websocket, user, queue_service))
     try:
-        async for message in queue_service.subscribe(user):
-            await websocket.send_json(message.model_dump())
-    except WebSocketDisconnect:
-        pass
+        async for _ in websocket.iter_bytes():
+            pass
+    finally:
+        task.cancel()
