@@ -13,6 +13,26 @@ from schemas.message import Entity, Location, Message, Velocity
 router = APIRouter(tags=["posting"])
 
 
+class CreateMessage(BaseModel):
+    """
+    Create message request schema.
+    """
+
+    entity: Entity
+    location: Location
+    velocity: Velocity | None = None
+    ttl: int | None = Field(
+        default=None,
+        ge=0,
+        le=7 * 24 * 60 * 60,
+    )
+    message_id: str | None = None
+    comment: str | None = Field(
+        default=None,
+        max_length=256,
+    )
+
+
 @router.put("/messages")
 async def create_message(
     entity: Entity,
@@ -23,7 +43,7 @@ async def create_message(
     token: str = Header(alias="Authorization"),
     user_service: UserService = Depends(get_user_service),
     queue_service: QueuePublishService = Depends(get_queue_publish_service),
-) -> str:
+) -> Message:
     """
     Send a message to the message broker.
 
