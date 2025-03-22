@@ -12,8 +12,8 @@ from schemas.message import Entity, Location, Velocity
 router = APIRouter(tags=["posting"])
 
 
-@router.put("/sendMessage")
-async def send_message(
+@router.put("/messages")
+async def create_message(
     entity: Entity,
     location: Location,
     velocity: Velocity | None = None,
