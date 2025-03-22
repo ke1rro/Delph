@@ -31,8 +31,8 @@ async def websocket_consume(
         await websocket.send_json(message.model_dump())
 
 
-@router.websocket("/readMessages")
-async def websocket_endpoint(
+@router.websocket("/messages")
+async def stream_messages(
     websocket: WebSocket,
     token: str = Header(alias="Authorization"),
     user_service: UserService = Depends(get_user_service),
