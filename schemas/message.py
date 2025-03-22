@@ -10,8 +10,8 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-
 # TODO: Entity deleted message
+
 
 class Location(BaseModel):
     """
@@ -100,7 +100,9 @@ class Message(BaseModel):
 
     id: str = Field(description="Unique identifier of the message.")
 
-    timestamp: int = Field(description="UNIX timestamp in milliseconds when the data was collected.")
+    timestamp: int = Field(
+        description="UNIX timestamp in milliseconds when the data was collected."
+    )
 
     source: Source
 
