@@ -4,13 +4,7 @@ Streaming service to stream messages from Kafka to the client.
 
 import asyncio
 
-from fastapi import (
-    APIRouter,
-    Depends,
-    Header,
-    HTTPException,
-    WebSocket,
-)
+from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket
 from models.user import User
 from services.queue import QueueSubscribeService
 from services.user import AuthenticationError, UserService
