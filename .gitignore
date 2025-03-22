@@ -278,5 +278,5 @@ dist-ssr
 *.sw?
 node_modules/
 
-jwt-private.pem
-jwt-public.pem
+.jwt-private.pem
+.jwt-public.pem

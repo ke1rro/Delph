@@ -6,7 +6,6 @@ from db.models import User
 from repositories.user_repo import UserRepository
 from schemas.user import UserReg
 from utils.utils import hash_password
-from db.models import User
 
 
 class UserService:
@@ -55,3 +54,15 @@ class UserService:
             **user_data.model_dump(exclude={"password"}), password=hashed_password
         )
         return await self.user_repository.write_user(user_obj)
+
+    async def is_admin(self, user_id: uuid.UUID) -> bool:
+        """
+        Check if the user is an admin.
+
+        Args:
+            user_id (uuid.UUID): The user ID to check.
+
+        Returns:
+            bool: True if the user is an admin, False otherwise.
+        """
+        return await self.user_repository.is_admin(user_id)
