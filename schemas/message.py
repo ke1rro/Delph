@@ -101,15 +101,12 @@ class Message(BaseModel):
     timestamp: int = Field(
         description="UNIX timestamp in milliseconds when the data was collected."
     )
-<<<<<<< HEAD
     ttl: int = Field(
         default=7 * 24 * 60 * 60,
         ge=0,
         le=7 * 24 * 60 * 60,
         description="Time-to-live in seconds. The message is valid for this duration. If 0, then removes the message.",
     )
-=======
->>>>>>> 61ea080 (Fix connection closure and logger)
 
     source: Source
 
