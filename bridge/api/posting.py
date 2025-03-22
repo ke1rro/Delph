@@ -3,11 +3,11 @@ Posting service to send messages to the message broker.
 """
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from schemas.message import Entity, Location, Velocity
-
-from api.dependencies import get_queue_publish_service, get_user_service
 from services.queue import NoPermissionError, QueuePublishService
 from services.user import AuthenticationError, UserService
+
+from api.dependencies import get_queue_publish_service, get_user_service
+from schemas.message import Entity, Location, Velocity
 
 router = APIRouter(tags=["posting"])
 

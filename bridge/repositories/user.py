@@ -2,9 +2,8 @@
 User repository to interact with the database.
 """
 
-from shapely import Point, Polygon
-
 from models.user import Permission, User
+from shapely import Point, Polygon
 
 
 # TODO: Currently stub user repository, needs to be implemented.
