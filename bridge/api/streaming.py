@@ -39,13 +39,7 @@ async def stream_messages(
     queue_service: QueueSubscribeService = Depends(get_queue_subscribe_service),
 ):
     """
-    WebSocket endpoint that streams messages from Kafka to the client.
-
-    Args:
-        websocket: WebSocket object.
-        token: User token.
-        user_service: User service dependency.
-        queue_service: Queue subscribe service dependency
+    Stream messages from the queue.
     """
     # TODO: JWT authentication
     try:
