@@ -3,11 +3,12 @@ User repository to interact with the database.
 """
 
 from models.user import Permission, User
+from repositories.base import Repository
 from shapely import Point, Polygon
 
 
 # TODO: Currently stub user repository, needs to be implemented.
-class UserRepository:
+class UserRepository(Repository):
     def __init__(self):
         pass
 

@@ -6,13 +6,14 @@ import logging
 
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 from pydantic import ValidationError
+from repositories.base import Repository
 
 from schemas.message import Message
 
 logger = logging.getLogger("delta")
 
 
-class QueuePublishRepository:
+class QueuePublishRepository(Repository):
     """
     Repository to publish messages to the message queue.
 
@@ -58,7 +59,7 @@ class QueuePublishRepository:
         )
 
 
-class QueueSubscription:
+class QueueSubscription(Repository):
     """
     Subscription to the message queue.
 
@@ -74,13 +75,6 @@ class QueueSubscription:
             **config,
             auto_offset_reset="earliest",
         )
-
-    async def __aenter__(self):
-        await self.connect()
-        return self
-
-    async def __aexit__(self, *_):
-        await self.disconnect()
 
     async def connect(self):
         """
@@ -109,7 +103,7 @@ class QueueSubscription:
                 )
 
 
-class QueueSubscribeRepository:
+class QueueSubscribeRepository(Repository):
     """
     Repository to subscribe to the message queue.
 
@@ -122,6 +116,18 @@ class QueueSubscribeRepository:
     def __init__(self, topic: str, config: dict):
         self.topic = topic
         self.config = config
+
+    async def connect(self):
+        """
+        Connect repository to the message queue.
+        """
+        logger.info("Queue subscription connected")
+
+    async def disconnect(self):
+        """
+        Disconnect repository from the message queue.
+        """
+        logger.info("Queue subscription disconnected")
 
     def subscribe(self):
         """
