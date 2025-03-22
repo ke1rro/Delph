@@ -10,8 +10,6 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-# TODO: Entity deleted message
-
 
 class Location(BaseModel):
     """
@@ -102,6 +100,12 @@ class Message(BaseModel):
 
     timestamp: int = Field(
         description="UNIX timestamp in milliseconds when the data was collected."
+    )
+    ttl: int = Field(
+        default=7 * 24 * 60 * 60,
+        ge=0,
+        le=7 * 24 * 60 * 60,
+        description="Time-to-live in seconds. The message is valid for this duration. If 0, then removes the message.",
     )
 
     source: Source
