@@ -1,6 +1,5 @@
 """User repository module."""
 
-import logging
 import uuid
 
 from db.models import User
@@ -8,11 +7,6 @@ from schemas.user import UserReg
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import validates
-from utils.utils import hash_password
-
-logging.basicConfig(
-    level=logging.INFO, filename="app.log", format="%(asctime)s - %(message)s"
-)
 
 
 class UserRepository:
@@ -35,8 +29,8 @@ class UserRepository:
         """
         try:
             return uuid.UUID(value)
-        except ValueError:
-            return False
+        except ValueError as e:
+            raise ValueError(f"invalid UUID: {value}") from e
 
     async def get_user_by_id(self, user_id: uuid.UUID) -> User | None:
         """
@@ -49,13 +43,14 @@ class UserRepository:
         Returns:
             User | None: The user object if found, None otherwise
         """
-        user_id = self.validate_user_id(user_id)
-        if user_id:
-            user = await self.session.scalars(
+        try:
+            user_id = self.validate_user_id(user_id)
+            result = await self.session.scalars(
                 select(User).where(User.user_id == user_id)
             )
-            return user.one_or_none()
-        return None
+            return result.one_or_none()
+        except ValueError as e:
+            return None
 
     async def write_user(self, user_obj: User) -> uuid.UUID:
         """
@@ -88,3 +83,18 @@ class UserRepository:
             )
         )
         return user.one_or_none()
+
+    async def is_admin(self, user_id: uuid.UUID) -> bool:
+        """
+        Check if the user is an admin.
+
+        Args:
+            user_id (uuid.UUID): The user ID to check.
+
+        Returns:
+            bool: True if the user is an admin, False otherwise.
+        """
+        user_is_admin = await self.session.scalars(
+            select(User.is_admin).where(User.user_id == user_id)
+        )
+        return user_is_admin.one_or_none()

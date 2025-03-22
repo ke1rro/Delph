@@ -69,3 +69,12 @@ class UserLogin(UserSchema):
     password: str
     name: str
     surname: str
+
+
+class BlacklistUserRequest(UserSchema):
+    """
+    Blacklist User Request Schema
+    """
+
+    reason: str
+    expire: int | None = None
