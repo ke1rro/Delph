@@ -3,12 +3,19 @@ Posting service to send messages to the message broker.
 """
 
 from fastapi import APIRouter, Depends, Header, HTTPException
+<<<<<<< HEAD
 from pydantic import BaseModel, Field
+=======
+>>>>>>> 61ea080 (Fix connection closure and logger)
 from services.queue import NoPermissionError, QueuePublishService
 from services.user import AuthenticationError, UserService
 
 from api.dependencies import get_queue_publish_service, get_user_service
+<<<<<<< HEAD
 from schemas.message import Entity, Location, Message, Velocity
+=======
+from schemas.message import Entity, Location, Velocity
+>>>>>>> 61ea080 (Fix connection closure and logger)
 
 router = APIRouter(tags=["posting"])
 

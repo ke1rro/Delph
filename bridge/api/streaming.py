@@ -11,7 +11,6 @@ from services.user import AuthenticationError, UserService
 
 from api.dependencies import get_queue_subscribe_service, get_user_service
 
-
 router = APIRouter()
 
 
