@@ -47,7 +47,8 @@ class QueuePublishService:
         user: User,
         entity: Entity,
         location: Location,
-        velocity: Velocity | None,
+        velocity: Velocity | None = None,
+        ttl: int | None = None,
         message_id: str | None = None,
         comment: str | None = None,
     ) -> Message:
@@ -59,6 +60,7 @@ class QueuePublishService:
             entity: The entity to be published.
             location: The location of the entity.
             velocity: The velocity of the entity, if available.
+            ttl: Time-to-live in seconds. Defaults to 7 days.
             message_id: The ID of the message. If not provided, a new ID will
                 be generated.
             comment: An optional comment to include with the message. Defaults to None.
@@ -79,9 +81,13 @@ class QueuePublishService:
         if message_id is None:
             message_id = await self.generate_message_id()
 
+        if ttl is None:
+            ttl = 7 * 24 * 60 * 60
+
         message = Message(
             id=message_id,
             timestamp=int(time.time() * 1000),
+            ttl=ttl,
             source=await self.user_service.create_source(user, comment),
             location=location,
             velocity=velocity,

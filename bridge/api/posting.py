@@ -16,7 +16,8 @@ router = APIRouter(tags=["posting"])
 async def send_message(
     entity: Entity,
     location: Location,
-    velocity: Velocity | None,
+    velocity: Velocity | None = None,
+    ttl: int | None = None,
     message_id: str | None = None,
     comment: str | None = None,
     token: str = Header(alias="Authorization"),
@@ -30,6 +31,7 @@ async def send_message(
         entity: The entity to be published.
         location: The location of the entity.
         velocity: The velocity of the entity. Defaults to None.
+        ttl: Time-to-live in seconds. Defaults to 7 days.
         message_id: Unique message ID. Defaults to None.
         comment: Comment for the message. Defaults to None.
         token: User token.
@@ -49,7 +51,7 @@ async def send_message(
     try:
         return (
             await queue_service.publish(
-                user, entity, location, velocity, message_id, comment
+                user, entity, location, velocity, ttl, message_id, comment
             )
         ).id
     except NoPermissionError as e:
