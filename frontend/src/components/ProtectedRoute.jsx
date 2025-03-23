@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import api from "../Api.js";
 
 const ProtectedRoute = ({ element }) => {
   const [isTokenValid, setIsTokenValid] = useState(null);
 
-  // TODO Client to server communication
   useEffect(() => {
     const validateToken = async () => {
       try {
-        const response = await fetch("http://localhost:8080/auth/validate_token", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        setIsTokenValid(response.ok);
+        const response = await api.auth.validateToken();
+        setIsTokenValid(response.status == 200);
       } catch (error) {
+        console.error(error);
         setIsTokenValid(false);
       }
     };
