@@ -1,0 +1,7 @@
+aiokafka==0.12.0
+fastapi==0.115.8
+uvicorn==0.34.0
+websockets==15.0
+aioredis==2.0.1
+shapely==2.0.7
+pydantic-settings==2.8.1

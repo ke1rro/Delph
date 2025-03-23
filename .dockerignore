@@ -1,10 +1,38 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-<!-- Kafka has its own Dockerfile -->
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Kafka has its own Dockerfile 
 kafka/
 
-<!-- License & Readme -->
+# License & Readme
 LICENSE
 README.md
 
-<!-- frontend has its own Dockerfile -->
+# frontend has its own Dockerfile
 frontend/
