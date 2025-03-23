@@ -278,5 +278,15 @@ dist-ssr
 *.sw?
 node_modules/
 
-.jwt-private.pem
-.jwt-public.pem
+# Keys
+*.pem
+/api/certificates/jwt-private.pem
+/api/certificates/jwt-public.pem
+
+# Redis Data
+.redisdata/
+
+# Redis append-only files
+*.aof
+redisdata/appendonlydir/
+redisdata/appendonlydir/appendonly.aof.1.incr.aof
