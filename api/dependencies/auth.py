@@ -13,6 +13,13 @@ from services.user_service import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils.utils import decode_jwt, encode_jwt, validate_password
 
+from pydantic import BaseModel
+
+
+class LogingData(BaseModel):
+    user_id: str
+    password: str
+
 
 async def get_user_service(
     session: AsyncSession = Depends(database.get_session),
@@ -31,16 +38,14 @@ async def get_user_service(
 
 
 async def validate_user_auth(
-    user_id: str = Form(),
-    password: str = Form(),
+    login_data: LogingData,
     user_service: UserService = Depends(get_user_service),
 ) -> bool:
     """
 
 
     Args:
-        user_id (str, optional): The user's id in format (UUID).
-        password (str, optional): The user's password.
+        login_data (LogingData): The login data.
         user_service (UserService, optional): The UserService instance.
 
     Raises:
@@ -53,14 +58,14 @@ async def validate_user_auth(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid credentials",
     )
-    if not user_id:
+    if not login_data.user_id:
         raise unauthed_exc
 
-    user = await user_service.get_user(user_id)
+    user = await user_service.get_user(login_data.user_id)
     if not user:
         raise unauthed_exc
 
-    if await validate_password(password, hashed_password=user.password):
+    if await validate_password(login_data.password, hashed_password=user.password):
         return user
 
     raise unauthed_exc

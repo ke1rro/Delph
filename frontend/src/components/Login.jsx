@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/Auth.css";
 import { useNavigate } from "react-router-dom";
+import api from "../Api.js";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,26 +14,17 @@ const Login = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        credentials: "include",
-        body: new URLSearchParams({
-          user_id: identifier,
-          password: password,
-        }),
-      });
+      const response = await api.auth.login({user_id: identifier, password: password});
 
-      if (!response.ok) {
+      if (response.status != 200) {
         throw new Error("Invalid credentials");
       }
 
       console.log("Login successful.");
       navigate("/map");
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      setError("Error during login. Try again.");
     }
   };
 

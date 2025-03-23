@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Auth.css";
+import api from "../Api.js";
 
 const Registration = () => {
   const [formData, setFormData] = useState({
@@ -32,24 +33,19 @@ const Registration = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.firstName,
-          surname: formData.lastName,
-          password: formData.password,
-        }),
+      const response = await api.auth.signup({
+        name: formData.firstName,
+        surname: formData.lastName,
+        password: formData.password,
       });
 
-      if (!response.ok) {
+      if (response.status != 200) {
         throw new Error("Registration failed");
       }
 
       setSuccess("Registration successful!");
     } catch (error) {
+      console.error(error);
       setError("Error during registration. Try again.");
     }
   };
