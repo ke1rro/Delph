@@ -1,0 +1,21 @@
+.page-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.main-content {
+    flex-grow: 1;
+    background-color: rgb(39, 43, 52);
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Ensure it fills the full height */
+    overflow: hidden; /* Prevents scrollbars */
+}
+
+.content {
+  flex-grow: 1;
+  height: 100%;
+  overflow: hidden;
+}
+
