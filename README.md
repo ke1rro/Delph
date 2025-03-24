@@ -2,7 +2,6 @@
 
 > [!CAUTION]
 > Install requirements to work with repo
-
 > [!IMPORTANT]
 > To work with repository create new branch from `dev` and submit pull request
 
@@ -21,6 +20,7 @@
 ```bash
 docker-compose up -d --build
 ```
+
 ## Generating jwt keys
 
 ```bash
@@ -29,6 +29,13 @@ cd certificates
 openssl genrsa -out jwt-private.pem 2048
 openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
 ```
+
+## Postman collection to test the API
+
+Join the POSTMAN team
+
+[**Team link**](https://delta6-6194.postman.co/workspace/delta~f62492cc-cf71-4441-a2ed-67e752ea4e28/collection/42375143-392cd135-bd82-4b46-b440-b434f0ccc6e2?action=share&creator=42375143)
+
 ----
 
 ## **Routers**
@@ -39,11 +46,9 @@ openssl rsa -in jwt-private.pem -outform PEM -pubout -out jwt-public.pem
 
 🔹 login: http://localhost:3000/login
 
-🔹 map: http://localhost:3000/map
+🔹 map: http://localhost:3000/map [AUTH required]
 
 🔹 FastAPI: http://localhost:8000/docs
-
-🔹 Hello world test (via NGINX): http://localhost:8080/greet
 
 🔹 FastAPI (via NGINX): http://localhost:8080/api
 
