@@ -20,7 +20,7 @@ async def lifespan(_):
 
 app = FastAPI(lifespan=lifespan)
 app.include_router(auth_router)
-app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend(get_user_service))
+app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend())
 
 app.add_middleware(
     CORSMiddleware,
