@@ -5,15 +5,15 @@ Module provides dependencies for the authentication.
 from typing import Any
 
 from core.postgres_database import database
-from fastapi import Depends, Form, HTTPException, Request, Response, status
+from fastapi import Depends, HTTPException, Request, Response, status
+from pydantic import BaseModel
 from repositories.user_repo import UserRepository
-from schemas.token import TokenInfo
-from schemas.user import UserLogin
 from services.user_service import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
 from utils.utils import decode_jwt, encode_jwt, validate_password
 
-from pydantic import BaseModel
+from schemas.token import TokenInfo
+from schemas.user import UserLogin
 
 
 class LogingData(BaseModel):

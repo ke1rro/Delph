@@ -1,6 +1,7 @@
 """
 Module provides user authentication via JWT
 """
+
 import uuid
 from typing import Any
 
@@ -9,38 +10,13 @@ from dependencies.auth import (create_jwt_token, get_user_service,
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse
-from schemas.token import TokenInfo
-from schemas.user import UserLogin, UserReg
-from services.cache_service import CacheService
 from services.user_service import UserService
 from starlette.authentication import requires
-from pydantic import BaseModel
+
+from schemas.token import TokenInfo
+from schemas.user import UserLogin, UserReg
+
 router = APIRouter(prefix="/auth", tags=["auth"])
-cache_service = CacheService()
-
-class TokenRevokeRequest(BaseModel):
-    token: str
-
-@router.post("/revoke")
-async def revoke_token(request: TokenRevokeRequest):
-    """
-    Revoke a token by adding it to the blacklist.
-
-    Args:
-        response (Response): The response object
-        token (str): The token to revoke
-
-    Returns:
-        dict: A success message
-    """
-    try:
-        await cache_service.blacklist_token(request.token, 900)
-        return {"message": "Token successfully revoked"}
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to revoke token: {str(e)}",
-        )
 
 
 @router.options("/{full_path:path}")

@@ -3,7 +3,6 @@
 from contextlib import asynccontextmanager
 
 from core.postgres_database import database
-from dependencies.auth import get_user_service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from middleware.jwt_auth import JWTAuthBackend

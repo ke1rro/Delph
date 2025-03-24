@@ -4,14 +4,11 @@ import logging
 import uuid
 
 from db.models import User
-from schemas.user import UserReg
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import validates
 
-logging.basicConfig(
-    level=logging.INFO, filename="app.log", format="%(asctime)s - %(message)s"
-)
+from schemas.user import UserReg
 
 
 class UserRepository:
