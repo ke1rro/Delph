@@ -5,8 +5,12 @@ Module provides user authentication via JWT
 import uuid
 from typing import Any
 
-from dependencies.auth import (create_jwt_token, get_user_service,
-                               validate_jwt_token, validate_user_auth)
+from dependencies.auth import (
+    create_jwt_token,
+    get_user_service,
+    validate_jwt_token,
+    validate_user_auth,
+)
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.requests import Request
 from fastapi.responses import JSONResponse

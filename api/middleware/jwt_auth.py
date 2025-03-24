@@ -9,8 +9,7 @@ from core.postgres_database import database
 from core.redis import redis_client
 from repositories.user_repo import UserRepository
 from services.user_service import UserService
-from starlette.authentication import (AuthCredentials, AuthenticationBackend,
-                                      SimpleUser)
+from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
 from starlette.requests import Request
 from utils.utils import decode_jwt
 

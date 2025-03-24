@@ -102,10 +102,13 @@ class Message(BaseModel):
         description="UNIX timestamp in milliseconds when the data was collected."
     )
     ttl: int = Field(
-        default=7 * 24 * 60 * 60,
+        default=7 * 24 * 60 * 60 * 1000,
+        le=7 * 24 * 60 * 60 * 1000,
         ge=0,
-        le=7 * 24 * 60 * 60,
-        description="Time-to-live in seconds. The message is valid for this duration. If 0, then removes the message.",
+        description=(
+            "Time-to-live in milliseconds. The message is valid for this "
+            "duration. If 0, then removes the message."
+        ),
     )
 
     source: Source

@@ -24,7 +24,7 @@ class CreateMessage(BaseModel):
     ttl: int | None = Field(
         default=None,
         ge=0,
-        le=7 * 24 * 60 * 60,
+        le=7 * 24 * 60 * 60 * 1000,
     )
     message_id: str | None = None
     comment: str | None = Field(

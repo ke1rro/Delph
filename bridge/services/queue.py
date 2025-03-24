@@ -60,7 +60,7 @@ class QueuePublishService:
             entity: The entity to be published.
             location: The location of the entity.
             velocity: The velocity of the entity, if available.
-            ttl: Time-to-live in seconds. Defaults to 7 days.
+            ttl: Time-to-live in milliseconds. Defaults to 7 days.
             message_id: The ID of the message. If not provided, a new ID will
                 be generated.
             comment: An optional comment to include with the message. Defaults to None.
@@ -82,7 +82,7 @@ class QueuePublishService:
             message_id = await self.generate_message_id()
 
         if ttl is None:
-            ttl = 7 * 24 * 60 * 60
+            ttl = 7 * 24 * 60 * 60 * 1000
 
         message = Message(
             id=message_id,
