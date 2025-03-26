@@ -283,10 +283,5 @@ node_modules/
 /api/certificates/jwt-private.pem
 /api/certificates/jwt-public.pem
 
-# Redis Data
-.redisdata/
-
-# Redis append-only files
-*.aof
-redisdata/appendonlydir/
-redisdata/appendonlydir/appendonly.aof.1.incr.aof
+# Containers Data
+data/

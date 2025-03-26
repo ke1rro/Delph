@@ -10,8 +10,6 @@ class Settings(BaseSettings):
     Settings for the bridge service.
     """
 
-    jwt_public_key: str
-    jwt_algorithm: str = "RS256"
     user_source_fmt: str = "DELTA_USER/{user_id}"
     kafka_topic: str = "delta"
     kafka_bootstrap_servers: str = "localhost:9092"

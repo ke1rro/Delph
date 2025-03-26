@@ -20,7 +20,6 @@ class Redis(BaseSettings):
     redis_port: int
     redis_db: int
     redis_password: str
-    redis_user: str
 
     model_config = SettingsConfigDict(env_file=f"{BASE_DIR}/.env")
 
@@ -29,7 +28,7 @@ class Redis(BaseSettings):
         """
         Return the Redis URL for connection.
         """
-        return f"redis://{self.redis_user}:{self.redis_password}@{self.redis_host}:{self.redis_port}/{self.redis_db}"
+        return f"redis://:{self.redis_password}@{self.redis_host}:{self.redis_port}/{self.redis_db}"
 
 
 class Database(BaseSettings):
