@@ -18,7 +18,7 @@ async def lifespan(_):
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(root_path="/api/core", lifespan=lifespan)
 app.include_router(auth_router)
 app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend())
 

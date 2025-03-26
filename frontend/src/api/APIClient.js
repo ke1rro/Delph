@@ -13,7 +13,7 @@ class APIClient {
             },
             withCredentials: true,
         });
-        this.auth = new AuthContext(this.client, "/auth");
+        this.auth = new AuthContext(this.client, "/core/auth");
         this.bridge = new BridgeContext(this.client, "/bridge", baseUrl);
     }
 }
