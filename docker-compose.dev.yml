@@ -1,3 +1,7 @@
+# Available ports:
+# 8081 - kafka ui
+# 8082 - redis insight
+
 services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -6,7 +10,15 @@ services:
       kafka:
         condition: service_healthy
     ports:
-      - 8082:8080
+      - 8081:8080
     environment:
       KAFKA_CLUSTERS_0_NAME: cluster
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+
+  redis-ui:
+    image: redislabs/redisinsight:latest
+    container_name: redis-ui
+    ports:
+      - 8082:5540
+    volumes:
+      - ./data/redisinsight:/db 
