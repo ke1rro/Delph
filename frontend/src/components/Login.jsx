@@ -8,18 +8,21 @@ const Login = () => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     try {
-      const response = await api.auth.login({user_id: identifier, password: password});
+      const response = await api.auth.login({ user_id: identifier, password: password });
 
-      if (response.status != 200) {
+      if (response.status !== 200) {
         throw new Error("Invalid credentials");
       }
 
+      setSuccess("Login successful!");
       console.log("Login successful.");
       navigate("/map");
     } catch (err) {
@@ -55,14 +58,15 @@ const Login = () => {
         </button>
       </form>
 
-      {error && <div className="popup error-popup">{error}</div>}
+      {/* Popup container */}
+      <div className="popup-container">
+        {error && <div className="popup error-popup">{error}</div>}
+        {success && <div className="popup success-popup">{success}</div>}
+      </div>
 
       <div className="auth-links">
         <a href="/signup" className="link">
           Sign up
-        </a>
-        <a href="/forgot-password" className="link">
-          Forgot password
         </a>
       </div>
 

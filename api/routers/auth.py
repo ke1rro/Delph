@@ -17,8 +17,7 @@ from fastapi.responses import JSONResponse
 from services.user_service import UserService
 from starlette.authentication import requires
 
-from schemas.token import TokenInfo
-from schemas.user import UserLogin, UserReg
+from schemas.user import LoginResponse, UserLogin, UserReg
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -60,20 +59,24 @@ async def validate_token(payload=Depends(validate_jwt_token)) -> dict[str, Any]:
     }
 
 
-@router.post("/login", response_model=TokenInfo)
+@router.post("/login", response_model=LoginResponse)
 async def auth_user(
     response: Response,
     user: UserLogin = Depends(validate_user_auth),
-) -> TokenInfo:
+) -> LoginResponse:
     """
     Authenticates a user and returns a JWT token.
     Adds cookie to the response.
     """
-    return await create_jwt_token(user, response)
+    await create_jwt_token(user, response)
+    return {
+        "message": "Successfully logged in",
+        "user_id": user.user_id.hex,
+    }
 
 
 @router.post("/logout")
-async def logout(response: Response):
+async def logout(response: Response) -> dict[str, str]:
     """
     Logout the user by clearing cookies.
     """
@@ -86,7 +89,7 @@ async def logout(response: Response):
 async def write_user(
     user_data: UserReg,
     user_service: UserService = Depends(get_user_service),
-):
+) -> uuid.UUID:
     """
     Register a new user.
     """
@@ -97,8 +100,8 @@ async def write_user(
             detail="User already exists",
         )
 
-    new_user = await user_service.create_user(user_data)
-    return new_user
+    new_user_id = await user_service.create_user(user_data)
+    return new_user_id
 
 
 # Will be removed
