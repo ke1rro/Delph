@@ -19,6 +19,14 @@ class UserSchema(BaseModel):
     user_id: uuid.UUID
 
 
+class LoginResponse(UserSchema):
+    """
+    User Schema for login response
+    """
+
+    message: str
+
+
 class UserReg(BaseModel):
     """
     User Schema for registration

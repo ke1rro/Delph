@@ -290,3 +290,6 @@ node_modules/
 *.aof
 redisdata/appendonlydir/
 redisdata/appendonlydir/appendonly.aof.1.incr.aof
+
+#node
+.package-lock.json
