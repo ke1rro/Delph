@@ -1,3 +1,3 @@
 import APIClient from "./api/APIClient";
 
-export default new APIClient("http://localhost:8002/api/");
+export default new APIClient("http://localhost:8000/api/");

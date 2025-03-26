@@ -43,6 +43,7 @@ async def stream_messages(
     """
     # TODO: JWT authentication
     token = "valid"
+    print("Trying...")
     try:
         user = await user_service.authenticate(token)
     except AuthenticationError as e:
