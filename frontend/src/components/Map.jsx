@@ -7,7 +7,7 @@ import EventStorage from "../bridge/EventStorage";
 
 const Map = () => {
   const storage = new EventStorage()
-  const client = new BridgeClient("ws://localhost:8081/bridge/messages", storage);
+  const client = new BridgeClient("ws://localhost:8003/bridge/messages", storage);
 
   storage.on("add", (event) => {
     console.log("Event added", event);

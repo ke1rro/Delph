@@ -1,3 +1,13 @@
+# Available ports:
+
+# 8000 - entry point (nginx)
+# 8001 - frontend service
+# 8002 - core service
+# 8003 - bridge service
+
+# 6380 - redis
+# 5433 - core db
+
 services:
   redis:
     build: redis
@@ -39,7 +49,6 @@ services:
       retries: 5
       start_period: 10s
 
-
   core-db:
     image: postgres:latest
     container_name: core-db
@@ -65,7 +74,7 @@ services:
       - .env
     restart: always
     ports:
-      - "8000:80"
+      - "8002:80"
     depends_on:
       core-db:
         condition: service_healthy
@@ -75,10 +84,8 @@ services:
   frontend:
     container_name: frontend
     build: frontend
-    environment:
-      VITE_API_URL: http://localhost:8080/api
     ports:
-      - "3000:80"
+      - "8001:80"
 
   bridge:
     build:
@@ -92,14 +99,14 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
     ports:
-      - 8081:80
+      - 8003:80
 
   nginx:
     build: server
     container_name: nginx
     restart: always
     ports:
-      - "8080:80"
+      - "8000:80"
     depends_on:
       - core
       - bridge

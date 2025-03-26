@@ -5,6 +5,7 @@ Module provides user authentication via JWT
 import uuid
 from typing import Any
 
+from core.config import settings
 from dependencies.auth import (
     create_jwt_token,
     get_user_service,
@@ -28,7 +29,7 @@ async def preflight(request: Request, full_path: str):
     Handle CORS preflight requests.
     """
     headers = {
-        "Access-Control-Allow-Origin": "http://localhost:3000",
+        "Access-Control-Allow-Origin": settings.cors.cors_allow_origin,
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
         "Access-Control-Allow-Credentials": "true",
