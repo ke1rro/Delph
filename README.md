@@ -38,19 +38,29 @@ Join the POSTMAN team
 
 ----
 
-## **Routers**
+## Composes
 
-🔹 Frontend: http://localhost:3000
+There are two available compose files.
+If you want to run service without development tools like kafka ui or redis insight, then just use `docker compose up --build`, otherwise you will have to specify two compose files:
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
 
-🔹 signup: http://localhost:3000/signup
+## Usage
+To access the system go to http://localhost:8000/
+All api routes are available at http://localhost:8000/api/
 
-🔹 login: http://localhost:3000/login
+## Raw access
 
-🔹 map: http://localhost:3000/map [AUTH required]
-
-🔹 FastAPI: http://localhost:8000/docs
-
-🔹 FastAPI (via NGINX): http://localhost:8080/api
+- Frontend Service: http://localhost:8001
+  - signup: http://localhost:3000/signup
+  - login: http://localhost:3000/login
+  - map: http://localhost:3000/map [AUTH required]
+- Core Service: http://localhost:8002
+  - docs: http://localhost:8002/docs
+- Bridge Service: http://localhost:8003
+  - docs: http://localhost:8003/docs
+  - streaming endpoint: http://localhost:8003/api/bridge/messages
 
 ### To run Frontend
 
