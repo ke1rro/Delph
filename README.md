@@ -49,13 +49,17 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ## Usage
 To access the system go to http://localhost:8000/
 All api routes are available at http://localhost:8000/api/
+Pages available:
+- signup: http://localhost:8000/signup
+- login: http://localhost:8000/login
+- map: http://localhost:8000/map [AUTH required]
 
 ## Raw access
 
 - Frontend Service: http://localhost:8001
-  - signup: http://localhost:3000/signup
-  - login: http://localhost:3000/login
-  - map: http://localhost:3000/map [AUTH required]
+  - signup: http://localhost:8001/signup
+  - login: http://localhost:8001/login
+  - map: http://localhost:8001/map [AUTH required]
 - Core Service: http://localhost:8002
   - docs: http://localhost:8002/docs
 - Bridge Service: http://localhost:8003
