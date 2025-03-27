@@ -76,10 +76,10 @@ class Entity(BaseModel):
         "unknown",
         "pending",
     ] = Field(description="Affiliation of the entity.")
-    type: Literal["land", "air", "water", "underwater"] = Field(
+    type: Literal["land", "air", "water", "underwater", "sof"] = Field(
         description="Type of the entity."
     )
-    entity: str = Field(max_length=6, description="Entity code according to APP6C.")
+    entity: str = Field(description="Entity path according to APP6C.")
     status: Literal["active", "disabled", "destroyed", "unknown"] = Field(
         default="unknown", description="Status of the entity."
     )

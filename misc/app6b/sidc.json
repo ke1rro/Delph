@@ -13,12 +13,4431 @@
         "air": "A",
         "water": "S",
         "space": "P",
-        "underwater": "U"
+        "underwater": "U",
+        "sof": "F"
     },
     "status": {
         "active": "C",
         "disabled": "D",
         "destroyed": "X",
         "unknown": "P"
+    },
+    "entity": {
+        "installation": {
+            "sidc": "I-----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:base/facility": {
+            "sidc": "IB----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:base/facility:airport/airbase": {
+            "sidc": "IBA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:base/facility:seaport/naval base": {
+            "sidc": "IBN---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility": {
+            "sidc": "IM----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:atomic energy production": {
+            "sidc": "IMF---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:aircraft production & assembly": {
+            "sidc": "IMA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:ammunition and explosives production": {
+            "sidc": "IME---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:armament production": {
+            "sidc": "IMG---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:military vehicle production": {
+            "sidc": "IMV---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:engineering equipment production": {
+            "sidc": "IMN---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:engineering equipment production:bridge": {
+            "sidc": "IMNB--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:chemical & biological warfare production": {
+            "sidc": "IMC---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:ship construction": {
+            "sidc": "IMS---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:military:materiel facility:missile & space system production": {
+            "sidc": "IMM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage": {
+            "sidc": "IR----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:mine": {
+            "sidc": "IRM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:petroleum/gas/oil": {
+            "sidc": "IRP---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:cbrn": {
+            "sidc": "IRN---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:cbrn:biological": {
+            "sidc": "IRNB--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:cbrn:chemical": {
+            "sidc": "IRNC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:raw material production/storage:cbrn:nuclear": {
+            "sidc": "IRNN--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:processing facility": {
+            "sidc": "IP----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:processing facility:decon": {
+            "sidc": "IPD---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:equipment manufacture": {
+            "sidc": "IE----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:service research utility facility": {
+            "sidc": "IU----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:service research utility facility:technological research facility": {
+            "sidc": "IUR---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:service research utility facility:telecommunications facility": {
+            "sidc": "IUT---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:service research utility facility:electric power facility": {
+            "sidc": "IUE---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:service research utility facility:public water services": {
+            "sidc": "IUP---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:government leadership": {
+            "sidc": "IG----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:transport facility": {
+            "sidc": "IT----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:medical facility": {
+            "sidc": "IX----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "installation:medical facility:hospital": {
+            "sidc": "IXH---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "special operations force (sof) unit": {
+            "sidc": "------",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation": {
+            "sidc": "A-----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:vstol": {
+            "sidc": "AV----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing": {
+            "sidc": "AF----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:attack": {
+            "sidc": "AFA---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:refuel": {
+            "sidc": "AFK---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:utility": {
+            "sidc": "AFU---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:utility:sof unit utility:(light)": {
+            "sidc": "AFUL--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:utility:sof unit utility:(medium)": {
+            "sidc": "AFUM--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:fixed wing:sof unit:utility:sof unit utility:(heavy)": {
+            "sidc": "AFUH--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing": {
+            "sidc": "AH----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:attack": {
+            "sidc": "AHA---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:utility": {
+            "sidc": "AHU---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:utility:sof unit utility:(light)": {
+            "sidc": "AHUL--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:utility:sof unit utility:(medium)": {
+            "sidc": "AHUM--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:utility:sof unit utility:(heavy)": {
+            "sidc": "AHUH--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:aviation:sof unit:rotary wing:sof unit:combat search and rescue": {
+            "sidc": "AHH---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground": {
+            "sidc": "G-----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground:sof unit:ranger": {
+            "sidc": "GSR---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground:sof unit:special forces": {
+            "sidc": "GS----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground:sof unit:psychological operations (psyops)": {
+            "sidc": "GSP---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground:sof unit:psychological operations (psyops):sof unit fixed aviation": {
+            "sidc": "GSPA--",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:ground:sof unit:civil affairs": {
+            "sidc": "GCA---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:support": {
+            "sidc": "GB----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:sof unit naval": {
+            "sidc": "SN----",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:sof unit naval:sof unit:seal": {
+            "sidc": "SNS---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:sof unit naval:sof unit:special:boat": {
+            "sidc": "SNB---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:sof unit naval:sof unit:special:ssnr": {
+            "sidc": "SNN---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "special operations force (sof) unit:sof unit:sof unit naval:sof unit:underwater demolition team": {
+            "sidc": "SNU---",
+            "filters": {
+                "type": "sof"
+            }
+        },
+        "subsurface track": {
+            "sidc": "------",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:submarine": {
+            "sidc": "S-----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:submarine:nuclear propulsion": {
+            "sidc": "SN----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:submarine:conventional propulsion": {
+            "sidc": "SC----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:submarine:other submersible": {
+            "sidc": "SO----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon": {
+            "sidc": "W-----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:torpedo": {
+            "sidc": "WT----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine": {
+            "sidc": "WM----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:dealt": {
+            "sidc": "WMD---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(ground)": {
+            "sidc": "WMG---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(ground):sea mine (ground) dealt": {
+            "sidc": "WMGD--",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(moored)": {
+            "sidc": "WMM---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(moored):sea mine (moored dealt": {
+            "sidc": "WMMD--",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(floating)": {
+            "sidc": "WMF---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(floating):sea mine (floating) dealt": {
+            "sidc": "WMFD--",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(in other position)": {
+            "sidc": "WMO---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:sea mine:sea mine:(in other position):sea mine (in other position) dealt": {
+            "sidc": "WMOD--",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:weapon:drone (uuv)": {
+            "sidc": "WV----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:decoy": {
+            "sidc": "WD----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:underwater:decoy:sea mine decoy": {
+            "sidc": "WDM---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine": {
+            "sidc": "N-----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:diver": {
+            "sidc": "ND----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:bottom return/nombo": {
+            "sidc": "NB----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:bottom return/nombo:seabed:installation/manmade": {
+            "sidc": "NBS---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:bottom return/nombo:seabed:rock/stone obstacle other": {
+            "sidc": "NBR---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:bottom return/nombo:wreck": {
+            "sidc": "NBW---",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:marine life": {
+            "sidc": "NM----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "subsurface track:non-submarine:sea anomaly": {
+            "sidc": "NA----",
+            "filters": {
+                "type": "underwater"
+            }
+        },
+        "sea surface:track": {
+            "sidc": "------",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant": {
+            "sidc": "C-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line": {
+            "sidc": "CL----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line:carrier": {
+            "sidc": "CLCV--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line:battleship": {
+            "sidc": "CLBB--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line:cruiser": {
+            "sidc": "CLCC--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line:destroyer": {
+            "sidc": "CLDD--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:line:frigate/corvette": {
+            "sidc": "CLFF--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:patrol": {
+            "sidc": "CP----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:patrol:anti:submarine warfare": {
+            "sidc": "CPSB--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:patrol:anti:surface warfare": {
+            "sidc": "CPSU--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:hovercraft": {
+            "sidc": "CH----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:amphibious warfare ship": {
+            "sidc": "CA----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:amphibious warfare ship:landing:ship": {
+            "sidc": "CALS--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:amphibious warfare ship:landing:craft": {
+            "sidc": "CALC--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:amphibious warfare ship:assault vessel": {
+            "sidc": "CALA--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel": {
+            "sidc": "CM----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel:minelayer": {
+            "sidc": "CMML--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel:minesweeper": {
+            "sidc": "CMMS--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel:minehunter": {
+            "sidc": "CMMH--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel:mcm:support": {
+            "sidc": "CMMA--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:mine warfare vessel:mcm:drone": {
+            "sidc": "CMMD--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group": {
+            "sidc": "G-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group:convoy": {
+            "sidc": "GC----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group:navy task:force": {
+            "sidc": "GT----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group:navy task:group": {
+            "sidc": "GG----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group:navy task:unit": {
+            "sidc": "GU----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:combatant:navy group:navy task:element": {
+            "sidc": "GE----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant": {
+            "sidc": "N-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:intelligence": {
+            "sidc": "NI----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:hovercraft": {
+            "sidc": "NH----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:underway replenishment": {
+            "sidc": "NR----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:underway replenishment:underway replenishment:ammo": {
+            "sidc": "NRA---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:underway replenishment:underway replenishment:oil": {
+            "sidc": "NRO---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:fleet support tug ocean going": {
+            "sidc": "NFT---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:hospital ship": {
+            "sidc": "NM----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:repair ship": {
+            "sidc": "NR----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:submarine tender": {
+            "sidc": "NTS---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:noncombatant:service & support harbour": {
+            "sidc": "NS----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:emergency": {
+            "sidc": "E-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:emergency:ditched aircraft": {
+            "sidc": "ED----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:emergency:person in water": {
+            "sidc": "EP----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:emergency:distressed vessel": {
+            "sidc": "EV----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:hazard": {
+            "sidc": "Z-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:hazard:navigational": {
+            "sidc": "ZN----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:hazard:iceberg": {
+            "sidc": "ZI----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:hazard:sea minelike": {
+            "sidc": "ZM----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military": {
+            "sidc": "X-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant": {
+            "sidc": "XM----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:cargo": {
+            "sidc": "XMC---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:oiler/tanker": {
+            "sidc": "XMO---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:tug": {
+            "sidc": "XMT---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:ferry": {
+            "sidc": "XMF---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:passenger": {
+            "sidc": "XMP---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:dredge": {
+            "sidc": "XMD---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:roll on-roll off": {
+            "sidc": "XME---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:merchant:hazardous materials": {
+            "sidc": "XMH---",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:fishing": {
+            "sidc": "XF----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:fishing:drifter": {
+            "sidc": "XFDF--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:fishing:dredge": {
+            "sidc": "XFDR--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:fishing:trawler": {
+            "sidc": "XFTR--",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:hovercraft": {
+            "sidc": "XH----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:leisure craft": {
+            "sidc": "XR----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:non military:law enforcement vessel": {
+            "sidc": "XL----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:track:own track": {
+            "sidc": "O-----",
+            "filters": {
+                "type": "water"
+            }
+        },
+        "sea surface:installation": {
+            "sidc": "IR----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "sea surface:installation:sea surface installation": {
+            "sidc": "IRR---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment": {
+            "sidc": "E-----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons": {
+            "sidc": "EW----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:gun": {
+            "sidc": "EWG---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:gun:antitank gun:recoilless": {
+            "sidc": "EWGR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:gun:antitank gun:light": {
+            "sidc": "EWGL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:gun:antitank gun:medium": {
+            "sidc": "EWGM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:gun:antitank gun:heavy": {
+            "sidc": "EWGH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:rocket launcher": {
+            "sidc": "EWT---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:rocket launcher:antitank rocket launcher:light": {
+            "sidc": "EWTL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:rocket launcher:antitank rocket launcher:medium": {
+            "sidc": "EWTM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:antitank:rocket launcher:antitank rocket launcher:heavy": {
+            "sidc": "EWTH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:mortar": {
+            "sidc": "EWO---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:mortar:mortar:light": {
+            "sidc": "EWOL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:mortar:mortar:medium": {
+            "sidc": "EWOM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:mortar:mortar:heavy": {
+            "sidc": "EWOH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer": {
+            "sidc": "EWH---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:light": {
+            "sidc": "EWHL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:light:howitzer light self-propelled": {
+            "sidc": "EWHLS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:medium": {
+            "sidc": "EWHM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:medium:howitzer medium self-propelled": {
+            "sidc": "EWHMS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:heavy": {
+            "sidc": "EWHH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:howitzer:howitzer:heavy:howitzer heavy self-propelled": {
+            "sidc": "EWHHS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers": {
+            "sidc": "EWM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:air defence (ad) missile launch": {
+            "sidc": "EWMA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:air defence (ad) missile launch:short range ad missile launchers": {
+            "sidc": "EWMAS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:air defence (ad) missile launch:intermediate range ad missile launch": {
+            "sidc": "EWMAI-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:air defence (ad) missile launch:long range ad missile launch": {
+            "sidc": "EWMAL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:air defence (ad) missile launch:ad missile launch theatre": {
+            "sidc": "EWMAT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:surface-surface (ss) missile launcher": {
+            "sidc": "EWMS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:surface-surface (ss) missile launcher:short range ss missile launch": {
+            "sidc": "EWMSS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:surface-surface (ss) missile launcher:intermediate range ss missile launch": {
+            "sidc": "EWMSI-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:surface-surface (ss) missile launcher:long range ss missile launch": {
+            "sidc": "EWMSL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:missile launchers anti tank (at)": {
+            "sidc": "EWMT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:missile launchers anti tank (at):missile:launchers at light": {
+            "sidc": "EWMTL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:missile launchers anti tank (at):missile:launcher at:medium": {
+            "sidc": "EWMTM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:missile launchers:missile launchers anti tank (at):missile:launcher at:heavy": {
+            "sidc": "EWMTH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:single rocket launcher": {
+            "sidc": "EWS---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:single rocket launcher:single rocket launcher:light": {
+            "sidc": "EWSL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:single rocket launcher:single rocket launcher:medium": {
+            "sidc": "EWSM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:single rocket launcher:single rocket launcher:heavy": {
+            "sidc": "EWSH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:multiple rocket launcher": {
+            "sidc": "EWX---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:multiple rocket launcher:multiple rocket launcher:light": {
+            "sidc": "EWXL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:multiple rocket launcher:multiple rocket launcher:medium": {
+            "sidc": "EWXM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:multiple rocket launcher:multiple rocket launcher:heavy": {
+            "sidc": "EWXH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:rifle/automatic weapon": {
+            "sidc": "EWR---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:rifle/automatic weapon:rifle": {
+            "sidc": "EWRR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:rifle/automatic weapon:light machine gun": {
+            "sidc": "EWRL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:rifle/automatic weapon:heavy machine gun": {
+            "sidc": "EWRH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:grenade launcher": {
+            "sidc": "EWZ---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:grenade launcher:grenade launcher:light": {
+            "sidc": "EWZL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:grenade launcher:grenade launcher:medium": {
+            "sidc": "EWZM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:grenade launcher:grenade launcher:heavy": {
+            "sidc": "EWZH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun": {
+            "sidc": "EWD---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:light": {
+            "sidc": "EWDL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:light:direct fire gun light self-propelled": {
+            "sidc": "EWDLS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:medium": {
+            "sidc": "EWDM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:medium:direct fire gun medium self-propelled": {
+            "sidc": "EWDMS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:heavy": {
+            "sidc": "EWDH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:direct fire gun:direct fire gun:heavy:direct fire gun heavy self-propelled": {
+            "sidc": "EWDHS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:air defence gun": {
+            "sidc": "EWA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:air defence gun:air defence gun:light": {
+            "sidc": "EWAL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:air defence gun:air defence gun:medium": {
+            "sidc": "EWAM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:weapons:air defence gun:air defence gun:heavy": {
+            "sidc": "EWAH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:sensor": {
+            "sidc": "ES----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:sensor:radar": {
+            "sidc": "ESR---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:sensor:emplaced sensor": {
+            "sidc": "ESE---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle": {
+            "sidc": "EV----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle": {
+            "sidc": "EVA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank": {
+            "sidc": "EVAT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:light": {
+            "sidc": "EVATL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:light:tank light recovery": {
+            "sidc": "EVATW-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:medium": {
+            "sidc": "EVATM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:medium:tank medium recovery": {
+            "sidc": "EVATX-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:heavy": {
+            "sidc": "EVATH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:tank:tank:heavy:tank heavy recovery": {
+            "sidc": "EVATY-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:armoured:infantry": {
+            "sidc": "EVAI--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:armoured:personnel carrier": {
+            "sidc": "EVAA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:armoured:personnel carrier:armoured personnel carrier recovery": {
+            "sidc": "EVAAR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:c2v/acv": {
+            "sidc": "EVAC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:combat service support vehicle": {
+            "sidc": "EVAS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:armoured vehicle:light armoured vehicle": {
+            "sidc": "EVAL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle": {
+            "sidc": "EVU---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle:bus": {
+            "sidc": "EVUB--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle:semi": {
+            "sidc": "EVUS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle:limited cross-country truck": {
+            "sidc": "EVUL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle:cross-country truck": {
+            "sidc": "EVUX--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:utility vehicle:water craft": {
+            "sidc": "EVUR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle": {
+            "sidc": "EVE---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:bridge": {
+            "sidc": "EVEB--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:earthmover": {
+            "sidc": "EVEE--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:earthmover:multifunctional earthmover/digger": {
+            "sidc": "EVEE--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:dozer": {
+            "sidc": "EVED--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:construction vehicle": {
+            "sidc": "EVEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:mine laying vehicle": {
+            "sidc": "EVEM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:mine laying vehicle:armoured:vehicle mounted": {
+            "sidc": "EVEMA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:mine laying vehicle:armoured:carrier with:volcano": {
+            "sidc": "EVEMV-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:mine laying vehicle:armoured:carrier with:scatterable mines": {
+            "sidc": "EVEMSM",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:mine laying vehicle:trailer mounted": {
+            "sidc": "EVEMT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:engineer vehicle:drilling vehicle": {
+            "sidc": "EVD---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:train locomotive": {
+            "sidc": "EVST--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:ground vehicle:civilian vehicle": {
+            "sidc": "EVC---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment": {
+            "sidc": "EX----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:laser": {
+            "sidc": "EXL---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:cbrn equipment": {
+            "sidc": "EXN---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:flame thrower": {
+            "sidc": "EXF---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:land mines": {
+            "sidc": "EXM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:land mines:land mines lethal": {
+            "sidc": "EXMC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:equipment:special equipment:land mines:less than lethal": {
+            "sidc": "EXML--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track": {
+            "sidc": "------",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit": {
+            "sidc": "U-----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat": {
+            "sidc": "UC----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour": {
+            "sidc": "UCA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track": {
+            "sidc": "UCAT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:airborne": {
+            "sidc": "UCATA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:amphibious": {
+            "sidc": "UCATW-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:amphibious:armour track amphibious recovery": {
+            "sidc": "UCATWR",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:light": {
+            "sidc": "UCATL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:medium": {
+            "sidc": "UCATM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:heavy": {
+            "sidc": "UCATH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:track:armour track:recovery": {
+            "sidc": "UCATR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled": {
+            "sidc": "UCAW--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:airborne": {
+            "sidc": "UCAWA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:amphibious": {
+            "sidc": "UCAWA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:light": {
+            "sidc": "UCAWL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:medium": {
+            "sidc": "UCAWM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:heavy": {
+            "sidc": "UCAWH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:recovery": {
+            "sidc": "UCAWR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:armour:armour:wheeled:armour wheeled:air assault": {
+            "sidc": "UCAWS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation": {
+            "sidc": "UCV---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:composite": {
+            "sidc": "UCVC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing": {
+            "sidc": "UCVF--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing:utility fixed wing": {
+            "sidc": "UCVFU-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing:attack fixed wing": {
+            "sidc": "UCVFA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing:attack fixed wing:tactical air control party (tacp)": {
+            "sidc": "UCVUTP",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing:attack fixed wing:forward air controller (fac)": {
+            "sidc": "UCVUFC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:fixed wing:recon fixed wing": {
+            "sidc": "UCVFR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing": {
+            "sidc": "UCVR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:attack rotary wing": {
+            "sidc": "UCVRA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:scout rotary wing": {
+            "sidc": "UCVRS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:antisubmarine warfare rotary wing": {
+            "sidc": "UCVRW-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:utility rotary wing": {
+            "sidc": "UCVRU-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:utility rotary wing:light utility rotary wing": {
+            "sidc": "UCVRUL",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:utility rotary wing:medium utility rotary wing": {
+            "sidc": "UCVRUM",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:utility rotary wing:heavy utility rotary wing": {
+            "sidc": "UCVRUH",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:c2 rotary wing": {
+            "sidc": "UCVRUC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:medevac rotary wing": {
+            "sidc": "UCVRUE",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:rotary wing:mine countermeasure rotary wing": {
+            "sidc": "UCVRM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:personnel recovery": {
+            "sidc": "UCVS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:vertical/short takeoff and landing (v/stol)": {
+            "sidc": "UCVV--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle": {
+            "sidc": "UCVU--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:unmanned aerial vehicle:fixed wing": {
+            "sidc": "UCVUF-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:unmanned aerial vehicle:fixed wing:aviation uav:control": {
+            "sidc": "UCVU--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:unmanned aerial vehicle:fixed wing:aviation uav:launcher": {
+            "sidc": "UCVU--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:unmanned aerial vehicle:fixed wing:aviation uav:recovery": {
+            "sidc": "UCVU--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:unmanned aerial vehicle:rotary wing": {
+            "sidc": "UCVUR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:tactical air control party (tacp)": {
+            "sidc": "UCVUTP",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:aviation:unmanned aerial vehicle:forward air controller (fac)": {
+            "sidc": "UCVUFC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry": {
+            "sidc": "UCI---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:light": {
+            "sidc": "UCIL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:motorized": {
+            "sidc": "UCIM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:mountain": {
+            "sidc": "UCIO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:airborne": {
+            "sidc": "UCIA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:mechanized": {
+            "sidc": "UCIZ--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:naval": {
+            "sidc": "UCIN--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:arctic": {
+            "sidc": "UCIC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:sniper": {
+            "sidc": "UCIC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:air assault": {
+            "sidc": "UCIS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:infantry:infantry:fighting vehicle": {
+            "sidc": "UCII--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer": {
+            "sidc": "UCE---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat": {
+            "sidc": "UCEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:airborne": {
+            "sidc": "UCECA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:arctic": {
+            "sidc": "UCECC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:light": {
+            "sidc": "UCECL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:medium": {
+            "sidc": "UCECM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:heavy": {
+            "sidc": "UCECH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:motorized": {
+            "sidc": "UCECW-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:mountain": {
+            "sidc": "UCECO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:recon": {
+            "sidc": "UCECR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:bridging": {
+            "sidc": "UCEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:mine:clearing": {
+            "sidc": "UCEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:mine:laying": {
+            "sidc": "UCEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:diving": {
+            "sidc": "UCEC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:air assault": {
+            "sidc": "UCECS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:combat:engineer combat:mechanized (track)": {
+            "sidc": "UCECT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:construction": {
+            "sidc": "UCEN--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:engineer:engineer:construction:engineer naval construction": {
+            "sidc": "UCENN-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance": {
+            "sidc": "UCR---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:horse": {
+            "sidc": "UCRH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:cavalry": {
+            "sidc": "UCRV--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:cavalry:reconnaissance cavalry:armoured": {
+            "sidc": "UCRVA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:cavalry:reconnaissance cavalry:motorized": {
+            "sidc": "UCRVM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:cavalry:reconnaissance cavalry:ground": {
+            "sidc": "UCRVG-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:cavalry:reconnaissance cavalry:air": {
+            "sidc": "UCRVO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:arctic": {
+            "sidc": "UCRC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:airborne": {
+            "sidc": "UCRA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:mountain": {
+            "sidc": "UCRO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:light": {
+            "sidc": "UCRLL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:marine": {
+            "sidc": "UCRR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:marine:reconnaissance marine:division": {
+            "sidc": "UCRRD-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:marine:reconnaissance marine:force": {
+            "sidc": "UCRRF-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:marine:reconnaissance marine:light armoured reconnaissance (lar)": {
+            "sidc": "UCRRL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:air assault": {
+            "sidc": "UCRS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:reconnaissance:reconnaissance:long range surveillance (lrs)": {
+            "sidc": "UCRX--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support": {
+            "sidc": "UU----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:topographic": {
+            "sidc": "UUT---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:dog": {
+            "sidc": "UU----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:drilling": {
+            "sidc": "UUD---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn": {
+            "sidc": "UUA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical": {
+            "sidc": "UUAC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke/decon": {
+            "sidc": "UUACC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke/decon:mechanized smoke/decon": {
+            "sidc": "UUACCK",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke/decon:motorized smoke/decon": {
+            "sidc": "UUACCM",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke": {
+            "sidc": "UUACS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke:motorized smoke": {
+            "sidc": "UUACSM",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:smoke:armour smoke": {
+            "sidc": "UUACSA",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:chemical recon": {
+            "sidc": "UUACR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:chemical recon:chemical wheeled armoured vehicle": {
+            "sidc": "UUACRW",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:chemical:chemical recon:chemical wheeled armoured vehicle:reconnaissance surveillance": {
+            "sidc": "UUACRS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:nuclear": {
+            "sidc": "UUAN--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:biological": {
+            "sidc": "UUAB--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:biological:recon equipped": {
+            "sidc": "UUABR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:combat support cbrn:decontamination": {
+            "sidc": "UUAD--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence": {
+            "sidc": "UUM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance": {
+            "sidc": "UUMR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance:ground:surveillance radar": {
+            "sidc": "UUMRG-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance:ground:station module": {
+            "sidc": "UUMRX-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance:sensor": {
+            "sidc": "UUMRS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance:sensor:sensor scm": {
+            "sidc": "UUMRSS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:surveillance:meteorological": {
+            "sidc": "UUMMO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:operations": {
+            "sidc": "UUMO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:interrogation": {
+            "sidc": "UUMQ--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:aerial exploitation": {
+            "sidc": "UUMA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint)": {
+            "sidc": "UUMS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare": {
+            "sidc": "UUMSE-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:intercept": {
+            "sidc": "UUMSEI",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:jamming": {
+            "sidc": "UUMSEJ",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:theatre": {
+            "sidc": "UUMSET",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:corps": {
+            "sidc": "UUMSEC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:armoured wheeled vehicle": {
+            "sidc": "UUMSEA",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:signal intelligence (sigint):electronic warfare:direction finding": {
+            "sidc": "UUMSED",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:counter intelligence": {
+            "sidc": "UUMC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:tactical exploit": {
+            "sidc": "UUMT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:military intelligence:joint intelligence centre": {
+            "sidc": "UUMJ--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit": {
+            "sidc": "UUL---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit:shore patrol": {
+            "sidc": "UULS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit:military police": {
+            "sidc": "UULM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit:civilian law enforcement": {
+            "sidc": "UULC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit:security police (air)": {
+            "sidc": "UULF--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:law enforcement unit:central intelligence division (cid)": {
+            "sidc": "UULD--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit": {
+            "sidc": "UUS---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:area": {
+            "sidc": "UUSA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:communication configured package": {
+            "sidc": "UUSC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:communication configured package:large communication configured package (lccp)": {
+            "sidc": "UUSCL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:command operations": {
+            "sidc": "UUSO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:forward communications": {
+            "sidc": "UUSF--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:multiple subscriber element": {
+            "sidc": "UUSM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:multiple subscriber element:small extension node": {
+            "sidc": "UUSMS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:multiple subscriber element:large extension node": {
+            "sidc": "UUSML-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:multiple subscriber element:node centre": {
+            "sidc": "UUSMN-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:radio unit": {
+            "sidc": "UUSR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:radio unit:relay": {
+            "sidc": "UUSRW-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:radio unit:tactical satellite": {
+            "sidc": "UUSRS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:radio unit:teletype centre": {
+            "sidc": "UUSRT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:signal support": {
+            "sidc": "UUSS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:telephone switch": {
+            "sidc": "UUSW--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:signal unit:electronic ranging": {
+            "sidc": "UUSX--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:information warfare unit": {
+            "sidc": "UUI---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:landing support": {
+            "sidc": "UUX---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:support:explosive ordinance disposal": {
+            "sidc": "UUE---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence": {
+            "sidc": "UCD---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:composite": {
+            "sidc": "UCDC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:short range": {
+            "sidc": "UCDS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:short range:missile": {
+            "sidc": "UCDS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:short range:gun": {
+            "sidc": "UCDS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile": {
+            "sidc": "UCDM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile:h/mad": {
+            "sidc": "UCDH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile:air defence missile:light": {
+            "sidc": "UCDML-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile:air defence missile:light:air defence missile motorized": {
+            "sidc": "UCDMLA",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile:air defence missile:medium": {
+            "sidc": "UCDMM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:air defence missile:air defence missile:heavy": {
+            "sidc": "UCDMH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:gun unit": {
+            "sidc": "UCDG--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:targeting unit": {
+            "sidc": "UCDT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:air defence:theatre missile defence unit": {
+            "sidc": "UCDO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour": {
+            "sidc": "UCAA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:dismounted": {
+            "sidc": "UCAAD-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:light": {
+            "sidc": "UCAAL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:airborne": {
+            "sidc": "UCAAM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:mountain": {
+            "sidc": "UCAAU-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:arctic": {
+            "sidc": "UCAAC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:armoured": {
+            "sidc": "UCAAA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:armoured:anti armour armoured:tracked": {
+            "sidc": "UCAAAT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:armoured:anti armour armoured:wheeled": {
+            "sidc": "UCAAAW",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:armoured:anti armour armoured:air assault": {
+            "sidc": "UCAAAS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:motorized": {
+            "sidc": "UCAAO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:motorized:anti armour motorized air assault": {
+            "sidc": "UCAAOS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:anti armour:anti armour:air assault": {
+            "sidc": "UCAAS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery": {
+            "sidc": "UCF---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun": {
+            "sidc": "UCFH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:airborne": {
+            "sidc": "UCFHA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:arctic": {
+            "sidc": "UCFHC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:mountain": {
+            "sidc": "UCFHO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:light": {
+            "sidc": "UCFHL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:medium": {
+            "sidc": "UCFHM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:heavy": {
+            "sidc": "UCFHH-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:amphibious": {
+            "sidc": "UCFHX-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:self propelled": {
+            "sidc": "UCFHE-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:howitzer/gun:air assault": {
+            "sidc": "UCFHS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket": {
+            "sidc": "UCFR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:single rocket launcher": {
+            "sidc": "UCFRS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:single rocket launcher:single rocket:truck": {
+            "sidc": "UCFRSR",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:single rocket launcher:single rocket:towed": {
+            "sidc": "UCFRST",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:single rocket launcher:single rocket:self propelled": {
+            "sidc": "UCFRSS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:multi rocket launcher": {
+            "sidc": "UCFRM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:multi rocket launcher:multi rocket:truck": {
+            "sidc": "UCFRMR",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:multi rocket launcher:multi rocket:towed": {
+            "sidc": "UCFRMT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:rocket:multi rocket launcher:multi rocket:self propelled": {
+            "sidc": "UCFRMS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar": {
+            "sidc": "UCFM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:self propelled (sp) tracked mortar": {
+            "sidc": "UCFMS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:sp wheeled mortar": {
+            "sidc": "UCFMSW",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:towed mortar": {
+            "sidc": "UCFMT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:towed mortar:towed:airborne mortar": {
+            "sidc": "UCFMTA",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:towed mortar:towed:air assault mortar": {
+            "sidc": "UCFMTS",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:towed mortar:towed:arctic mortar": {
+            "sidc": "UCFMTC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:towed mortar:towed:mountain mortar": {
+            "sidc": "UCFMTO",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:mortar:amphibious mortar": {
+            "sidc": "UCFML-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:meteorological": {
+            "sidc": "UCFO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:meteorological:air assault meteorological": {
+            "sidc": "UCFOS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:meteorological:airborne meteorological": {
+            "sidc": "UCFOA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:meteorological:light meteorological": {
+            "sidc": "UCFOL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:meteorological:mountain meteorological": {
+            "sidc": "UCFOO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:oberserver": {
+            "sidc": "UCF---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition": {
+            "sidc": "UCFT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:radar": {
+            "sidc": "UCFTR-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:sound": {
+            "sidc": "UCFTS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:flash (optical)": {
+            "sidc": "UCFTF-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:target acquisition:mounted": {
+            "sidc": "UCFTC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:target acquisition:mounted:target acquisition:dismounted": {
+            "sidc": "UCFTCD",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:target acquisition:mounted:target acquisition:tracked": {
+            "sidc": "UCFTCM",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:target acquisition:target acquisition:naval gunfire": {
+            "sidc": "UCFTA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:artillery survey": {
+            "sidc": "UCFS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:artillery survey:airborne": {
+            "sidc": "UCFSA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:artillery survey:light": {
+            "sidc": "UCFSL-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:artillery survey:mountain": {
+            "sidc": "UCFSO-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:artillery survey:air assault": {
+            "sidc": "UCFSS-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:field artillery:fire direction centre": {
+            "sidc": "UCF---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:missile (surface-surface)": {
+            "sidc": "UCM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:missile (surface-surface):missile (surface-surface):tactical": {
+            "sidc": "UCMT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:missile (surface-surface):missile (surface-surface):strategic": {
+            "sidc": "UCMS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces": {
+            "sidc": "UCS---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:riverine": {
+            "sidc": "UCSW--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:ground": {
+            "sidc": "UCSG--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:ground:dismounted ground": {
+            "sidc": "UCSGD-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:ground:motorized ground": {
+            "sidc": "UCSGM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:ground:mechanized ground": {
+            "sidc": "UCSGA-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:railroad": {
+            "sidc": "UCSR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:aviation": {
+            "sidc": "UCSA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:internal security forces:wheeled mechanized": {
+            "sidc": "UCSM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support": {
+            "sidc": "US----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical": {
+            "sidc": "USM---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:theatre": {
+            "sidc": "USMT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:corps": {
+            "sidc": "USMC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:veterinary": {
+            "sidc": "USMV--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:veterinary:medical veterinary:theatre": {
+            "sidc": "USMVT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:veterinary:medical veterinary:corps": {
+            "sidc": "USMVC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:dental": {
+            "sidc": "USMD--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:dental:medical dental:theatre": {
+            "sidc": "USMDT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:dental:medical dental:corps": {
+            "sidc": "USMDC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:psychological": {
+            "sidc": "USMP--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:psychological:medical psychological:theatre": {
+            "sidc": "USMPT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:psychological:medical psychological:corps": {
+            "sidc": "USMPC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:treatment facility": {
+            "sidc": "USMM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:treatment facility:medical treatment facility:theatre": {
+            "sidc": "USMMT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:medical:medical:treatment facility:medical treatment facility:corps": {
+            "sidc": "USMMC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply": {
+            "sidc": "USS---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:theatre": {
+            "sidc": "USST--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:corps": {
+            "sidc": "USSC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:i": {
+            "sidc": "USS1--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:i:supply class i:theatre": {
+            "sidc": "USS1T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:i:supply class i:corps": {
+            "sidc": "USS1C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ii": {
+            "sidc": "USS2--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ii:supply class ii:theatre": {
+            "sidc": "USS2T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ii:supply class ii:corps": {
+            "sidc": "USS2C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii": {
+            "sidc": "USS3--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii:supply class iii:theatre": {
+            "sidc": "USS3T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii:supply class iii:corps": {
+            "sidc": "USS3C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii:supply class iii:aviation": {
+            "sidc": "USS3A-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii:supply class iii:aviation:supply class iii aviation": {
+            "sidc": "USS3AT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iii:supply class iii:aviation:supply class iii aviation:corps": {
+            "sidc": "USS3AC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iv": {
+            "sidc": "USS4--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iv:supply class iv:theatre": {
+            "sidc": "USS4T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:iv:supply class iv:corps": {
+            "sidc": "USS4C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:v": {
+            "sidc": "USS5--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:v:supply class v:theatre": {
+            "sidc": "USS5T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:v:supply class v:corps": {
+            "sidc": "USS5C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vi": {
+            "sidc": "USS6--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vi:supply class vi:theatre": {
+            "sidc": "USS6T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vi:supply class vi:corps": {
+            "sidc": "USS6C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vii": {
+            "sidc": "USS7--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vii:supply class vii:theatre": {
+            "sidc": "USS7T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:vii:supply class vii:corps": {
+            "sidc": "USS7C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:viii": {
+            "sidc": "USS8--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:viii:supply class viii:theatre": {
+            "sidc": "USS8T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:viii:supply class viii:corps": {
+            "sidc": "USS8C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ix": {
+            "sidc": "USS9--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ix:supply class ix:theatre": {
+            "sidc": "USS9T-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:ix:supply class ix:corps": {
+            "sidc": "USS9C-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:x": {
+            "sidc": "USSX--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:x:supply class x:theatre": {
+            "sidc": "USSXT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:class:x:supply class x:corps": {
+            "sidc": "USSXC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:laundry/bath": {
+            "sidc": "USSL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:laundry/bath:supply laundry/bath:theatre": {
+            "sidc": "USSLT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:laundry/bath:supply laundry/bath:corps": {
+            "sidc": "USSLC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water": {
+            "sidc": "USSW--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water:supply water:theatre": {
+            "sidc": "USSWT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water:supply water:corps": {
+            "sidc": "USSWC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water:supply water:purification": {
+            "sidc": "USSWP-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water:supply water:purification:supply water purification:theatre": {
+            "sidc": "USSWPT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:supply:supply:water:supply water:purification:supply water purification:corps": {
+            "sidc": "USSWPC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation": {
+            "sidc": "UST---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:transportation:theatre": {
+            "sidc": "USTT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:transportation:corps": {
+            "sidc": "USTC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:railhead": {
+            "sidc": "USTR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:railhead:railhead:theatre": {
+            "sidc": "USTRT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:railhead:railhead:corps": {
+            "sidc": "USTRC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:spod/spoe": {
+            "sidc": "USTS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:spod/spoe:spod/spoe:theatre": {
+            "sidc": "USTST-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:spod/spoe:spod/spoe:corps": {
+            "sidc": "USTSC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:apod/apoe": {
+            "sidc": "USTA--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:apod/apoe:apod/apoe:theatre": {
+            "sidc": "USTAT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:apod/apoe:apod/apoe:corps": {
+            "sidc": "USTAC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:missile": {
+            "sidc": "USTI--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:missile:missile:theatre": {
+            "sidc": "USTIT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:missile:missile:corps": {
+            "sidc": "USTIC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:movement control centre(mcc)": {
+            "sidc": "USTM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:movement control centre(mcc):mcc:theatre": {
+            "sidc": "USTMT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:transportation:movement control centre(mcc):mcc:corps": {
+            "sidc": "USTMC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance": {
+            "sidc": "USX---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:theatre": {
+            "sidc": "USXT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:corps": {
+            "sidc": "USXC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:heavy": {
+            "sidc": "USXH--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:heavy:maintenance heavy:theatre": {
+            "sidc": "USXHT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:heavy:maintenance heavy:corps": {
+            "sidc": "USXHC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:recovery": {
+            "sidc": "USXR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:recovery:maintenance recovery:theatre": {
+            "sidc": "USXRT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:maintenance:recovery:maintenance recovery:corps": {
+            "sidc": "USXRC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance": {
+            "sidc": "USXO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance:ordinance:theatre": {
+            "sidc": "USXOT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance:ordinance:corps": {
+            "sidc": "USXOC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance:ordinance:missile": {
+            "sidc": "USXOM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance:ordinance:missile:ordinance missile:theatre": {
+            "sidc": "USXOMT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:ordinance:ordinance:missile:ordinance missile:corps": {
+            "sidc": "USXOMC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:electro-optical": {
+            "sidc": "USXE--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:electro-optical:electro-optical:theatre": {
+            "sidc": "USXET-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:electro-optical:electro-optical:corps": {
+            "sidc": "USXEC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:battle damage repair": {
+            "sidc": "USXBDR",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:maintenance:preventive maintanance": {
+            "sidc": "USXPM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:pipeline": {
+            "sidc": "USXP--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin)": {
+            "sidc": "USA---",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):admin:theatre": {
+            "sidc": "USAT--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):admin:corps": {
+            "sidc": "USAC--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):postal": {
+            "sidc": "USAO--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):postal:postal:theatre": {
+            "sidc": "USAOT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):postal:postal:corps": {
+            "sidc": "USAOC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):finance": {
+            "sidc": "USAF--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):finance:finance:theatre": {
+            "sidc": "USAFT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):finance:finance:corps": {
+            "sidc": "USAFC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):religious/chaplain": {
+            "sidc": "USAR--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):religious/chaplain:religious/chaplain:theatre": {
+            "sidc": "USART-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):religious/chaplain:religious/chaplain:corps": {
+            "sidc": "USARC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):labour": {
+            "sidc": "USAL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):labour:labour:theatre": {
+            "sidc": "USALT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):labour:labour:corps": {
+            "sidc": "USALC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):judge advocate general (jag)": {
+            "sidc": "USAJ--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):judge advocate general (jag):jag:theatre": {
+            "sidc": "USAJT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):judge advocate general (jag):jag:corps": {
+            "sidc": "USAJC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):personnel services": {
+            "sidc": "USAS--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):personnel services:personnel:theatre": {
+            "sidc": "USAST-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):personnel services:personnel:corps": {
+            "sidc": "USASC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):mortuary/graves registry": {
+            "sidc": "USAM--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):mortuary/graves registry:mortuary/graves registry:theatre": {
+            "sidc": "USAMT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):mortuary/graves registry:mortuary/graves registry:corps": {
+            "sidc": "USAMC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs": {
+            "sidc": "USAP--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:theatre": {
+            "sidc": "USAPT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:corps": {
+            "sidc": "USAPC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:broadcast": {
+            "sidc": "USAPB-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:broadcast:public affairs broadcast:theatre": {
+            "sidc": "USAPBT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:broadcast:public affairs broadcast:corps": {
+            "sidc": "USAPBC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:joint information bureau (jib)": {
+            "sidc": "USAPM-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:joint information bureau (jib):public affairs jib:theatre": {
+            "sidc": "USAPMT",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):public affairs:public affairs:joint information bureau (jib):public affairs jib:corps": {
+            "sidc": "USAPMC",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):replacement holding unit (rhu)": {
+            "sidc": "USAX--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):replacement holding unit (rhu):rhu:theatre": {
+            "sidc": "USAXT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):replacement holding unit (rhu):rhu:corps": {
+            "sidc": "USAXC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):moral welfare recreation (mwr)": {
+            "sidc": "USAW--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):moral welfare recreation (mwr):mwr:theatre": {
+            "sidc": "USAWT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):moral welfare recreation (mwr):mwr:corps": {
+            "sidc": "USAWC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):quartermaster (supply)": {
+            "sidc": "USAQ--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):quartermaster (supply):quartermaster (supply):theatre": {
+            "sidc": "USAQT-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:administrative (admin):quartermaster (supply):quartermaster (supply):corps": {
+            "sidc": "USAQC-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:combat:service support:environmental protection": {
+            "sidc": "USXEP-",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:special c2 headquarters component": {
+            "sidc": "UH----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:unit general:headquarters": {
+            "sidc": "UH----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:unit general:liaison": {
+            "sidc": "UHGL--",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "ground track:unit:general headquarters and service": {
+            "sidc": "UH----",
+            "filters": {
+                "type": "land"
+            }
+        },
+        "air track": {
+            "sidc": "------",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military": {
+            "sidc": "M-----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing": {
+            "sidc": "MF----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:bomber": {
+            "sidc": "MFB---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:fighter": {
+            "sidc": "MFF---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:fighter:interceptor": {
+            "sidc": "MFFI--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:trainer": {
+            "sidc": "MFT---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:attack/strike": {
+            "sidc": "MFA---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:vstol": {
+            "sidc": "MFL---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:tanker": {
+            "sidc": "MFK---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:medevac": {
+            "sidc": "MFO---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:reconnaissance": {
+            "sidc": "MFR---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:reconnaissance:photographic": {
+            "sidc": "MFRX--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:reconnaissance:airborne early warning (aew)": {
+            "sidc": "MFRW--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:reconnaissance:electronic surveillance measures": {
+            "sidc": "MFRZ--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:patrol": {
+            "sidc": "MFP---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:patrol:anti surface warfare/asuw": {
+            "sidc": "MFPN--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:patrol:mine counter measures": {
+            "sidc": "MFPM--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:utility": {
+            "sidc": "MFU---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:utility:utility:(light)": {
+            "sidc": "MFUL--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:utility:utility:(medium)": {
+            "sidc": "MFUM--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:utility:utility:(heavy)": {
+            "sidc": "MFUH--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:cargo airlift (transport)": {
+            "sidc": "MFC---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:cargo airlift (transport):cargo airlift:(light)": {
+            "sidc": "MFCL--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:cargo airlift (transport):cargo airlift:(medium)": {
+            "sidc": "MFCM--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:cargo airlift (transport):cargo airlift:(heavy)": {
+            "sidc": "MFCH--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:electronic countermeasures(ecm/jammer)": {
+            "sidc": "MFJ---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:communications (c3i)": {
+            "sidc": "MFY---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:search and rescue (csar)": {
+            "sidc": "MFH---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:airborne command post (c2)": {
+            "sidc": "MFD---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:drone (rpv/uav)": {
+            "sidc": "MFQ---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:anti submarine warfare (asw) carrier based": {
+            "sidc": "MFS---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:fixed wing:special operations force (sof)": {
+            "sidc": "MFM---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing": {
+            "sidc": "MH----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:attack": {
+            "sidc": "MHA---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:utility": {
+            "sidc": "MHU---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:utility:utility:(light)": {
+            "sidc": "MHUL--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:utility:utility:(medium)": {
+            "sidc": "MHUM--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:utility:utility:(heavy)": {
+            "sidc": "MHUH--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:reconnaissance": {
+            "sidc": "MHR---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:trainer": {
+            "sidc": "MHT---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:medevac": {
+            "sidc": "MHO---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:tanker": {
+            "sidc": "MHK---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:antisubmarine warfare": {
+            "sidc": "MHS---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:mine counter measures": {
+            "sidc": "MHI---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:combat search and rescue (csar)": {
+            "sidc": "MHH---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:drone (rpv/uav)": {
+            "sidc": "MHQ---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:cargo airlift (transport)": {
+            "sidc": "MHC---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:cargo airlift (transport):cargo airlift:(light)": {
+            "sidc": "MHCL--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:cargo airlift (transport):cargo airlift:(medium)": {
+            "sidc": "MHCM--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:cargo airlift (transport):cargo airlift:(heavy)": {
+            "sidc": "MHCH--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:special operations force (sof)": {
+            "sidc": "MHM---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:airborne command post (c2)": {
+            "sidc": "MHD---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:rotary wing:electronic counter measures (ecm/jammer)": {
+            "sidc": "MHJ---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:military:lighter than air": {
+            "sidc": "ML----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon": {
+            "sidc": "W-----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:decoy": {
+            "sidc": "WD----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight": {
+            "sidc": "WM----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:surface/land launched missile": {
+            "sidc": "WMS---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:surface/land launched missile:surface to:surface missile (ssm)": {
+            "sidc": "WMSS--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:surface/land launched missile:surface to:air missile (sam)": {
+            "sidc": "WMSA--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:air launched missile": {
+            "sidc": "WMA---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:air launched missile:air to:surface missile (asm)": {
+            "sidc": "WMAS--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:air launched missile:air to:air missile (aam)": {
+            "sidc": "WMAA--",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:subsurface to surface missile (s/ssm)": {
+            "sidc": "WMU---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:weapon:missile in flight:land attack missile": {
+            "sidc": "WML---",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:civil aircraft": {
+            "sidc": "C-----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:civil aircraft:fixed wing": {
+            "sidc": "CF----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:civil aircraft:rotary wing": {
+            "sidc": "CH----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "air track:civil aircraft:lighter than air": {
+            "sidc": "CL----",
+            "filters": {
+                "type": "air"
+            }
+        },
+        "space track": {
+            "sidc": "------",
+            "filters": {
+                "type": "space"
+            }
+        },
+        "space track:satellite": {
+            "sidc": "S-----",
+            "filters": {
+                "type": "space"
+            }
+        },
+        "space track:crewed space vehicle": {
+            "sidc": "V-----",
+            "filters": {
+                "type": "space"
+            }
+        },
+        "space track:space station": {
+            "sidc": "T-----",
+            "filters": {
+                "type": "space"
+            }
+        }
     }
 }
