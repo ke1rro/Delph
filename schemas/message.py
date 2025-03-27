@@ -1,7 +1,7 @@
 """
 Models representing the shared schema of the message object.
 
-Our models are based on APP6C NATO Joint Military Symbology. The
+Our models are based on APP6B NATO Joint Military Symbology. The
 JSON schema fully describes the message object and its properties, except
 the list of available entities. Those are available at misc/app6b.
 """
@@ -76,7 +76,7 @@ class Entity(BaseModel):
         "unknown",
         "pending",
     ] = Field(description="Affiliation of the entity.")
-    entity: str = Field(description="Entity path according to APP6C.")
+    entity: str = Field(description="Entity path according to APP6B.")
     status: Literal["active", "disabled", "destroyed", "unknown"] = Field(
         default="unknown", description="Status of the entity."
     )
