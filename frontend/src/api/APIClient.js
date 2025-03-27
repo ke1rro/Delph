@@ -4,17 +4,16 @@ import BridgeContext from "./BridgeContext";
 
 
 class APIClient {
-    constructor (baseUrl) {
-        this.baseUrl = baseUrl;
+    constructor () {
         this.client = axios.create({
-            baseURL: baseUrl,
+            baseURL: "/api/",
             headers: {
                 "Content-type": "application/json"
             },
             withCredentials: true,
         });
         this.auth = new AuthContext(this.client, "/core/auth");
-        this.bridge = new BridgeContext(this.client, "/bridge", baseUrl);
+        this.bridge = new BridgeContext(this.client, "/bridge");
     }
 }
 

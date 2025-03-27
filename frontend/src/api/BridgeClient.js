@@ -1,17 +1,17 @@
 class BridgeClient {
-    constructor(url, storage) {
+    constructor(storage) {
         this.storage = storage;
-        this.socket = new WebSocket(url);
-        this.socket.onmessage = this.onmessage.bind(this)
+        this.socket = new WebSocket("/api/bridge/messages");
+        this.socket.onmessage = this.onmessage.bind(this);
         this.interval = setInterval(this.update.bind(this), 500);
     }
 
-    update() {
-        this.storage.update()
+    onmessage(message) {
+        this.storage.push(JSON.parse(message.data));
     }
 
-    onmessage(message) {
-        this.storage.push(JSON.parse(message.data))
+    update() {
+        this.storage.update();
     }
 }
 
