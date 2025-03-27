@@ -1,0 +1,24 @@
+{
+    "affiliation": {
+        "assumed_friend": "A",
+        "friend": "F",
+        "hostile": "H",
+        "suspect": "S",
+        "neutral": "N",
+        "unknown": "U",
+        "pending": "P"
+    },
+    "type": {
+        "land": "G",
+        "air": "A",
+        "water": "S",
+        "space": "P",
+        "underwater": "U"
+    },
+    "status": {
+        "active": "C",
+        "disabled": "D",
+        "destroyed": "X",
+        "unknown": "P"
+    }
+}
