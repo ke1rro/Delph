@@ -3,7 +3,7 @@ Models representing the shared schema of the message object.
 
 Our models are based on APP6C NATO Joint Military Symbology. The
 JSON schema fully describes the message object and its properties, except
-the list of available entities and modifiers.
+the list of available entities. Those are available at misc/app6b.
 """
 
 from typing import Literal
@@ -79,13 +79,7 @@ class Entity(BaseModel):
     type: Literal["land", "air", "water", "underwater"] = Field(
         description="Type of the entity."
     )
-    entity: str = Field(description="Entity according to APP6C.")
-    modifier1: str | None = Field(
-        default=None, description="Modifier 1 according to APP6C."
-    )
-    modifier2: str | None = Field(
-        default=None, description="Modifier 2 according to APP6C."
-    )
+    entity: str = Field(max_length=6, description="Entity code according to APP6C.")
     status: Literal["active", "disabled", "destroyed", "unknown"] = Field(
         default="unknown", description="Status of the entity."
     )
