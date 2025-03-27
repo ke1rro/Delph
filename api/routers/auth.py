@@ -23,21 +23,6 @@ from schemas.user import LoginResponse, UserLogin, UserReg
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@router.options("/{full_path:path}")
-async def preflight(request: Request, full_path: str):
-    """
-    Handle CORS preflight requests.
-    """
-    headers = {
-        "Access-Control-Allow-Origin": settings.cors.cors_allow_origin,
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-        "Access-Control-Allow-Credentials": "true",
-    }
-
-    return JSONResponse(content=request, headers=headers, status_code=204)
-
-
 # Should not be used
 # This used due to the fact the frontend do not have client side routing
 # This will be removed once the frontend is updated
