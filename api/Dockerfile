@@ -2,14 +2,19 @@ FROM python:3.12
 
 WORKDIR /api
 
-COPY requirements.txt .
+COPY /api/requirements.txt .
 
 RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN chmod 755 .
 
-COPY . .
+COPY /shared_config/. ./shared_config/.
+COPY /certificates/. ./certificates/.
+COPY /utils/. ./utils/.
+COPY /cache/. ./cache/.
+COPY /middleware/. ./middleware/.
+COPY /api/. .
 
 EXPOSE 80
 

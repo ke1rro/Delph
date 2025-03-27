@@ -5,8 +5,9 @@ Redis client module for interacting with Redis hash tables.
 import json
 import logging
 
-from core.config import settings
 from redis.asyncio import Redis
+
+from shared_config.config import settings
 
 
 class RedisClient:
@@ -83,87 +84,88 @@ class RedisClient:
             )
             raise
 
-    async def blacklist_user(
-        self, user_id: str, reason: str, expire: int = None
+    async def whitelist_user(
+        self, token: str, payload: dict, expire: int = None
     ) -> None:
         """
-        Add a user to the blacklist using a Redis hash.
+        Add a user to the whitelist using a Redis hash.
 
         Args:
-            user_id (str): The user ID to blacklist.
-            reason (str): The reason for blacklisting.
-            expire (int, optional): Expiration time for the blacklist entry in seconds.
+            token (str): The user's JWT token (used as the key).
+            payload (dict): The JWT payload containing user details (name, surname, user_id, iat, expire).
+            expire (int, optional): Expiration time for the whitelist entry in seconds.
 
         Returns:
             None
         """
         try:
-            key = "user_blacklist"
-            value = {"reason": reason}
-            await self.set_hash(key, user_id, value)
+            key = "user_whitelist"
+            await self.set_hash(key, token, payload)
             if expire:
                 await self.redis.expire(key, expire)
         except Exception as e:
-            logging.error(f"Failed to blacklist user {user_id}. Error: {e}")
+            logging.error(f"Failed to whitelist user with token {token}. Error: {e}")
             raise
 
-    async def is_user_blacklisted(self, user_id: str) -> bool:
+    async def is_user_whitelisted(self, token: str) -> bool:
         """
-        Check if a user is blacklisted.
+        Check if a user is whitelisted.
 
         Args:
-            user_id (str): The user ID to check.
+            token (str): The user's JWT token to check.
 
         Returns:
-            bool: True if the user is blacklisted, False otherwise.
+            bool: True if the user is whitelisted, False otherwise.
         """
         try:
-            key = "user_blacklist"
-            return await self.redis.hexists(key, user_id)
+            key = "user_whitelist"
+            return await self.redis.hexists(key, token)
         except Exception as e:
             logging.error(
-                f"Failed to check blacklist status for user {user_id}. Error: {e}"
+                f"Failed to check whitelist status for token {token}. Error: {e}"
             )
             raise
 
-    async def get_blacklist_reason(self, user_id: str) -> str | None:
+    async def get_whitelist_payload(self, token: str) -> dict | None:
         """
-        Get the reason why a user is blacklisted.
+        Get the JWT payload for a whitelisted user.
 
         Args:
-            user_id (str): The user ID to check.
+            token (str): The user's JWT token to check.
 
         Returns:
-            str | None: The reason for blacklisting, or None if the user is not blacklisted.
+            dict | None: The JWT payload if the user is whitelisted, or None if not.
         """
         try:
-            key = "user_blacklist"
-            data = await self.get_hash(key, user_id)
+            key = "user_whitelist"
+            data = await self.get_hash(key, token)
             if isinstance(data, dict):
-                return data.get("reason")
+                return data
             return None
         except Exception as e:
             logging.error(
-                f"Failed to get blacklist reason for user {user_id}. Error: {e}"
+                f"Failed to get whitelist payload for token {token}. Error: {e}"
             )
             raise
 
-    async def remove_user_from_blacklist(self, user_id: str) -> None:
+    async def remove_user_from_whitelist(self, token: str) -> None:
         """
-        Remove a user from the blacklist.
+        Remove a user from the whitelist.
 
         Args:
-            user_id (str): The user ID to remove.
+            token (str): The user's JWT token to remove.
 
         Returns:
             None
         """
         try:
-            key = "user_blacklist"
-            await self.delete_hash_field(key, user_id)
-            logging.info(f"User {user_id} removed from blacklist")
+            key = "user_whitelist"
+            await self.delete_hash_field(key, token)
+            logging.info(f"User with token {token} removed from whitelist")
         except Exception as e:
-            logging.error(f"Failed to remove user {user_id} from blacklist. Error: {e}")
+            logging.error(
+                f"Failed to remove user with token {token} from whitelist. Error: {e}"
+            )
             raise
 
 

@@ -2,10 +2,11 @@
 Posting service to send messages to the message broker.
 """
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 from services.queue import NoPermissionError, QueuePublishService
 from services.user import AuthenticationError, UserService
+from starlette.authentication import requires
 
 from api.dependencies import get_queue_publish_service, get_user_service
 from schemas.message import Entity, Location, Message, Velocity
@@ -34,7 +35,9 @@ class CreateMessage(BaseModel):
 
 
 @router.put("/messages")
+@requires("authenticated")
 async def create_message(
+    request: Request,
     create_message: CreateMessage,
     token: str = Header(alias="Authorization"),
     user_service: UserService = Depends(get_user_service),

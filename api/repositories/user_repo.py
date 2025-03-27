@@ -1,6 +1,5 @@
 """User repository module."""
 
-import logging
 import uuid
 
 from db.models import User
@@ -85,18 +84,3 @@ class UserRepository:
             )
         )
         return user.one_or_none()
-
-    async def is_admin(self, user_id: uuid.UUID) -> bool:
-        """
-        Check if the user is an admin.
-
-        Args:
-            user_id (uuid.UUID): The user ID to check.
-
-        Returns:
-            bool: True if the user is an admin, False otherwise.
-        """
-        user_is_admin = await self.session.scalars(
-            select(User.is_admin).where(User.user_id == user_id)
-        )
-        return user_is_admin.one_or_none()

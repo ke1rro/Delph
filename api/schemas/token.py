@@ -1,5 +1,7 @@
 """Token Scheme"""
 
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -13,4 +15,4 @@ class TokenInfo(BaseModel):
 
     access_token: str
     token_type: str
-    expires_in: int = 300
+    expires: datetime

@@ -77,6 +77,7 @@ class UserLogin(UserSchema):
     password: str
     name: str
     surname: str
+    is_admin: bool = False
 
 
 class BlacklistUserRequest(UserSchema):

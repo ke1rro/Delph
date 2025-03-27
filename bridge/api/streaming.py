@@ -4,10 +4,11 @@ Streaming service to stream messages from Kafka to the client.
 
 import asyncio
 
-from fastapi import APIRouter, Depends, Header, HTTPException, WebSocket
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, WebSocket
 from models.user import User
 from services.queue import QueueSubscribeService
 from services.user import AuthenticationError, UserService
+from starlette.authentication import requires
 
 from api.dependencies import get_queue_subscribe_service, get_user_service
 
@@ -32,9 +33,9 @@ async def websocket_consume(
 
 
 @router.websocket("/messages")
+@requires("authenticated")
 async def stream_messages(
     websocket: WebSocket,
-    # token: str = Header(alias="Authorization"),
     user_service: UserService = Depends(get_user_service),
     queue_service: QueueSubscribeService = Depends(get_queue_subscribe_service),
 ):
