@@ -1,9 +1,16 @@
+"""
+Extract the data from the tables and save it as a CSV file.
+"""
+
 import os
 
 import pandas
 
 
 def main():
+    """
+    Extract the data from the tables and save it as a CSV file.
+    """
     tables = [
         pandas.read_html(f"tables/{table}")[0]
         for table in os.listdir("tables")

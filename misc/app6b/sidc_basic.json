@@ -3,18 +3,10 @@
         "assumed_friend": "A",
         "friend": "F",
         "hostile": "H",
-        "suspect": "S",
         "neutral": "N",
-        "unknown": "U",
-        "pending": "P"
-    },
-    "type": {
-        "land": "G",
-        "air": "A",
-        "water": "S",
-        "space": "P",
-        "underwater": "U",
-        "sof": "F"
+        "pending": "P",
+        "suspect": "S",
+        "unknown": "U"
     },
     "status": {
         "active": "C",
