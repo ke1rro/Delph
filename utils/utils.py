@@ -5,8 +5,9 @@ from datetime import datetime, timedelta, timezone
 
 import bcrypt
 import jwt
-from core.config import settings
 from fastapi import HTTPException
+
+from shared_config.config import settings
 
 PR_KEY = settings.auth_jwt.private_key_path.read_text()
 PUB_KEY = settings.auth_jwt.public_key_path.read_text()
@@ -18,7 +19,7 @@ async def encode_jwt(
     payload: dict[str,],
     expires: int = EXPIRES,
     expire_timedelta: timedelta | None = None,
-) -> str:
+) -> tuple[str, int]:
     """
     Creates a JWT token.
 
@@ -28,7 +29,7 @@ async def encode_jwt(
         algorithm (str): The algorithm used to encode the JWT.
 
     Returns:
-        str: The encoded JWT token.
+        str: The encoded JWT token and expire time.
     """
     to_encode = payload.copy()
     time_now = datetime.now(timezone.utc)
@@ -37,7 +38,7 @@ async def encode_jwt(
     else:
         expires = time_now + timedelta(minutes=expires)
     to_encode.update(exp=expires, iat=time_now)
-    return jwt.encode(to_encode, PR_KEY, ALGORITHM)
+    return jwt.encode(to_encode, PR_KEY, ALGORITHM), expires
 
 
 async def decode_jwt(

@@ -2,6 +2,7 @@
 Module provides dependencies for the authentication.
 """
 
+from datetime import datetime, timezone
 from typing import Any
 
 from core.postgres_database import database
@@ -10,10 +11,10 @@ from pydantic import BaseModel
 from repositories.user_repo import UserRepository
 from services.user_service import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
-from utils.utils import decode_jwt, encode_jwt, validate_password
 
 from schemas.token import TokenInfo
 from schemas.user import UserLogin
+from utils.utils import decode_jwt, encode_jwt, validate_password
 
 
 class LogingData(BaseModel):
@@ -66,7 +67,13 @@ async def validate_user_auth(
         raise unauthed_exc
 
     if await validate_password(login_data.password, hashed_password=user.password):
-        return user
+        return UserLogin(
+            user_id=user.user_id.hex,
+            name=user.name,
+            surname=user.surname,
+            is_admin=user.is_admin,
+            password=user.password,
+        )
 
     raise unauthed_exc
 
@@ -122,8 +129,10 @@ async def create_jwt_token(user: UserLogin, response: Response) -> TokenInfo:
         "user_id": user.user_id.hex,
         "user_name": user.name,
         "user_surname": user.surname,
+        "is_admin": user.is_admin,
     }
-    token = await encode_jwt(jwt_payload)
+
+    token, expires = await encode_jwt(jwt_payload)
 
     response.set_cookie(
         key="access_token",
@@ -131,7 +140,8 @@ async def create_jwt_token(user: UserLogin, response: Response) -> TokenInfo:
         httponly=True,
         secure=True,
         samesite=None,
-        max_age=300,
+        max_age=int((expires - datetime.now(timezone.utc)).total_seconds()),
+        expires=expires,
     )
 
-    return TokenInfo(access_token=token, token_type="Bearer", expires_in=300)
+    return TokenInfo(access_token=token, token_type="Bearer", expires=expires)
