@@ -2,9 +2,9 @@ class EventStorage {
     constructor() {
         this.events = {};
         this.callbacks = {
-            add: function(event) {},
-            update: function(previous_event, event) {},
-            remove: function(event) {}
+            add: async (event) => {},
+            update: async (previous_event, event) => {},
+            remove: async (event) => {}
         };
     }
 
@@ -12,24 +12,24 @@ class EventStorage {
         this.callbacks[event] = callback;
     }
 
-    push(event) {
+    async push(event) {
         if(event.id in this.events) {
             const previous_event = this.events[event.id];
             this.events[event.id] = event;
-            this.callbacks.update(previous_event, event);
+            await this.callbacks.update(previous_event, event);
         } else {
             this.events[event.id] = event;
-            this.callbacks.add(event);
+            await this.callbacks.add(event);
         }
     }
 
-    update() {
+    async update() {
         const time = Date.now();
         for(let event_id in this.events) {
             const event = this.events[event_id];
             if(event.ttl + event.timestamp < time) {
                 delete this.events[event_id];
-                this.callbacks.remove(event);
+                await this.callbacks.remove(event);
             }
         }
     }
@@ -40,5 +40,3 @@ class EventStorage {
 }
 
 export default EventStorage;
-
-// TODO: Remake as async

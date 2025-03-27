@@ -2,22 +2,22 @@ import React from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import PageLayout from "./PageLayout";
-import BridgeClient from "../bridge/BridgeClient";
-import EventStorage from "../bridge/EventStorage";
+import BridgeClient from "../api/BridgeClient";
+import EventStorage from "../api/EventStorage";
 
 const Map = () => {
   const storage = new EventStorage()
   const client = new BridgeClient("ws://localhost:8000/api/bridge/messages", storage);
 
-  storage.on("add", (event) => {
+  storage.on("add", async (event) => {
     console.log("Event added", event);
   });
 
-  storage.on("update", (previous_event, event) => {
+  storage.on("update", async (previous_event, event) => {
     console.log("Event updated", previous_event, event);
   });
 
-  storage.on("remove", (event) => {
+  storage.on("remove", async (event) => {
     console.log("Event removed", event);
   });
 
