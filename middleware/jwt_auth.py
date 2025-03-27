@@ -4,13 +4,12 @@ backend that validates a JWT token provided either in the Authorization header
 """
 
 import logging
+from datetime import datetime, timezone
 
-from core.postgres_database import database
-from core.redis import redis_client
-from repositories.user_repo import UserRepository
-from services.user_service import UserService
 from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
 from starlette.requests import Request
+
+from cache.redis import redis_client
 from utils.utils import decode_jwt
 
 
@@ -34,19 +33,31 @@ class JWTAuthBackend(AuthenticationBackend):
         token = request.cookies.get("access_token")
 
         if not token:
+            logging.error("No access token found in cookies")
             return None
 
-        payload = await decode_jwt(token)
-        user_id = payload.get("sub")
-        if await redis_client.is_user_blacklisted(user_id):
-            logging.error(f"User {user_id} is blacklisted")
+        try:
+            payload = await decode_jwt(token)
+
+            exp = payload.get("exp")
+            if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
+                timezone.utc
+            ):
+                logging.error("JWT token is expired")
+                return None
+
+            whitelist_payload = await redis_client.get_whitelist_payload(token)
+            if not whitelist_payload:
+                logging.error("JWT token is not in the whitelist")
+                return None
+
+            user_id = payload.get("sub")
+            if not user_id:
+                logging.error("User ID is missing in the JWT payload")
+                return None
+
+            return AuthCredentials(["authenticated"]), SimpleUser(user_id)
+
+        except Exception as e:
+            logging.error(f"Failed to authenticate user: {str(e)}")
             return None
-
-        async with database.session_factory() as session:
-            is_admin = await UserService(UserRepository(session)).is_admin(user_id)
-
-        if is_admin:
-            logging.info(f"Admin user {user_id} authenticated")
-            return AuthCredentials(["admin", "authenticated"]), SimpleUser(user_id)
-        logging.info(f"User {user_id} authenticated")
-        return AuthCredentials(["authenticated"]), SimpleUser(user_id)

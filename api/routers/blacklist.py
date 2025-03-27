@@ -2,10 +2,10 @@
 Module provides user blacklisting functionality via Redis.
 """
 
-from core.redis import redis_client
 from fastapi import APIRouter, HTTPException, Request, status
 from starlette.authentication import requires
 
+from cache.redis import redis_client
 from schemas.user import BlacklistUserRequest
 
 router = APIRouter(prefix="/blacklist", tags=["blacklist"])
@@ -53,8 +53,3 @@ async def remove_user_from_blacklist(request: Request, user_id: str):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to remove user from blacklist: {str(e)}",
         )
-
-
-@router.get("/user")
-async def get_blacklist_reason(requeat: Request):
-    return {"message": "get_blacklist_reason"}

@@ -2,13 +2,12 @@
 
 from contextlib import asynccontextmanager
 
-from core.config import settings
 from core.postgres_database import database
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from middleware.jwt_auth import JWTAuthBackend
 from routers.auth import router as auth_router
 from starlette.middleware.authentication import AuthenticationMiddleware
+
+from middleware.jwt_auth import JWTAuthBackend
 
 
 @asynccontextmanager
@@ -19,8 +18,10 @@ async def lifespan(_):
 
 
 app = FastAPI(root_path="/api/core", lifespan=lifespan)
-app.include_router(auth_router)
+
 app.add_middleware(AuthenticationMiddleware, backend=JWTAuthBackend())
+
+app.include_router(auth_router)
 
 # app.add_middleware(
 #     CORSMiddleware,

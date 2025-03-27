@@ -3,9 +3,9 @@ Module provides user authentication via JWT
 """
 
 import uuid
+from datetime import datetime, timezone
 from typing import Any
 
-from core.config import settings
 from dependencies.auth import (
     create_jwt_token,
     get_user_service,
@@ -14,10 +14,10 @@ from dependencies.auth import (
 )
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.requests import Request
-from fastapi.responses import JSONResponse
 from services.user_service import UserService
 from starlette.authentication import requires
 
+from cache.redis import redis_client
 from schemas.user import LoginResponse, UserLogin, UserReg
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -54,10 +54,16 @@ async def auth_user(
     Authenticates a user and returns a JWT token.
     Adds cookie to the response.
     """
-    await create_jwt_token(user, response)
+    token = await create_jwt_token(user, response)
+    user_data = user.model_dump()
+    user_data["user_id"] = str(user_data["user_id"])
+    expire_seconds = int((token.expires - datetime.now(timezone.utc)).total_seconds())
+    await redis_client.whitelist_user(
+        token=token.access_token, payload=user_data, expire=expire_seconds
+    )
     return {
         "message": "Successfully logged in",
-        "user_id": user.user_id.hex,
+        "user_id": user.user_id,
     }
 
 
