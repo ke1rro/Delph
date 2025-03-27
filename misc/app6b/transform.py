@@ -2,8 +2,6 @@ import json
 
 import pandas
 
-DATA_KEY = "$SIDC"
-
 
 def append(tree: dict, path: list[str], data: str):
     for node in path:
@@ -11,11 +9,11 @@ def append(tree: dict, path: list[str], data: str):
         tree.setdefault(node, {})
         tree = tree[node]
 
-    tree[DATA_KEY] = data
+    tree[""] = data
 
 
 def smash(parent, tree, node):
-    if len(tree) == 1 and DATA_KEY not in tree:
+    if len(tree) == 1 and "" not in tree:
         subnode = next(iter(tree.keys()))
 
         parent[" ".join([node, subnode])] = tree[subnode]
@@ -24,7 +22,7 @@ def smash(parent, tree, node):
         smash(parent, tree[subnode], " ".join([node, subnode]))
     else:
         for subnode in list(tree.keys()):
-            if subnode == DATA_KEY:
+            if subnode == "":
                 continue
             smash(tree, tree[subnode], subnode)
 
@@ -47,4 +45,5 @@ def main():
         json.dump(prefix_tree, file, indent=4)
 
 
-main()
+if __name__ == "__main__":
+    main()

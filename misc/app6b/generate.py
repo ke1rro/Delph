@@ -1,62 +1,45 @@
 import json
 from typing import Generator
 
-DATA_KEY = "$SIDC"
-
-with open("tree.json", "r") as file:
-    prefix_tree = json.load(file)
-
-with open("sidc_basic.json", "r") as file:
-    sidc_basic = json.load(file)
-
-sidc_basic["entity"] = {}
-
 
 def iterate(tree: dict, path: list[str]) -> Generator[tuple[str, str], None, None]:
     for node in tree:
-        if node == DATA_KEY:
+        if not node:
             yield path, tree[node]
         else:
             yield from iterate(tree[node], path + [node])
 
 
-def lookup(tree: dict, value: str) -> str | None:
-    for key, val in tree.items():
+def lookup_type(tree: dict, value: str) -> str | None:
+    for key, val in tree["type"].items():
         if val == value:
             return key
 
     return None
 
 
-def extract_filters(sidc: str) -> dict | None:
-    if sidc[0] != "S":
-        return None
+def main():
+    with open("tree.json", "r") as file:
+        prefix_tree = json.load(file)
 
-    filters = {}
+    with open("sidc_basic.json", "r") as file:
+        sidc_basic = json.load(file)
 
-    for char, name in zip(sidc[1:], ["affiliation", "type", "status"]):
-        if char == "*":
+    tree = {}
+    for path, sidc in iterate(prefix_tree, []):
+        type_ = lookup_type(sidc_basic, sidc[2])
+        if type_ is None:
+            print(f"Unknown type: {sidc[2]}")
             continue
 
-        value = lookup(sidc_basic[name], char)
-        if value is None:
-            return None
+        tree.setdefault(type_, {})
+        tree[type_][":".join(path)] = sidc[4:]
 
-        filters[name] = value
+    sidc_basic["entity"] = tree
 
-    return filters
+    with open("sidc.json", "w") as file:
+        json.dump(sidc_basic, file, indent=4)
 
 
-for path, sidc in iterate(prefix_tree, []):
-    filters = extract_filters(sidc[:4])
-    if filters is None:
-        print(f"Skipped {':'.join(path)}")
-        continue
-
-    sidc_basic["entity"][":".join(path)] = {
-        "sidc": sidc[4:],
-        "filters": filters,
-    }
-
-with open("sidc.json", "w") as file:
-    json.dump(sidc_basic, file, indent=4)
+if __name__ == "__main__":
+    main()
