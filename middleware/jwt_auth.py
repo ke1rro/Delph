@@ -36,28 +36,20 @@ class JWTAuthBackend(AuthenticationBackend):
             logging.error("No access token found in cookies")
             return None
 
-        try:
-            payload = await decode_jwt(token)
 
-            exp = payload.get("exp")
-            if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
-                timezone.utc
-            ):
-                logging.error("JWT token is expired")
-                return None
-
-            whitelist_payload = await redis_client.get_whitelist_payload(token)
-            if not whitelist_payload:
-                logging.error("JWT token is not in the whitelist")
-                return None
-
-            user_id = payload.get("sub")
-            if not user_id:
-                logging.error("User ID is missing in the JWT payload")
-                return None
-
-            return AuthCredentials(["authenticated"]), SimpleUser(user_id)
-
-        except Exception as e:
-            logging.error(f"Failed to authenticate user: {str(e)}")
+        payload = await decode_jwt(token)
+        exp = payload.get("exp")
+        if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
+            timezone.utc
+        ):
+            logging.error("JWT token is expired")
             return None
+        is_whitelisted = await redis_client.is_user_whitelisted(token)
+        if not is_whitelisted:
+            logging.error("JWT token is not in the whitelist")
+            return None
+        user_id = payload.get("sub")
+        if not user_id:
+            logging.error("User ID is missing in the JWT payload")
+            return None
+        return AuthCredentials(["authenticated"]), SimpleUser(user_id)

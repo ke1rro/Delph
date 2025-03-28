@@ -1,7 +1,7 @@
 """
 Module provides user authentication via JWT
 """
-
+import logging
 import uuid
 from datetime import datetime, timezone
 from typing import Any
@@ -27,7 +27,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 # This used due to the fact the frontend do not have client side routing
 # This will be removed once the frontend is updated
 @router.get("/validate_token")
-async def validate_token(payload=Depends(validate_jwt_token)) -> dict[str, Any]:
+@requires(["authenticated"])
+async def validate_token(request: Request, payload=Depends(validate_jwt_token)) -> dict[str, Any]:
     """
     Validates a JWT token and returns the payload.
 
@@ -47,6 +48,7 @@ async def validate_token(payload=Depends(validate_jwt_token)) -> dict[str, Any]:
 
 @router.post("/login", response_model=LoginResponse)
 async def auth_user(
+    request: Request,
     response: Response,
     user: UserLogin = Depends(validate_user_auth),
 ) -> LoginResponse:
@@ -54,6 +56,16 @@ async def auth_user(
     Authenticates a user and returns a JWT token.
     Adds cookie to the response.
     """
+    existing_token = request.cookies.get("access_token")
+    if existing_token:
+        is_whitelisted = await redis_client.is_user_whitelisted(existing_token)
+        if is_whitelisted:
+            logging.info(f"User session with token {existing_token} already exists in the whitelist.")
+            return {
+                "message": "Successfully logged in",
+                "user_id": user.user_id,
+            }
+
     token = await create_jwt_token(user, response)
     user_data = user.model_dump()
     user_data["user_id"] = str(user_data["user_id"])
@@ -61,11 +73,12 @@ async def auth_user(
     await redis_client.whitelist_user(
         token=token.access_token, payload=user_data, expire=expire_seconds
     )
+    logging.info(f"User session with token {token.access_token} added to the whitelist.")
+
     return {
         "message": "Successfully logged in",
         "user_id": user.user_id,
     }
-
 
 @router.post("/logout")
 async def logout(response: Response) -> dict[str, str]:
