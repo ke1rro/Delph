@@ -36,7 +36,6 @@ class JWTAuthBackend(AuthenticationBackend):
             logging.error("No access token found in cookies")
             return None
 
-
         payload = await decode_jwt(token)
         exp = payload.get("exp")
         if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(

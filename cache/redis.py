@@ -84,7 +84,9 @@ class RedisClient:
             )
             raise
 
-    async def whitelist_user(self, token: str, payload: dict, expire: int = None) -> None:
+    async def whitelist_user(
+        self, token: str, payload: dict, expire: int = None
+    ) -> None:
         """
         Add a user to the whitelist using a Redis key with an expiration time.
 
@@ -118,7 +120,9 @@ class RedisClient:
             key = f"user_whitelist:{token}"
             return await self.redis.exists(key) > 0
         except Exception as e:
-            logging.error(f"Failed to check whitelist status for token {token}. Error: {e}")
+            logging.error(
+                f"Failed to check whitelist status for token {token}. Error: {e}"
+            )
             raise
 
     async def get_whitelist_payload(self, token: str) -> dict | None:
@@ -138,7 +142,9 @@ class RedisClient:
                 return json.loads(value)
             return None
         except Exception as e:
-            logging.error(f"Failed to get whitelist payload for token {token}. Error: {e}")
+            logging.error(
+                f"Failed to get whitelist payload for token {token}. Error: {e}"
+            )
             raise
 
     async def remove_user_from_whitelist(self, token: str) -> None:
@@ -156,7 +162,10 @@ class RedisClient:
             await self.redis.delete(key)
             logging.info(f"User with token {token} removed from whitelist")
         except Exception as e:
-            logging.error(f"Failed to remove user with token {token} from whitelist. Error: {e}")
+            logging.error(
+                f"Failed to remove user with token {token} from whitelist. Error: {e}"
+            )
             raise
+
 
 redis_client = RedisClient()
