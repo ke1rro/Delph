@@ -16,7 +16,10 @@ const Login = () => {
     setSuccess(null);
 
     try {
-      const response = await api.auth.login({ user_id: identifier, password: password });
+      const response = await api.auth.login({
+        user_id: identifier,
+        password: password,
+      });
 
       if (response.status !== 200) {
         throw new Error("Invalid credentials");

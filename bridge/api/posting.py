@@ -2,10 +2,11 @@
 Posting service to send messages to the message broker.
 """
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
+from models.user import User
 from pydantic import BaseModel, Field
 from services.queue import NoPermissionError, QueuePublishService
-from services.user import AuthenticationError, UserService
+from services.user import UserService
 from starlette.authentication import requires
 
 from api.dependencies import get_queue_publish_service, get_user_service
@@ -39,19 +40,18 @@ class CreateMessage(BaseModel):
 async def create_message(
     request: Request,
     create_message: CreateMessage,
-    token: str = Header(alias="Authorization"),
     user_service: UserService = Depends(get_user_service),
     queue_service: QueuePublishService = Depends(get_queue_publish_service),
 ) -> Message:
     """
     Create a new message and enqueue it.
     """
-
-    # TODO: JWT authentication
-    try:
-        user = await user_service.authenticate(token)
-    except AuthenticationError as e:
-        raise HTTPException(status_code=403, detail="Invalid token") from e
+    user = User(
+        id=request.user.user_id,
+        name=request.user.username,
+        token=request.user.token,
+        permissions=[await user_service.get_global_permission()],
+    )
 
     try:
         return await queue_service.publish(

@@ -2,9 +2,9 @@
 User service for authentication and checking permissions.
 """
 
-from models.user import User
+from models.user import Permission, User
 from repositories.user import UserRepository
-from shapely import Point
+from shapely import Point, Polygon
 
 from schemas.message import Source
 
@@ -29,24 +29,26 @@ class UserService:
         self.repo = repo
         self.source_fmt = source_fmt
 
-    async def authenticate(self, token: str) -> User:
+    async def get_global_permission(self) -> Permission:
         """
-        Authenticate the user by token.
-
-        Args:
-            token: User token.
+        Get global permission for the user.
 
         Returns:
-            Authenticated user.
-
-        Raises:
-            AuthenticationError: If invalid token was provided.
+            Permission: Global permission object.
         """
-        user = await self.repo.get_user_by_token(token)
-        if user is None:
-            raise AuthenticationError
-
-        return user
+        return Permission(
+            shape=Polygon(
+                [
+                    Point(-180, -90),
+                    Point(-180, 90),
+                    Point(180, 90),
+                    Point(180, -90),
+                    Point(-180, -90),
+                ]
+            ),
+            can_read=True,
+            can_write=True,
+        )
 
     async def create_source(self, user: User, comment: str | None = None) -> Source:
         """

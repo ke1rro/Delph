@@ -13,7 +13,7 @@ const Registration = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [userId, setUserId] = useState(null); // State to store the user ID
+  const [userId, setUserId] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,7 +32,6 @@ const Registration = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Clear previous messages
     setError("");
     setSuccess("");
     setUserId(null);
@@ -42,7 +41,9 @@ const Registration = () => {
       return;
     }
     if (!validatePassword(formData.password)) {
-      setError("Password must have at least one uppercase, one number, one special character, and be at least 8 characters long.");
+      setError(
+        "Password must have at least one uppercase, one number, one special character, and be at least 8 characters long.",
+      );
       return;
     }
 
@@ -59,7 +60,7 @@ const Registration = () => {
 
       setError("");
       setSuccess("Registration successful!");
-      setUserId(response.data); // Set the user ID from the response
+      setUserId(response.data);
     } catch (error) {
       console.error(error);
       setError("Error during registration. Try again.");
@@ -69,7 +70,7 @@ const Registration = () => {
   const handleCopy = () => {
     navigator.clipboard.writeText(userId);
     alert("User ID copied to clipboard!");
-    setUserId(null); // Hide the popup after copying
+    setUserId(null);
   };
 
   return (
@@ -79,11 +80,45 @@ const Registration = () => {
         <h1 className="title">DELTA</h1>
 
         <form className="login-form" onSubmit={handleSubmit}>
-          <input className="input-field" type="text" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} required />
-          <input className="input-field" type="text" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} required />
-          <input className="input-field" type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} required />
-          <input className="input-field" type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required />
-          <button className="login-button" type="submit">Register</button>
+          <input
+            className="input-field"
+            type="text"
+            name="firstName"
+            placeholder="First Name"
+            value={formData.firstName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="input-field"
+            type="text"
+            name="lastName"
+            placeholder="Last Name"
+            value={formData.lastName}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="input-field"
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
+          <input
+            className="input-field"
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+          <button className="login-button" type="submit">
+            Register
+          </button>
         </form>
 
         {/* Popup container */}
@@ -93,7 +128,9 @@ const Registration = () => {
         </div>
 
         <div className="reg-link">
-          <a href="/login" className="link">Already have an account?</a>
+          <a href="/login" className="link">
+            Already have an account?
+          </a>
         </div>
       </div>
 
@@ -103,8 +140,16 @@ const Registration = () => {
           <div className="card">
             <div className="header">
               <span className="icon">
-                <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                  <path clipRule="evenodd" d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z" fillRule="evenodd" />
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clipRule="evenodd"
+                    d="M18 3a1 1 0 00-1.447-.894L8.763 6H5a3 3 0 000 6h.28l1.771 5.316A1 1 0 008 18h1a1 1 0 001-1v-4.382l6.553 3.276A1 1 0 0018 15V3z"
+                    fillRule="evenodd"
+                  />
                 </svg>
               </span>
               <p className="alert">Registration Successful!</p>

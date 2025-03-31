@@ -4,7 +4,7 @@ Streaming service to stream messages from Kafka to the client.
 
 import asyncio
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Request, WebSocket
+from fastapi import APIRouter, Depends, HTTPException, WebSocket
 from models.user import User
 from services.queue import QueueSubscribeService
 from services.user import AuthenticationError, UserService
@@ -42,13 +42,12 @@ async def stream_messages(
     """
     Stream messages from the queue.
     """
-    # TODO: JWT authentication
-    token = "valid"
-    print("Trying...")
-    try:
-        user = await user_service.authenticate(token)
-    except AuthenticationError as e:
-        raise HTTPException(status_code=403, detail="Invalid token") from e
+    user = User(
+        id=websocket.user.user_id,
+        name=websocket.user.username,
+        token=websocket.user.token,
+        permissions=[await user_service.get_global_permission()],
+    )
 
     await websocket.accept()
 

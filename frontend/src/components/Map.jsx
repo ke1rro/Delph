@@ -10,29 +10,28 @@ import ms from "milsymbol";
 let sidcData;
 
 async function createEventSVG(event) {
-    if(sidcData == null) {
-        sidcData = await (await fetch("/sidc.json")).json();
-    }
+  if (sidcData == null) {
+    sidcData = await (await fetch("/sidc.json")).json();
+  }
 
-    let sidc = sidcData.entity[event.entity.entity];
-    if (sidc == null) {
-        sidc = sidcData.entity["ground"];
-    }
-    let affiliation = sidcData.affiliation[event.entity.affiliation];
-    let status = sidcData.status[event.entity.status];
+  let sidc = sidcData.entity[event.entity.entity];
+  if (sidc == null) {
+    sidc = sidcData.entity["ground"];
+  }
+  let affiliation = sidcData.affiliation[event.entity.affiliation];
+  let status = sidcData.status[event.entity.status];
 
-    sidc = sidc.replace("@", affiliation).replace("#", status);
+  sidc = sidc.replace("@", affiliation).replace("#", status);
 
-    return new ms.Symbol(sidc).asSVG()
+  return new ms.Symbol(sidc).asSVG();
 }
 
 const Map = () => {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    const storage = new EventStorage()
+    const storage = new EventStorage();
     const client = new BridgeClient(storage);
-
 
     const addMarker = async (event) => {
       console.log("Event added", event);
@@ -46,60 +45,56 @@ const Map = () => {
       setMarkers((prevMarkers) => [
         ...prevMarkers,
         {
-            id: event.id,
-            position: {
-                lat: event.location.latitude,
-                lng: event.location.longitude,
-            },
-            icon,
+          id: event.id,
+          position: {
+            lat: event.location.latitude,
+            lng: event.location.longitude,
+          },
+          icon,
         },
       ]);
     };
-
     storage.on("add", addMarker);
 
     const updateMarker = async (previous_event, event) => {
-        console.log("Event updated", previous_event, event);
-        const svgString = await createEventSVG(event);
-        const icon = L.divIcon({
-            className: "custom-icon",
-            html: `<div style="width:40px;height:40px;">${svgString}</div>`,
-            iconSize: [40, 40],
-        });
+      console.log("Event updated", previous_event, event);
+      const svgString = await createEventSVG(event);
+      const icon = L.divIcon({
+        className: "custom-icon",
+        html: `<div style="width:40px;height:40px;">${svgString}</div>`,
+        iconSize: [40, 40],
+      });
 
-        setMarkers((prevMarkers) => {
-            const index = prevMarkers.findIndex(
-                (marker) => marker.id === previous_event.id
-            );
-
-            if (index !== -1) {
-                const updatedMarkers = [...prevMarkers];
-                updatedMarkers[index] = {
-                    id: event.id,
-                    position: {
-                        lat: event.location.latitude,
-                        lng: event.location.longitude,
-                    },
-                    icon,
-                };
-                return updatedMarkers;
-            }
-            return prevMarkers;
-        }
+      setMarkers((prevMarkers) => {
+        const index = prevMarkers.findIndex(
+          (marker) => marker.id === previous_event.id
         );
-    }
+
+        if (index !== -1) {
+          const updatedMarkers = [...prevMarkers];
+          updatedMarkers[index] = {
+            id: event.id,
+            position: {
+              lat: event.location.latitude,
+              lng: event.location.longitude,
+            },
+            icon,
+          };
+          return updatedMarkers;
+        }
+        return prevMarkers;
+      });
+    }  
     storage.on("update", updateMarker);
 
     const removeMarker = async (event) => {
-        console.log("Event removed", event);
-        setMarkers((prevMarkers) =>
-            prevMarkers.filter(
-                (marker) =>
-                    marker.id !== event.id
-            )
-        );
+      console.log("Event removed", event);
+      setMarkers((prevMarkers) =>
+        prevMarkers.filter(
+          (marker) => marker.id !== event.id
+        )
+      );
     };
-
     storage.on("remove", removeMarker);
   }, []);
 
@@ -107,7 +102,8 @@ const Map = () => {
     <PageLayout>
       <div className="map-container">
         <MapContainer
-          center={[50.4501, 30.5234]}
+          // add moscow coordinates
+          center={[55.7558, 37.6173]}
           zoom={10}
           style={{ height: "100vh", width: "100%" }}
         >
