@@ -10,29 +10,28 @@ import ms from "milsymbol";
 let sidcData;
 
 async function createEventSVG(event) {
-    if(sidcData == null) {
-        sidcData = await (await fetch("/sidc.json")).json();
-    }
+  if (sidcData == null) {
+    sidcData = await (await fetch("/sidc.json")).json();
+  }
 
-    let sidc = sidcData.entity[event.entity.entity];
-    if (sidc == null) {
-        sidc = sidcData.entity["ground"];
-    }
-    let affiliation = sidcData.affiliation[event.entity.affiliation];
-    let status = sidcData.status[event.entity.status];
+  let sidc = sidcData.entity[event.entity.entity];
+  if (sidc == null) {
+    sidc = sidcData.entity["ground"];
+  }
+  let affiliation = sidcData.affiliation[event.entity.affiliation];
+  let status = sidcData.status[event.entity.status];
 
-    sidc = sidc.replace("@", affiliation).replace("#", status);
+  sidc = sidc.replace("@", affiliation).replace("#", status);
 
-    return new ms.Symbol(sidc).asSVG()
+  return new ms.Symbol(sidc).asSVG();
 }
 
 const Map = () => {
   const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
-    const storage = new EventStorage()
+    const storage = new EventStorage();
     const client = new BridgeClient(storage);
-
 
     const addMarker = async (event) => {
       console.log("Event added", event);
@@ -45,21 +44,24 @@ const Map = () => {
 
       setMarkers((prevMarkers) => [
         ...prevMarkers,
-        { position: {
+        {
+          position: {
             lat: event.location.latitude,
             lng: event.location.longitude,
-        }, icon },
+          },
+          icon,
+        },
       ]);
     };
 
     storage.on("add", addMarker);
 
     storage.on("update", async (previous_event, event) => {
-        console.log("Event updated", previous_event, event);
+      console.log("Event updated", previous_event, event);
     });
 
     storage.on("remove", async (event) => {
-        console.log("Event removed", event);
+      console.log("Event removed", event);
     });
   }, []);
 
@@ -67,7 +69,8 @@ const Map = () => {
     <PageLayout>
       <div className="map-container">
         <MapContainer
-          center={[50.4501, 30.5234]}
+          // add moscow coordinates
+          center={[55.7558, 37.6173]}
           zoom={10}
           style={{ height: "100vh", width: "100%" }}
         >

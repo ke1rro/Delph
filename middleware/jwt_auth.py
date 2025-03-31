@@ -13,6 +13,32 @@ from cache.redis import redis_client
 from utils.utils import decode_jwt
 
 
+class SimpleUser(SimpleUser):
+    """
+    Extended SimpleUser class to include additional attributes.
+    """
+
+    def __init__(
+        self,
+        username: str,
+        user_id: str = None,
+        user_surname: str = None,
+        token: str = None,
+    ):
+        """
+        Initialize the extended SimpleUser.
+
+        Args:
+            username (str): The username of the user.
+            user_id (str): The unique identifier of the user.
+            user_surname (str): The surname of the user.
+        """
+        super().__init__(username)
+        self.token = token
+        self.user_id = user_id
+        self.user_surname = user_surname
+
+
 class JWTAuthBackend(AuthenticationBackend):
     """
     Authentication backend that validates a JWT token provided either in the
@@ -36,8 +62,17 @@ class JWTAuthBackend(AuthenticationBackend):
             logging.error("No access token found in cookies")
             return None
 
+        # jwt_payload
+        # "sub": user.user_id.hex,
+        # "user_id": user.user_id.hex,
+        # "user_name": user.name,
+        # "user_surname": user.surname,
+        # "is_admin": user.is_admin,
+
         payload = await decode_jwt(token)
         exp = payload.get("exp")
+        name = payload.get("user_name")
+        surname = payload.get("user_surname")
         if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
             timezone.utc
         ):
@@ -51,4 +86,6 @@ class JWTAuthBackend(AuthenticationBackend):
         if not user_id:
             logging.error("User ID is missing in the JWT payload")
             return None
-        return AuthCredentials(["authenticated"]), SimpleUser(user_id)
+        return AuthCredentials(["authenticated"]), SimpleUser(
+            username=name, user_id=user_id, user_surname=surname, token=token
+        )

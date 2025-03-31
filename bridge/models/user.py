@@ -36,4 +36,5 @@ class User:
 
     id: str
     name: str
+    token: str
     permissions: list[Permission]
