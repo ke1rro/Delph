@@ -3,6 +3,7 @@ import time
 from dataclasses import dataclass
 
 import requests
+import requests.cookies
 
 
 class Client:
@@ -18,7 +19,11 @@ class Client:
 
     def push(self, message: dict) -> str:
         response = self.session.put(
-            "http://localhost:8000/api/bridge/messages", json=message
+            "http://localhost:8000/api/bridge/messages",
+            json=message,
+            cookies={
+                "access_token": self.session.cookies.get("access_token"),
+            },
         )
         response.raise_for_status()
         return response.json()["id"]
