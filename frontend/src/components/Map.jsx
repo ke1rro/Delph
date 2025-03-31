@@ -45,22 +45,62 @@ const Map = () => {
 
       setMarkers((prevMarkers) => [
         ...prevMarkers,
-        { position: {
-            lat: event.location.latitude,
-            lng: event.location.longitude,
-        }, icon },
+        {
+            id: event.id,
+            position: {
+                lat: event.location.latitude,
+                lng: event.location.longitude,
+            },
+            icon,
+        },
       ]);
     };
 
     storage.on("add", addMarker);
 
-    storage.on("update", async (previous_event, event) => {
+    const updateMarker = async (previous_event, event) => {
         console.log("Event updated", previous_event, event);
-    });
+        const svgString = await createEventSVG(event);
+        const icon = L.divIcon({
+            className: "custom-icon",
+            html: `<div style="width:40px;height:40px;">${svgString}</div>`,
+            iconSize: [40, 40],
+        });
 
-    storage.on("remove", async (event) => {
+        setMarkers((prevMarkers) => {
+            const index = prevMarkers.findIndex(
+                (marker) => marker.id === previous_event.id
+            );
+
+            if (index !== -1) {
+                const updatedMarkers = [...prevMarkers];
+                updatedMarkers[index] = {
+                    id: event.id,
+                    position: {
+                        lat: event.location.latitude,
+                        lng: event.location.longitude,
+                    },
+                    icon,
+                };
+                return updatedMarkers;
+            }
+            return prevMarkers;
+        }
+        );
+    }
+    storage.on("update", updateMarker);
+
+    const removeMarker = async (event) => {
         console.log("Event removed", event);
-    });
+        setMarkers((prevMarkers) =>
+            prevMarkers.filter(
+                (marker) =>
+                    marker.id !== event.id
+            )
+        );
+    };
+
+    storage.on("remove", removeMarker);
   }, []);
 
   return (
