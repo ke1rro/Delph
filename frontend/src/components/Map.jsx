@@ -23,7 +23,7 @@ async function createEventSVG(event) {
 
   sidc = sidc.replace("@", affiliation).replace("#", status);
 
-  return new ms.Symbol(sidc).asSVG();
+  return new ms.Symbol(sidc, { size: 35 }).asSVG();
 }
 
 const Map = () => {
@@ -84,7 +84,7 @@ const Map = () => {
         }
         return prevMarkers;
       });
-    }  
+    }
     storage.on("update", updateMarker);
 
     const removeMarker = async (event) => {
