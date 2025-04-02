@@ -1,6 +1,8 @@
 # Available ports:
 # 8081 - kafka ui
 # 8082 - redis insight
+# 8083 - mongo express
+
 
 services:
   kafka-ui:
@@ -21,4 +23,27 @@ services:
     ports:
       - 8082:5540
     volumes:
-      - ./data/redisinsight:/db 
+      - ./data/redisinsight:/db
+
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    env_file:
+      - .env
+    ports:
+      - "8083:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_ROOT_USER}
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_ROOT_PASSWORD}
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+    links:
+      - history-db:mongo
+    depends_on:
+      - history-db
+    restart: always
