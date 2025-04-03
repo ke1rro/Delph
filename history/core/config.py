@@ -18,6 +18,7 @@ class MongoDB(BaseSettings):
     mongo_root_user: str
     mongo_root_password: str
     mongo_db_name: str
+    mongo_host: str
 
     @property
     def mongo_uri(self) -> str:
@@ -26,7 +27,7 @@ class MongoDB(BaseSettings):
         """
         return (
             f"mongodb://{self.mongo_root_user}:{self.mongo_root_password}@"
-            f"localhost:27017/{self.mongo_db_name}"
+            f"{self.mongo_host}:27017/{self.mongo_db_name}?authSource=admin"
         )
 
 

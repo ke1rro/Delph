@@ -1,11 +1,12 @@
-from confluent_kafka import Consumer
 import json
-from pymongo import MongoClient
 import logging
 import os
+
 import logging_config
 import utils
 from config import settings
+from confluent_kafka import Consumer
+from pymongo import MongoClient
 
 
 class ConsumerClass:
@@ -14,11 +15,13 @@ class ConsumerClass:
         self.bootstrap_server = bootstrap_server
         self.topic = topic
         self.group_id = group_id
-        self.consumer = Consumer({
-            "bootstrap.servers": bootstrap_server,
-            "group.id": self.group_id,
-            "auto.offset.reset": "earliest"
-        })
+        self.consumer = Consumer(
+            {
+                "bootstrap.servers": bootstrap_server,
+                "group.id": self.group_id,
+                "auto.offset.reset": "earliest",
+            }
+        )
 
         self.mongo_uri = settings.mongodb.mongo_uri
         self.mongo_db_name = settings.mongodb.mongo_db_name
@@ -26,7 +29,9 @@ class ConsumerClass:
         self.db = self.client[self.mongo_db_name]
         self.collection_name = os.environ.get("MONGO_COLLECTION_NAME", "messages")
         self.collection = self.db[self.collection_name]
-        logging.info(f"Connected to MongoDB: {self.mongo_db_name}.{self.collection_name}")
+        logging.info(
+            f"Connected to MongoDB: {self.mongo_db_name}.{self.collection_name}"
+        )
 
     def process_kafka_message(self, msg_kafka):
         """
@@ -42,7 +47,9 @@ class ConsumerClass:
 
             if isinstance(data, list):
                 self.collection.insert_many(data)
-                logging.info(f"Successfully inserted {len(data)} messages into MongoDB.")
+                logging.info(
+                    f"Successfully inserted {len(data)} messages into MongoDB."
+                )
             else:
                 self.collection.insert_one(data)
                 logging.info("Successfully inserted one message into MongoDB.")
