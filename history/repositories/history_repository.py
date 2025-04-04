@@ -2,14 +2,14 @@
 Query and manage the history to mongoDB.
 """
 
-from core.mongodb import MongoDB
+from core.mongodb import MongoDB, mongo
 
 
 class MongoRepository:
     """MongoDB repository class, which contains methods for data manipulation."""
 
-    def __init__(self, mongo: MongoDB, collection: str = "my_collection"):
-        self.collection = mongo.db[collection]
+    def __init__(self, mongodb: MongoDB = mongo, collection: str = "my_collection"):
+        self.collection = mongodb.db[collection]
 
     async def find_to_list(
         self, filters: dict = {}, return_fields: dict = {"_id": 0}

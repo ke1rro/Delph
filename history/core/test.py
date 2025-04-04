@@ -1,15 +1,14 @@
-from core.mongodb import mongo
-from repositories.history_repository import MongoRepository
+from services.history_service import MongoHistoryService
 
 
 async def add_data_example():
-    db = MongoRepository(mongo)
+    db = MongoHistoryService()
     await db.insert_one({"key": "value", "timestamp": "2025-04-02"})
     print("Data inserted!")
 
 
 async def select_all():
-    db = MongoRepository(mongo)
-    data = await db.find_to_list({})
+    db = MongoHistoryService()
+    data = await db.get_all()
     print("Data selected!")
     return data
