@@ -6,7 +6,7 @@ import asyncio
 
 from fastapi import FastAPI
 
-from core.test import add_data_example
+from core.test import add_data_example, select_all
 
 app = FastAPI(root_path="/api/history")
 
@@ -20,4 +20,4 @@ async def get_history():
     # Added example to add data into Mongo
     await add_data_example()
 
-    return {"message": "History data"}
+    return await select_all()
