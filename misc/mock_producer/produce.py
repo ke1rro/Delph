@@ -3,7 +3,6 @@ import time
 from dataclasses import dataclass
 
 import requests
-import requests.cookies
 
 
 class Client:
