@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     Settings for the bridge service.
     """
 
+    websocket_user_validation_interval: int = 1
     user_source_fmt: str = "DELTA_USER/{user_id}"
     kafka_topic: str = "delta"
     kafka_bootstrap_servers: str = "localhost:9092"

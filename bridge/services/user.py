@@ -9,12 +9,6 @@ from shapely import Point, Polygon
 from schemas.message import Source
 
 
-class AuthenticationError(Exception):
-    """
-    Invalid token was provided.
-    """
-
-
 class UserService:
     """
     User service to authenticate and check permissions.
@@ -28,6 +22,18 @@ class UserService:
     def __init__(self, repo: UserRepository, source_fmt: str):
         self.repo = repo
         self.source_fmt = source_fmt
+
+    async def validate_user(self, user: User) -> bool:
+        """
+        Validate user by token.
+
+        Args:
+            user: User object.
+
+        Returns:
+            bool: True if user is valid, False otherwise.
+        """
+        return await self.repo.is_token_valid(user.token)
 
     async def get_global_permission(self) -> Permission:
         """

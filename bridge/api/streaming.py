@@ -4,10 +4,12 @@ Streaming service to stream messages from Kafka to the client.
 
 import asyncio
 
-from fastapi import APIRouter, Depends, HTTPException, WebSocket
+from config import settings
+from fastapi import APIRouter, Depends
+from fastapi.websockets import WebSocket, WebSocketState
 from models.user import User
 from services.queue import QueueSubscribeService
-from services.user import AuthenticationError, UserService
+from services.user import UserService
 from starlette.authentication import requires
 
 from api.dependencies import get_queue_subscribe_service, get_user_service
@@ -15,7 +17,7 @@ from api.dependencies import get_queue_subscribe_service, get_user_service
 router = APIRouter()
 
 
-async def websocket_consume(
+async def websocket_send(
     websocket: WebSocket,
     user: User,
     queue_service: QueueSubscribeService,
@@ -30,6 +32,19 @@ async def websocket_consume(
     """
     async for message in queue_service.subscribe(user):
         await websocket.send_json(message.model_dump())
+
+
+async def websocket_receive(
+    websocket: WebSocket,
+):
+    """
+    Receive messages from the client.
+
+    Args:
+        websocket: WebSocket object.
+    """
+    async for _ in websocket.iter_text():
+        pass
 
 
 @router.websocket("/messages")
@@ -51,9 +66,18 @@ async def stream_messages(
 
     await websocket.accept()
 
-    task = asyncio.create_task(websocket_consume(websocket, user, queue_service))
+    task_send = asyncio.create_task(websocket_send(websocket, user, queue_service))
+    task_receive = asyncio.create_task(websocket_receive(websocket))
     try:
-        async for _ in websocket.iter_bytes():
-            pass
+        while websocket.state != WebSocketState.DISCONNECTED:
+            if not await user_service.validate_user(user):
+                task_send.cancel()
+                task_receive.cancel()
+
+                await websocket.close(code=3000)
+                return
+
+            await asyncio.sleep(settings.websocket_user_validation_interval)
     finally:
-        task.cancel()
+        task_send.cancel()
+        task_receive.cancel()
