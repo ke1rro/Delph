@@ -24,27 +24,25 @@ from schemas.user import LoginResponse, UserLogin, UserReg
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
-# Will be renamed to /me
-@router.get("/validate_token")
+@router.get("/me")
 @requires(["authenticated"])
 async def validate_token(
     request: Request, payload=Depends(validate_jwt_token)
 ) -> dict[str, Any]:
     """
-    Validates a JWT token and returns the payload.
+    Represents a simple endpoint to validate the JWT token.
 
     Args:
-        payload (_type_, optional): payload of the jwt token Defaults to Depends(validate_jwt_token).
+        payload (validate_jwt_token): payload of the jwt token Defaults to Depends(validate_jwt_token).
 
     Returns:
-        dics[str,]: payload of the jwt
+        dics[str,]: User information if validation is valid.
     """
+    user = request.user
     return {
-        "valid": True,
-        "user_id": payload.get("sub"),
-        "user_name": payload.get("user_name"),
-        "user_sur_name": payload.get("user_sur_name"),
-    }
+        "user_id": str(user.user_id),
+        "user_name": user.username,
+        "user_surname": user.user_surname,}
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -113,24 +111,3 @@ async def write_user(
 
     new_user_id = await user_service.create_user(user_data)
     return new_user_id
-
-
-# Will be removed
-@router.get("/user")
-@requires(["authenticated"])
-async def get_user(
-    request: Request,
-):
-    """
-    Test route will be removed.
-    """
-    return {"request": request.headers}
-
-
-# Will be removed
-@router.get("/check")
-async def check(request: Request):
-    """
-    Test route will be removed.
-    """
-    return {"Hello": 200}

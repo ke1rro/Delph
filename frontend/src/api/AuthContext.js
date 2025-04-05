@@ -29,8 +29,8 @@ class AuthContext {
         return await this.client.post(this.prefix + "/logout", data, config);
     }
 
-    async validateToken(data, config) {
-        return await this.client.get(this.prefix + "/validate_token", data, config);
+    async dashboard(data, config) {
+        return await this.client.get(this.prefix + "/me", data, config);
     }
 }
 

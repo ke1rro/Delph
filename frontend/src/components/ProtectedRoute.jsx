@@ -6,9 +6,9 @@ const ProtectedRoute = ({ element }) => {
   const [isTokenValid, setIsTokenValid] = useState(null);
 
   useEffect(() => {
-    const validateToken = async () => {
+    const get_me = async () => {
       try {
-        const response = await api.auth.validateToken();
+        const response = await api.auth.dashboard();
         setIsTokenValid(response.status == 200);
       } catch (error) {
         console.error(error);
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ element }) => {
       }
     };
 
-    validateToken();
+    get_me();
   }, []);
 
   if (isTokenValid === null) {
