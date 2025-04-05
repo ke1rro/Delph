@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity } from "react-icons/fi";
+import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiTrash2, FiZap } from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import ms from "milsymbol";
 import DraggableSVGPreview from "./DraggableSVGPreview";
@@ -8,7 +8,7 @@ import SidcDataService from "../utils/SidcDataService";
 import Api from "../Api";
 import { v4 as uuidv4 } from 'uuid';
 
-const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
+const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdate = null }) => {
   const [sidcData, setSidcData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [entityTree, setEntityTree] = useState([]);
@@ -26,10 +26,15 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
       affiliation: "friend",
       status: "present"
     },
+    velocity: {
+      speed: "",
+      direction: ""
+    },
     description: "",
   });
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     const fetchSidcData = async () => {
@@ -172,7 +177,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
     try {
       // Create message object according to schema
       const message = {
-        id: uuidv4(), // Generate unique ID
+        id: isEditMode ? eventData.id : uuidv4(), // Use existing ID if editing
         timestamp: Date.now(), // Current timestamp in ms
         ttl: 7 * 24 * 60 * 60 * 1000, // Default 7 days TTL
         source: {
@@ -186,7 +191,12 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
           altitude: null,
           radius: null
         },
-        velocity: null, // No velocity data in the form
+        velocity: eventData.velocity.speed || eventData.velocity.direction
+          ? {
+              speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
+              direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
+            }
+          : null,
         entity: {
           affiliation: mapAffiliation(eventData.entity.affiliation),
           entity: eventData.entity.entityPath,
@@ -194,17 +204,78 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
         }
       };
 
-      // Call API to create message
-      await Api.bridge.createMessage(message);
-
-      // Call original onSubmit callback
-      onSubmit(eventData);
+      // Call API to create or update message
+      if (isEditMode) {
+        await Api.bridge.updateMessage(message);
+        if (onUpdate) onUpdate(message);
+      } else {
+        await Api.bridge.createMessage(message);
+        if (onSubmit) onSubmit(eventData);
+      }
 
       // Close sidebar
       onClose();
     } catch (error) {
-      console.error("Error creating event:", error);
-      setSubmitError("Failed to create event. Please try again.");
+      console.error(`Error ${isEditMode ? 'updating' : 'creating'} event:`, error);
+      setSubmitError(`Failed to ${isEditMode ? 'update' : 'create'} event. Please try again.`);
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (newStatus) => {
+    if (!isEditMode || !eventData.id) return;
+
+    setSubmitLoading(true);
+    setSubmitError(null);
+
+    try {
+      // Create an updated message with the new status
+      const updatedMessage = {
+        id: eventData.id,
+        timestamp: Date.now(),
+        ttl: 7 * 24 * 60 * 60 * 1000,
+        source: {
+          id: localStorage.getItem('userId') || 'anonymous',
+          name: localStorage.getItem('userName') || null,
+          comment: eventData.description || null
+        },
+        location: {
+          latitude: parseFloat(eventData.location.latitude),
+          longitude: parseFloat(eventData.location.longitude),
+          altitude: null,
+          radius: null
+        },
+        velocity: eventData.velocity.speed || eventData.velocity.direction
+          ? {
+              speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
+              direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
+            }
+          : null,
+        entity: {
+          affiliation: mapAffiliation(eventData.entity.affiliation),
+          entity: eventData.entity.entityPath,
+          status: mapStatus(newStatus)
+        }
+      };
+
+      // Update the event
+      await Api.bridge.updateMessage(updatedMessage);
+
+      // Update local state
+      setEventData({
+        ...eventData,
+        entity: {
+          ...eventData.entity,
+          status: newStatus
+        }
+      });
+
+      if (onUpdate) onUpdate(updatedMessage);
+
+    } catch (error) {
+      console.error("Error updating event status:", error);
+      setSubmitError("Failed to update event status. Please try again.");
     } finally {
       setSubmitLoading(false);
     }
@@ -227,9 +298,6 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
       'active': 'active',
       'disabled': 'disabled',
       'destroyed': 'destroyed',
-      'present': 'active',
-      'planned': 'active',
-      'anticipated': 'active',
       'unknown': 'unknown'
     };
     return statusMap[status] || 'unknown';
@@ -237,17 +305,73 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const basicEntityType = eventData.entity.entity;
-      setEntityPath(basicEntityType);
-      setEventData({
-        ...eventData,
-        entity: {
-          ...eventData.entity,
-          entityPath: basicEntityType
-        }
-      });
+      if (selectedEvent) {
+        setIsEditMode(true);
+        setEventData({
+          id: selectedEvent.id,
+          title: selectedEvent.source?.comment || "",
+          location: {
+            latitude: selectedEvent.location?.latitude?.toString() || "",
+            longitude: selectedEvent.location?.longitude?.toString() || "",
+          },
+          entity: {
+            entity: selectedEvent.entity?.entity?.split(':')[0] || "ground",
+            entityPath: selectedEvent.entity?.entity || "",
+            affiliation: reverseMapAffiliation(selectedEvent.entity?.affiliation) || "friend",
+            status: reverseMapStatus(selectedEvent.entity?.status) || "present"
+          },
+          velocity: {
+            speed: selectedEvent.velocity?.speed?.toString() || "",
+            direction: selectedEvent.velocity?.direction?.toString() || ""
+          },
+          description: selectedEvent.source?.comment || "",
+        });
+        setEntityPath(selectedEvent.entity?.entity || "");
+      } else {
+        // Create mode - reset form
+        setIsEditMode(false);
+        setEventData({
+          title: "",
+          location: { latitude: "", longitude: "" },
+          entity: {
+            entity: "ground",
+            entityPath: "",
+            affiliation: "friend",
+            status: "present"
+          },
+          velocity: {
+            speed: "",
+            direction: ""
+          },
+          description: "",
+        });
+        const basicEntityType = "ground";
+        setEntityPath(basicEntityType);
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, selectedEvent]);
+
+  // Reverse map API schema values to UI affiliation values
+  const reverseMapAffiliation = (affiliation) => {
+    const reverseMap = {
+      'friend': 'friend',
+      'hostile': 'hostile',
+      'neutral': 'neutral',
+      'unknown': 'unknown'
+    };
+    return reverseMap[affiliation] || 'unknown';
+  };
+
+  // Reverse map API schema values to UI status values
+  const reverseMapStatus = (status) => {
+    const reverseMap = {
+      'active': 'active',
+      'disabled': 'disabled',
+      'destroyed': 'destroyed',
+      'unknown': 'unknown'
+    };
+    return reverseMap[status] || 'present';
+  };
 
   useEffect(() => {
     if (!sidcData || !eventData.entity.entityPath) return;
@@ -281,11 +405,33 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
     <>
       <StyledSidebar className={`event-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="event-sidebar-header">
-          <h2><FiCalendar /> Add New Event</h2>
+          <h2>
+            {isEditMode ? <FiEdit /> : <FiCalendar />}
+            {isEditMode ? 'Update Event' : 'Add New Event'}
+          </h2>
           <button className="close-button" onClick={onClose}>
             <FiX />
           </button>
         </div>
+
+        {isEditMode && (
+          <div className="quick-actions">
+            <button
+              className="status-button destroyed"
+              onClick={() => handleStatusChange('destroyed')}
+              disabled={eventData.entity.status === 'destroyed'}
+            >
+              <FiTrash2 /> Mark as Destroyed
+            </button>
+            <button
+              className="status-button disabled"
+              onClick={() => handleStatusChange('disabled')}
+              disabled={eventData.entity.status === 'disabled'}
+            >
+              Disable
+            </button>
+          </div>
+        )}
 
         <form className="event-form" onSubmit={handleSubmit}>
           <div className="form-group">
@@ -323,6 +469,30 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
                 onChange={handleChange}
                 placeholder="Longitude"
                 required
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>
+              <FiZap /> Velocity
+            </label>
+            <div className="velocity-inputs">
+              <input
+                type="number"
+                name="velocity.speed"
+                value={eventData.velocity.speed}
+                onChange={handleChange}
+                placeholder="Speed (km/h)"
+              />
+              <input
+                type="number"
+                name="velocity.direction"
+                value={eventData.velocity.direction}
+                onChange={handleChange}
+                placeholder="Direction (degrees)"
+                min="0"
+                max="359"
               />
             </div>
           </div>
@@ -412,7 +582,10 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
             className="submit-button"
             disabled={submitLoading}
           >
-            {submitLoading ? "Creating..." : "Create Event"}
+            {submitLoading ?
+              (isEditMode ? "Updating..." : "Creating...") :
+              (isEditMode ? "Update Event" : "Create Event")
+            }
           </button>
         </form>
       </StyledSidebar>
@@ -432,6 +605,7 @@ const StyledSidebar = styled.div`
   right: -400px;
   width: 380px;
   height: 100vh;
+  font-family: "Inter", sans-serif;
   background-color: var(--color-primary);
   transition: right 0.3s ease;
   z-index: 1000;
@@ -440,6 +614,52 @@ const StyledSidebar = styled.div`
 
   &.open {
     right: 0;
+  }
+
+  .quick-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background-color: rgba(0, 0, 0, 0.05);
+
+    .status-button {
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.destroyed {
+        background-color: #f44336;
+        color: white;
+      }
+
+      &.disabled {
+        background-color: #757575;
+        color: white;
+      }
+    }
+  }
+
+  .velocity-inputs {
+    display: flex;
+    gap: 10px;
+  }
+
+  .velocity-inputs input {
+    flex: 1;
+  }
+
+  &.selected-event-active {
+    border-left: 4px solid #ffeb3b;
   }
 `;
 

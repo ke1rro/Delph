@@ -182,3 +182,58 @@
   border-radius: 4px;
   font-size: 14px;
 }
+
+.velocity-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.velocity-inputs input {
+  flex: 1;
+}
+
+/* Add styles for selected event icons on the map */
+.event-icon {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.event-icon.selected {
+  stroke: #ffeb3b !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 8px rgba(255, 235, 59, 0.8)) !important;
+  transform: scale(1.15);
+  z-index: 1000 !important;
+}
+
+/* Add a pulsing animation to selected icons for better visibility */
+@keyframes pulse {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(255, 235, 59, 0.7));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(255, 235, 59, 1));
+  }
+  100% {
+    filter: drop-shadow(0 0 5px rgba(255, 235, 59, 0.7));
+  }
+}
+
+.custom-icon.selected {
+  animation: pulse 2s infinite;
+  z-index: 1000 !important;
+}
+
+/* Add a visible state to Leaflet marker when selected */
+.leaflet-marker-icon.selected::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border: 3px solid #ffeb3b;
+  border-radius: 50%;
+  z-index: -1;
+  animation: pulse 2s infinite;
+}
