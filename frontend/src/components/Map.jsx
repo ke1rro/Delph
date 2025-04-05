@@ -43,7 +43,7 @@ const Map = () => {
       while (true) {
         try {
           await client.connect();
-          console.log("Successfuly reconnected...");
+          console.log("Successfully reconnected...");
           break;
         } catch (error) {
           console.error("Reconnection failed, retrying in 5 seconds...", error);
