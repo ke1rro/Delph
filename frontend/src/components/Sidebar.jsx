@@ -22,7 +22,7 @@ const icons = [
   { Icon: FiAlertTriangle, alt: "Warning" },
   { Icon: FiList, alt: "List dashes" },
   { Icon: FiFilter, alt: "Funnel" },
-  { Icon: FiPlusCircle, alt: "Plus circle", className: "plus-icon" },
+  // Removed PlusCircle from icons array to handle it separately
 ];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
@@ -44,7 +44,7 @@ IconButton.propTypes = {
   className: PropTypes.string,
 };
 
-export const Sidebar = ({ className = "" }) => {
+export const Sidebar = ({ className = "", onPlusClick }) => {
   return (
     <aside className={`sidebar ${className}`}>
       <img className="logo" src="logo.webp" alt="Logo" />
@@ -58,11 +58,19 @@ export const Sidebar = ({ className = "" }) => {
             onClick={() => alert(`${icon.alt} clicked`)}
           />
         ))}
+        {/* Add the plus icon separately at the bottom */}
+        <IconButton
+          Icon={FiPlusCircle}
+          title="Add Event"
+          className="plus-icon"
+          onClick={onPlusClick}
+        />
       </nav>
     </aside>
   );
 };
 
-Sidebar.prototype = {
+Sidebar.propTypes = {
   className: PropTypes.string,
+  onPlusClick: PropTypes.func,
 };
