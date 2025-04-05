@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
+"""
+Base repository class.
+"""
 
 
-class Repository(ABC):
+class Repository:
     """
     Abstract base class for repositories.
     """
@@ -13,13 +15,11 @@ class Repository(ABC):
     async def __aexit__(self, *_):
         await self.disconnect()
 
-    @abstractmethod
     async def connect(self):
         """
         Connect repository to the data source.
         """
 
-    @abstractmethod
     async def disconnect(self):
         """
         Disconnect repository from the data source.

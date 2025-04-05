@@ -13,11 +13,25 @@ class EventStorage {
     }
 
     async push(event) {
+        const time = Date.now();
         if(event.id in this.events) {
+            if(event.timestamp < this.events[event.id].timestamp) {
+                return;
+            }
+
             const previous_event = this.events[event.id];
             this.events[event.id] = event;
             await this.callbacks.update(previous_event, event);
+
+            if(event.ttl + event.timestamp < time) {
+                delete this.events[event.id];
+                await this.callbacks.remove(event);
+            }
         } else {
+            if(event.ttl + event.timestamp < time) {
+                return;
+            }
+
             this.events[event.id] = event;
             await this.callbacks.add(event);
         }

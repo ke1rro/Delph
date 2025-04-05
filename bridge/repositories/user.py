@@ -2,64 +2,32 @@
 User repository to interact with the database.
 """
 
-from models.user import Permission, User
 from repositories.base import Repository
-from shapely import Point, Polygon
+
+from cache.redis import RedisClient
 
 
-# TODO: Currently stub user repository, needs to be implemented.
 class UserRepository(Repository):
-    def __init__(self):
-        pass
+    """
+    User repository to interact with the database.
 
-    async def connect(self):
-        pass
+    Attributes:
+        client: Redis client instance.
+    """
 
-    async def disconnect(self):
-        pass
+    client: RedisClient
 
-    async def get_user_by_token(self, token: str) -> User | None:
+    def __init__(self, client: RedisClient):
+        self.client = client
+
+    async def is_token_valid(self, token: str) -> bool:
         """
-        Get a user by token.
+        Check if the token is valid.
 
         Args:
-            token: Token to get the user.
+            token: The token to check.
 
         Returns:
-            User object if the token is valid, None otherwise.
+            True if the token is valid, False otherwise.
         """
-        if token == "valid":
-            return User(
-                "user_test",
-                "Test user",
-                [
-                    Permission(
-                        shape=Polygon(
-                            [
-                                Point(0, 0),
-                                Point(0, 1),
-                                Point(1, 1),
-                                Point(1, 0),
-                                Point(0, 0),
-                            ]
-                        ),
-                        can_read=True,
-                        can_write=True,
-                    ),
-                    Permission(
-                        shape=Polygon(
-                            [
-                                Point(1, 1),
-                                Point(1, 2),
-                                Point(2, 2),
-                                Point(2, 1),
-                                Point(1, 1),
-                            ]
-                        ),
-                        can_read=True,
-                        can_write=False,
-                    ),
-                ],
-            )
-        else:
-            return None
+        return await self.client.is_user_whitelisted(token)
