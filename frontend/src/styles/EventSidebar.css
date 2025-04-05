@@ -148,3 +148,21 @@
   border-radius: 8px;
   margin: 10px 0;
 }
+
+.preview-button {
+  background-color: #4a5568;
+  border: none;
+  border-radius: 29px;
+  padding: 10px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.preview-button:hover {
+  background-color: #2d3748;
+  transform: scale(1.02);
+}
