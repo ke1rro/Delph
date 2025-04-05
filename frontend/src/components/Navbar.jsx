@@ -2,11 +2,12 @@ import PropTypes from "prop-types";
 import React from "react";
 import { FiGrid, FiMap, FiUser, FiMessageSquare } from "react-icons/fi";
 import "../styles/Navbar.css";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const IconButton = ({ Icon, title, onClick, className }) => {
+const IconButton = ({ Icon, title, onClick, className, isActive }) => {
   return (
     <button
-      className={`icon-button ${className || ""}`}
+      className={`icon-button ${isActive ? 'active' : ''} ${className || ""}`}
       onClick={onClick}
       title={title}
     >
@@ -20,9 +21,14 @@ IconButton.propTypes = {
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   className: PropTypes.string,
+  isActive: PropTypes.bool,
 };
 
 export const Navbar = ({ className = "" }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   return (
     <nav className={`navbar ${className}`}>
       <div className="navbar-brand">
@@ -38,7 +44,8 @@ export const Navbar = ({ className = "" }) => {
           <IconButton
             Icon={FiMap}
             title="Map"
-            onClick={() => alert("Map clicked")}
+            onClick={() => navigate("/map")}
+            isActive={currentPath === "/map"}
           />
         </div>
       </div>
@@ -46,7 +53,8 @@ export const Navbar = ({ className = "" }) => {
         <IconButton
           Icon={FiUser}
           title="User Profile"
-          onClick={() => alert("User Profile clicked")}
+          onClick={() => navigate("/profile")}
+          isActive={currentPath === "/profile"}
         />
         <IconButton
           Icon={FiMessageSquare}
