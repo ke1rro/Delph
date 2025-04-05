@@ -119,8 +119,6 @@ const PreviewContainer = styled.div`
 `;
 
 const PreviewHeader = styled.div`
-make a background color transparent
-
   background: rgba(80, 115, 213, 0.7);
   padding: 8px 12px;
   font-weight: bold;
