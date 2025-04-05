@@ -9,12 +9,6 @@ from shapely import Point, Polygon
 from schemas.message import Source
 
 
-class AuthenticationError(Exception):
-    """
-    Invalid token was provided.
-    """
-
-
 class UserService:
     """
     User service to authenticate and check permissions.
