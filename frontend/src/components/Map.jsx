@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -28,13 +29,33 @@ async function createEventSVG(event) {
 
 const Map = () => {
   const [markers, setMarkers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storage = new EventStorage();
     const client = new BridgeClient(storage);
 
+    client.onclose = async () => {
+      await navigate("/login");
+    }
+
+    client.onreconnect = async () => {
+      while (true) {
+        try {
+          await client.connect();
+          console.log("Successfuly reconnected...");
+          break;
+        } catch (error) {
+          console.error("Reconnection failed, retrying in 5 seconds...", error);
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+        }
+      }
+    }
+
+    client.connect();
+
     const addMarker = async (event) => {
-      console.log("Event added", event);
+    //   console.log("Event added", event);
       const svgString = await createEventSVG(event);
       const icon = L.divIcon({
         className: "custom-icon",
@@ -57,7 +78,7 @@ const Map = () => {
     storage.on("add", addMarker);
 
     const updateMarker = async (previous_event, event) => {
-      console.log("Event updated", previous_event, event);
+    //   console.log("Event updated", previous_event, event);
       const svgString = await createEventSVG(event);
       const icon = L.divIcon({
         className: "custom-icon",
@@ -88,7 +109,7 @@ const Map = () => {
     storage.on("update", updateMarker);
 
     const removeMarker = async (event) => {
-      console.log("Event removed", event);
+    //   console.log("Event removed", event);
       setMarkers((prevMarkers) =>
         prevMarkers.filter(
           (marker) => marker.id !== event.id
