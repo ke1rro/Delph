@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import PageLayout from "./PageLayout";
 import BridgeClient from "../api/BridgeClient";
 import EventStorage from "../api/EventStorage";
 import ms from "milsymbol";
-
-let sidcData;
+import SidcDataService from "../utils/SidcDataService";
+import EventSidebar from "./EventSidebar";
+import "../styles/EventSidebar.css";
 
 async function createEventSVG(event) {
-  if (sidcData == null) {
-    sidcData = await (await fetch("/sidc.json")).json();
-  }
+  const sidcDataService = SidcDataService.getInstance();
+  const sidcData = await sidcDataService.getData();
 
   let sidc = sidcData.entity[event.entity.entity];
   if (sidc == null) {
@@ -29,10 +29,13 @@ async function createEventSVG(event) {
 
 const Map = () => {
   const [markers, setMarkers] = useState([]);
+  const [events, setEvents] = useState({});
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [storage] = useState(() => new EventStorage());
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storage = new EventStorage();
     const client = new BridgeClient(storage);
 
     client.onclose = async () => {
@@ -55,11 +58,16 @@ const Map = () => {
     client.connect();
 
     const addMarker = async (event) => {
-    //   console.log("Event added", event);
+      console.log("Event added", event);
       const svgString = await createEventSVG(event);
+      setEvents(prev => ({
+        ...prev,
+        [event.id]: event
+      }));
+
       const icon = L.divIcon({
-        className: "custom-icon",
-        html: `<div style="width:40px;height:40px;">${svgString}</div>`,
+        className: `custom-icon ${selectedEventId === event.id ? 'selected' : ''}`,
+        html: `<div class="event-icon ${selectedEventId === event.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
         iconSize: [40, 40],
       });
 
@@ -72,17 +80,22 @@ const Map = () => {
             lng: event.location.longitude,
           },
           icon,
+          event: event,
         },
       ]);
     };
     storage.on("add", addMarker);
 
     const updateMarker = async (previous_event, event) => {
-    //   console.log("Event updated", previous_event, event);
+      setEvents(prev => ({
+        ...prev,
+        [event.id]: event
+      }));
+      console.log("Event updated", previous_event, event);
       const svgString = await createEventSVG(event);
       const icon = L.divIcon({
-        className: "custom-icon",
-        html: `<div style="width:40px;height:40px;">${svgString}</div>`,
+        className: `custom-icon ${selectedEventId === event.id ? 'selected' : ''}`,
+        html: `<div class="event-icon ${selectedEventId === event.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
         iconSize: [40, 40],
       });
 
@@ -100,16 +113,27 @@ const Map = () => {
               lng: event.location.longitude,
             },
             icon,
+            event: event,
           };
           return updatedMarkers;
         }
         return prevMarkers;
       });
-    }
+    };
     storage.on("update", updateMarker);
 
     const removeMarker = async (event) => {
-    //   console.log("Event removed", event);
+      console.log("Event removed", event);
+      setEvents(prev => {
+        const newEvents = {...prev};
+        delete newEvents[event.id];
+        return newEvents;
+      });
+      if (selectedEventId === event.id) {
+        setSelectedEventId(null);
+        setSidebarOpen(false);
+      }
+      
       setMarkers((prevMarkers) =>
         prevMarkers.filter(
           (marker) => marker.id !== event.id
@@ -117,13 +141,72 @@ const Map = () => {
       );
     };
     storage.on("remove", removeMarker);
-  }, []);
+    
+    const loadInitialEvents = async () => {
+      try {
+        const allEvents = storage.get();
+        console.log("Initial events:", allEvents);
+
+        for (const event of allEvents) {
+          await addMarker(event);
+        }
+      } catch (error) {
+        console.error("Error loading initial events:", error);
+      }
+    };
+
+    loadInitialEvents();
+
+    return () => {
+    };
+  }, [selectedEventId]);
+  const handleMarkerClick = (eventId) => {
+    console.log("Marker clicked:", eventId);
+    setSelectedEventId(eventId);
+    setSidebarOpen(true);
+  };
+  const handleEventUpdate = (updatedEvent) => {
+    console.log("Event updated from sidebar:", updatedEvent);
+    storage.push(updatedEvent);
+  };
+
+  useEffect(() => {
+    if (!markers.length) return;
+
+    const updateMarkerIcons = async () => {
+      const updatedMarkers = await Promise.all(markers.map(async (marker) => {
+        const svgString = await createEventSVG(marker.event);
+        const icon = L.divIcon({
+          className: `custom-icon ${selectedEventId === marker.id ? 'selected' : ''}`,
+          html: `<div class="event-icon ${selectedEventId === marker.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
+          iconSize: [40, 40],
+        });
+
+        return {
+          ...marker,
+          icon
+        };
+      }));
+
+      setMarkers(updatedMarkers);
+    };
+
+    updateMarkerIcons();
+  }, [selectedEventId]);
+  const MapClickHandler = () => {
+    useMapEvents({
+      click: () => {
+        setSelectedEventId(null);
+        setSidebarOpen(false);
+      }
+    });
+    return null;
+  };
 
   return (
     <PageLayout>
       <div className="map-container">
         <MapContainer
-          // add moscow coordinates
           center={[55.7558, 37.6173]}
           zoom={10}
           style={{ height: "100vh", width: "100%" }}
@@ -132,10 +215,32 @@ const Map = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-          {markers.map((marker, index) => (
-            <Marker key={index} position={marker.position} icon={marker.icon} />
+          <MapClickHandler />
+          {markers.map((marker) => (
+            <Marker
+              key={marker.id}
+              position={marker.position}
+              icon={marker.icon}
+              eventHandlers={{
+                click: (e) => {
+                  e.originalEvent.stopPropagation();
+                  handleMarkerClick(marker.id);
+                },
+              }}
+            />
           ))}
         </MapContainer>
+
+        <EventSidebar
+          isOpen={sidebarOpen}
+          onClose={() => {
+            setSidebarOpen(false);
+            setSelectedEventId(null);
+          }}
+          onSubmit={(data) => console.log("Form submitted:", data)}
+          onUpdate={handleEventUpdate}
+          selectedEvent={events[selectedEventId]}
+        />
       </div>
     </PageLayout>
   );

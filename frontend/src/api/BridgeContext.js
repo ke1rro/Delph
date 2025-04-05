@@ -37,6 +37,10 @@ class BridgeContext {
         */
         return await this.client.put(this.prefix + "/messages", data, config);
     }
+
+    async updateMessage(data, config) {
+        return await this.createMessage(data, config);
+    }
 }
 
 export default BridgeContext;
