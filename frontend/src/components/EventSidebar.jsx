@@ -4,6 +4,7 @@ import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity } from "r
 import "../styles/EventSidebar.css";
 import ms from "milsymbol";
 import DraggableSVGPreview from "./DraggableSVGPreview";
+import SidcDataService from "../utils/SidcDataService";
 
 const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
   const [sidcData, setSidcData] = useState(null);
@@ -30,8 +31,8 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
     const fetchSidcData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("/sidc.json");
-        const data = await response.json();
+        const sidcDataService = SidcDataService.getInstance();
+        const data = await sidcDataService.getData();
         setSidcData(data);
 
         const topLevelEntities = Object.keys(data.entity)

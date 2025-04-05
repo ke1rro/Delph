@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ms from "milsymbol";
+import SidcDataService from "../utils/SidcDataService";
 
 const DraggableSVGPreview = ({ sidc, visible = true, onClose }) => {
     const [position, setPosition] = useState({ x: 20, y: 20 });

@@ -6,13 +6,12 @@ import PageLayout from "./PageLayout";
 import BridgeClient from "../api/BridgeClient";
 import EventStorage from "../api/EventStorage";
 import ms from "milsymbol";
+import SidcDataService from "../utils/SidcDataService";
 
-let sidcData;
 
 async function createEventSVG(event) {
-  if (sidcData == null) {
-    sidcData = await (await fetch("/sidc.json")).json();
-  }
+  const sidcDataService = SidcDataService.getInstance();
+  const sidcData = await sidcDataService.getData();
 
   let sidc = sidcData.entity[event.entity.entity];
   if (sidc == null) {
