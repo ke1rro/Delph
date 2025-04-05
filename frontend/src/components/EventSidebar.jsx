@@ -5,6 +5,8 @@ import "../styles/EventSidebar.css";
 import ms from "milsymbol";
 import DraggableSVGPreview from "./DraggableSVGPreview";
 import SidcDataService from "../utils/SidcDataService";
+import Api from "../Api";
+import { v4 as uuidv4 } from 'uuid';
 
 const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
   const [sidcData, setSidcData] = useState(null);
@@ -26,6 +28,8 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
     },
     description: "",
   });
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     const fetchSidcData = async () => {
@@ -160,10 +164,75 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(eventData);
-    onClose();
+    setSubmitLoading(true);
+    setSubmitError(null);
+
+    try {
+      // Create message object according to schema
+      const message = {
+        id: uuidv4(), // Generate unique ID
+        timestamp: Date.now(), // Current timestamp in ms
+        ttl: 7 * 24 * 60 * 60 * 1000, // Default 7 days TTL
+        source: {
+          id: localStorage.getItem('userId') || 'anonymous', // Use authenticated user ID if available
+          name: localStorage.getItem('userName') || null,
+          comment: eventData.description || null
+        },
+        location: {
+          latitude: parseFloat(eventData.location.latitude),
+          longitude: parseFloat(eventData.location.longitude),
+          altitude: null,
+          radius: null
+        },
+        velocity: null, // No velocity data in the form
+        entity: {
+          affiliation: mapAffiliation(eventData.entity.affiliation),
+          entity: eventData.entity.entityPath,
+          status: mapStatus(eventData.entity.status)
+        }
+      };
+
+      // Call API to create message
+      await Api.bridge.createMessage(message);
+
+      // Call original onSubmit callback
+      onSubmit(eventData);
+
+      // Close sidebar
+      onClose();
+    } catch (error) {
+      console.error("Error creating event:", error);
+      setSubmitError("Failed to create event. Please try again.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  // Map UI affiliation values to API schema values
+  const mapAffiliation = (affiliation) => {
+    const affiliationMap = {
+      'friend': 'friend',
+      'hostile': 'hostile',
+      'neutral': 'neutral',
+      'unknown': 'unknown'
+    };
+    return affiliationMap[affiliation] || 'unknown';
+  };
+
+  // Map UI status values to API schema values
+  const mapStatus = (status) => {
+    const statusMap = {
+      'active': 'active',
+      'disabled': 'disabled',
+      'destroyed': 'destroyed',
+      'present': 'active',
+      'planned': 'active',
+      'anticipated': 'active',
+      'unknown': 'unknown'
+    };
+    return statusMap[status] || 'unknown';
   };
 
   useEffect(() => {
@@ -332,16 +401,18 @@ const EventSidebar = ({ isOpen, onClose, onSubmit }) => {
             />
           </div>
 
-          <button
-            type="button"
-            className="preview-button"
-            onClick={togglePreview}
-          >
-            {svgPreviewVisible ? "Hide Symbol Preview" : "Show Symbol Preview"}
-          </button>
+          {submitError && (
+            <div className="error-message">
+              {submitError}
+            </div>
+          )}
 
-          <button type="submit" className="submit-button">
-            Create Event
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={submitLoading}
+          >
+            {submitLoading ? "Creating..." : "Create Event"}
           </button>
         </form>
       </StyledSidebar>

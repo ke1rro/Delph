@@ -105,6 +105,12 @@
   transform: scale(1.02);
 }
 
+.submit-button:disabled {
+  background-color: #7f8c8d;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .entity-selection-container {
   display: flex;
   flex-direction: column;
@@ -165,4 +171,14 @@
 .preview-button:hover {
   background-color: #2d3748;
   transform: scale(1.02);
+}
+
+.error-message {
+  background-color: rgba(231, 76, 60, 0.2);
+  border-left: 3px solid #e74c3c;
+  color: #fff;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  font-size: 14px;
 }
