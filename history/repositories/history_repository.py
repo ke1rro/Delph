@@ -11,9 +11,7 @@ class MongoRepository:
     def __init__(self, mongodb: MongoDB = mongo, collection: str = "my_collection"):
         self.collection = mongodb.db[collection]
 
-    async def find_to_list(
-        self, filters: dict = {}, return_fields: dict = {"_id": 0}
-    ) -> list:
+    async def find_to_list(self, filters: dict = {}, return_fields: dict = {}) -> list:
         """
         Reads from the collection with given mongo filters
         """
@@ -24,3 +22,9 @@ class MongoRepository:
         Inserts one document into collection.
         """
         await self.collection.insert_one(doc)
+
+    async def insert_many(self, docs: list[dict]):
+        """
+        Inserts list of documents into collection.
+        """
+        await self.collection.insert_many(docs)
