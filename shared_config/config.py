@@ -18,7 +18,7 @@ class AuthJWT(BaseSettings):
 
     private_key_path: Path = BASE_DIR / "certificates" / "jwt-private.pem"
     public_key_path: Path = BASE_DIR / "certificates" / "jwt-public.pem"
-    jwks_url: str = "http://nginx/.well-known/jwks.json"
+    jwks_url: str = "http://jwks/.well-known/jwks.json"
     algorithm: str = "RS256"
     access_token_expire: int = 20
 

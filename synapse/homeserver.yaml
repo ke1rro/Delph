@@ -1,0 +1,47 @@
+server_name: "localhost:8005"
+
+listeners:
+  - port: 80
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: true
+
+# Enable registration (for testing purposes)
+enable_registration: true
+
+
+# Database config - PostgreSQL
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: synapse
+    database: synapse
+    host: synapse-db
+    cp_min: 5
+    cp_max: 10
+
+# Path to the signing key (generate with synapse or during first run)
+signing_key_path: "/data/signing.key"
+media_store_path: "/data/media"
+
+# Enable email verification
+enable_registration_without_verification: true
+
+# Registration shared secret
+registration_shared_secret: "your-registration-secret"
+
+# macaroon secrets
+macaroon_secret_key: "your-macaroon-secret"
+
+# Prevent user auto-creation when federating
+auto_join_rooms: []
+enable_metrics: true
+
+report_stats: false
+
+# Used for federation
+federation_domain_whitelist: []

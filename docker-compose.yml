@@ -4,6 +4,8 @@
 # 8001 - frontend service
 # 8002 - core service
 # 8003 - bridge service
+# 8005 - synapse service
+# 8006 - jwks service
 
 # 6380 - redis
 # 5433 - core db
@@ -81,6 +83,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      jwks:
+        condition: service_started
 
   frontend:
     container_name: frontend
@@ -99,6 +103,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      jwks:
+        condition: service_started
     restart: always
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
@@ -116,3 +122,35 @@ services:
       - core
       - bridge
       - frontend
+
+  jwks:
+    build:
+      dockerfile: jwks/Dockerfile
+    container_name: jwks
+    restart: always
+    ports:
+      - "8006:80"
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: synapse
+    restart: always
+    environment:
+      - SYNAPSE_CONFIG_PATH=/etc/synapse/config/homeserver.yaml
+    volumes:
+      - ./data/synapse:/data
+      - ./synapse/homeserver.yaml:/etc/synapse/config/homeserver.yaml
+    depends_on:
+      - synapse-db
+    ports:
+      - 8005:80
+
+  synapse-db:
+    image: postgres:latest
+    container_name: synapse-db
+    environment:
+      - POSTGRES_USER=synapse
+      - POSTGRES_PASSWORD=synapse     
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+    volumes:
+      - ./data/synapse-db:/var/lib/postgresql/data
