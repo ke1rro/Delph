@@ -66,9 +66,9 @@ class WaypointMove(Waypoint):
     """
 
     target: Location
-    speed: int
+    speed: float
 
-    def __init__(self, entity: Entity, target: Location, speed: int):
+    def __init__(self, entity: Entity, target: Location, speed: float):
         super().__init__(entity)
         self.target = target
         self.speed = speed
