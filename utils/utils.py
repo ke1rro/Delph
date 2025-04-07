@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from shared_config.config import settings
 
 PR_KEY = settings.auth_jwt.private_key_path.read_text()
-PUB_KEY = settings.auth_jwt.public_key_path.read_text()
+PUB_KEY = jwt.PyJWKClient(settings.auth_jwt.jwks_url).get_jwk_set()["main"]
 ALGORITHM = settings.auth_jwt.algorithm
 EXPIRES = settings.auth_jwt.access_token_expire
 

@@ -12,7 +12,7 @@ RUN chmod 755 .
 COPY /certificates/. ./certificates/.
 COPY /server/generate_jwks.py .
 
-RUN python generate_jwks.py 1 < certificates/jwt-public.pem > jwks.json
+RUN python generate_jwks.py main < certificates/jwt-public.pem > jwks.json
 
 FROM nginx:latest
 
