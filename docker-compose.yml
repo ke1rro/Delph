@@ -106,7 +106,8 @@ services:
       - 8003:80
 
   nginx:
-    build: server
+    build:
+      dockerfile: server/Dockerfile
     container_name: nginx
     restart: always
     ports:
