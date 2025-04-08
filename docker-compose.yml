@@ -5,7 +5,6 @@
 # 8002 - core service
 # 8003 - bridge service
 # 8005 - synapse service
-# 8006 - jwks service
 
 # 6380 - redis
 # 5433 - core db
@@ -83,7 +82,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      jwks:
+      nginx:
         condition: service_started
 
   frontend:
@@ -103,7 +102,7 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      jwks:
+      nginx:
         condition: service_started
     restart: always
     environment:
@@ -118,18 +117,6 @@ services:
     restart: always
     ports:
       - "8000:80"
-    depends_on:
-      - core
-      - bridge
-      - frontend
-
-  jwks:
-    build:
-      dockerfile: jwks/Dockerfile
-    container_name: jwks
-    restart: always
-    ports:
-      - "8006:80"
 
   synapse:
     image: matrixdotorg/synapse:latest
