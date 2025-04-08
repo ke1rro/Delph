@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 COPY /history/. .
+COPY /schemas/. ./schemas/.
 
 EXPOSE 80
 

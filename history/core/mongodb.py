@@ -2,9 +2,10 @@
 MongoDB connection module for the History service.
 """
 
-from core.config import settings
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.server_api import ServerApi
+
+from core.config import settings
 
 
 class MongoDB:

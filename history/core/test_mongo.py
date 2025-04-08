@@ -3,11 +3,10 @@ import logging
 import os
 
 import logging_config
+import utils
 from config import settings
 from confluent_kafka import Consumer
 from pymongo import MongoClient
-
-import utils
 
 
 class ConsumerClass:
