@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from emulator.location import Location
-from emulator.object import Object
+from simulator.location import Location
+from simulator.object import Object
 
 
 class Noise(ABC):

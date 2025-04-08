@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from emulator.object import Object
+from simulator.object import Object
 
 
 class MessageBuilder(ABC):

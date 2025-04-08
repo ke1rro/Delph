@@ -1,14 +1,14 @@
 import random
 from math import radians
 
-from emulator.battlefield import Battlefield
-from emulator.client import Client
-from emulator.entity import Entity
-from emulator.location import Location
-from emulator.message_builder import SimpleMessageBuilder
-from emulator.noise import NoiseNone
-from emulator.object import Object
-from emulator.waypoint import WaypointMove
+from simulator.battlefield import Battlefield
+from simulator.client import Client
+from simulator.entity import Entity
+from simulator.location import Location
+from simulator.message_builder import SimpleMessageBuilder
+from simulator.noise import NoiseNone
+from simulator.object import Object
+from simulator.waypoint import WaypointMove
 
 
 def create_tank(

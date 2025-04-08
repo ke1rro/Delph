@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from emulator.entity import Entity
-from emulator.location import Location
+from simulator.entity import Entity
+from simulator.location import Location
 
 
 class Waypoint(ABC):
