@@ -1,8 +1,8 @@
 import random
 from math import radians
 
+from clients.http import HttpClient
 from simulator.battlefield import Battlefield
-from simulator.client import Client
 from simulator.entity import Entity
 from simulator.location import Location
 from simulator.message_builder import SimpleMessageBuilder
@@ -74,7 +74,7 @@ def main():
     user_id = "81ab4d00-dd83-4b42-8301-e82c6bf5372f"
     password = "StrongPass!2"
 
-    client = Client("http://localhost:8000/")
+    client = HttpClient("http://localhost:8000/")
 
     bf = Battlefield(
         client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(1000)
