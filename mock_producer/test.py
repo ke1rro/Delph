@@ -1,14 +1,14 @@
 import random
 from math import radians
 
-from emulator.battlefield import Battlefield
-from emulator.client import Client
-from emulator.entity import Entity
-from emulator.location import Location
-from emulator.message_builder import SimpleMessageBuilder
-from emulator.noise import NoiseNone
-from emulator.object import Object
-from emulator.waypoint import WaypointMove
+from clients.http import HttpClient
+from simulator.battlefield import Battlefield
+from simulator.entity import Entity
+from simulator.location import Location
+from simulator.message_builder import SimpleMessageBuilder
+from simulator.noise import NoiseNone
+from simulator.object import Object
+from simulator.waypoint import WaypointMove
 
 
 def create_tank(
@@ -74,7 +74,7 @@ def main():
     user_id = "81ab4d00-dd83-4b42-8301-e82c6bf5372f"
     password = "StrongPass!2"
 
-    client = Client("http://localhost:8000/")
+    client = HttpClient("http://localhost:8000/")
 
     bf = Battlefield(
         client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(1000)

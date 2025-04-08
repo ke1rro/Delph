@@ -1,7 +1,9 @@
 import requests
 
+from simulator.client import Client
 
-class Client:
+
+class HttpClient(Client):
     """
     A class to handle the connection to the server and push messages.
 
@@ -20,7 +22,7 @@ class Client:
         self.url = url.removesuffix("/")
         self.connected = False
 
-    def __enter__(self) -> "Client":
+    def __enter__(self) -> "HttpClient":
         """
         Enter the runtime context related to this object.
 
@@ -36,7 +38,7 @@ class Client:
         """
         self.disconnect()
 
-    def connect(self, user_id: str, password: str) -> "Client":
+    def connect(self, user_id: str, password: str) -> "HttpClient":
         """
         Connect to the server and authenticate the user.
 

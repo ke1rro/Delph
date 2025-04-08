@@ -1,10 +1,10 @@
 from collections import deque
 from dataclasses import dataclass
 
-from emulator.entity import Entity
-from emulator.location import Location
-from emulator.velocity import Velocity
-from emulator.waypoint import Waypoint
+from simulator.entity import Entity
+from simulator.location import Location
+from simulator.velocity import Velocity
+from simulator.waypoint import Waypoint
 
 
 @dataclass

@@ -1,10 +1,10 @@
 import math
 import time
 
-from emulator.client import Client
-from emulator.message_builder import MessageBuilder
-from emulator.noise import Noise
-from emulator.object import Object
+from simulator.client import Client
+from simulator.message_builder import MessageBuilder
+from simulator.noise import Noise
+from simulator.object import Object
 
 
 class Battlefield:
