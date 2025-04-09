@@ -36,7 +36,79 @@ class CreateMessage(BaseModel):
     )
 
 
-@app.get("/history")
+"""
+Main entry point for the History service.
+
+Initialization Sequence:
+1. Load configurations.
+2. Initialize MongoDB connection.
+3. Start Kafka consumer to process messages.
+"""
+
+import asyncio
+import logging
+
+from adapter.history_kafka_consumer import KafkaToMongoRepository
+from core.config import settings
+from repositories.history_repository import MongoRepository
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("history-service")
+
+
+async def initialize_kafka_consumer():
+    """
+    Initialize and start the Kafka consumer.
+    """
+    kafka_config = {
+        "bootstrap_servers": settings.KAFKA_HISTORY_BOOTSTRAP_SERVERS,  # Оновлено
+        "group_id": settings.KAFKA_GROUP_ID,
+    }
+    kafka_topic = settings.KAFKA_TOPIC
+    mongo_collection = "history"
+
+    kafka_consumer = KafkaToMongoRepository(
+        topic=kafka_topic, kafka_config=kafka_config, mongo_collection=mongo_collection
+    )
+
+    try:
+        await kafka_consumer.connect()
+        logger.info("Kafka consumer initialized successfully.")
+        await kafka_consumer.process_messages()
+    except Exception as e:
+        logger.error(f"Error initializing Kafka consumer: {e}")
+        raise
+    finally:
+        await kafka_consumer.disconnect()
+
+
+async def initialize_mongo():
+    """
+    Initialize MongoDB connection.
+    """
+    try:
+        mongo_service = MongoHistoryService(repo=MongoRepository())
+        logger.info("MongoDB initialized successfully.")
+        return mongo_service
+    except Exception as e:
+        logger.error(f"Error initializing MongoDB: {e}")
+        raise
+
+
+async def main():
+    """
+    Main function to initialize configurations and start the application.
+    """
+    logger.info("Starting History service...")
+
+    logger.info("Configurations loaded successfully.")
+
+    await initialize_mongo()
+
+    await initialize_kafka_consumer()
+
+
+@app.get("/history/data")
 async def get_data():
     """
     Get history data.
@@ -45,17 +117,19 @@ async def get_data():
     return await select_all()
 
 
-@app.post("/history")
+@app.post("/history/data")
 async def post_data():
     """
     Get history data.
     """
+
+    # Added example to add data into Mongo
     await add_data_example()
 
     return await select_all()
 
 
-@app.get("/history/{id}")
+@app.get("/history/data/{id}")
 async def get_data_by_id(id: str):
     """
     Get history data.
@@ -92,3 +166,10 @@ async def post_message(message: CreateMessage):
     except pymongo.errors.DuplicateKeyError:
         return {"error": "Duplicate Key"}
     return msg
+
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("History service stopped.")

@@ -32,16 +32,74 @@ services:
       retries: 1
       start_period: 5s
 
+  # MongoDB для history
+  mongo-history:
+    image: mongo:latest
+    container_name: mongo-history
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+    restart: always
+    ports:
+      - "27018:27017" # Уникаємо конфлікту з основним MongoDB
+    volumes:
+      - ./data/mongo-history:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
+      interval: 25s
+      retries: 1
+      start_period: 5s
+
+  # Kafka для history
+  zookeeper-history:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper-history
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2182
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka-history:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-history
+    depends_on:
+      - zookeeper-history
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-history:2182
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-history:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9093:9092" # Уникаємо конфлікту з основною Kafka
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9093", "--list"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+
   history:
     build:
       dockerfile: history/Dockerfile
+    container_name: history
     env_file:
       - .env
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_DB_NAME: ${MONGO_DB_NAME}
+      MONGO_PORT: ${MONGO_HISTORY_PORT}
     ports:
       - "8004:80"
     depends_on:
-      history-db:
+      mongo-history:
         condition: service_healthy
+      kafka-history:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
 
   redis:
     build: redis

@@ -2,7 +2,6 @@ import logging
 
 from aiokafka import AIOKafkaProducer
 from base import Repository
-
 from schemas.message import Message
 
 logger = logging.getLogger("delta")

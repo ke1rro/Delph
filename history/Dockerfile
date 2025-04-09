@@ -2,14 +2,14 @@ FROM python:3.12
 
 WORKDIR /history
 
-COPY /history/requirements.txt .
+COPY history/requirements.txt .
 
 RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-COPY /history/. .
-COPY /schemas/. ./schemas/.
+COPY history/. .
+COPY schemas/. ./schemas/.
 
 EXPOSE 80
 

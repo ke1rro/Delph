@@ -7,11 +7,11 @@ from typing import Any, Dict
 
 from aiokafka import AIOKafkaConsumer
 from pydantic import ValidationError
-from repositories.base import Repository
+from schemas.message import Message
+
+from adapter.base import Repository
 from repositories.history_repository import MongoRepository
 from services.history_service import MongoHistoryService
-
-from schemas.message import Message
 
 logger = logging.getLogger("delta")
 
