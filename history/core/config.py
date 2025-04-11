@@ -38,6 +38,9 @@ class Settings(BaseSettings):
     """
 
     mongodb: ClassVar[MongoDB] = MongoDB()
+    kafka_topic: str = "delta"
+    KAFKA_HISTORY_BOOTSTRAP_SERVERS: str = "kafka:9092"
+    KAFKA_GROUP_ID: str = "history-group"
 
 
 settings = Settings()

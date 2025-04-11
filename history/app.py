@@ -64,7 +64,7 @@ async def initialize_kafka_consumer():
         "bootstrap_servers": settings.KAFKA_HISTORY_BOOTSTRAP_SERVERS,
         "group_id": settings.KAFKA_GROUP_ID,
     }
-    kafka_topic = settings.KAFKA_TOPIC
+    kafka_topic = settings.kafka_topic
     mongo_collection = "history"
 
     kafka_consumer = KafkaToMongoRepository(
@@ -77,9 +77,10 @@ async def initialize_kafka_consumer():
         await kafka_consumer.process_messages()
     except Exception as e:
         logger.error(f"Error initializing Kafka consumer: {e}")
-        raise
     finally:
         await kafka_consumer.disconnect()
+
+    return kafka_consumer
 
 
 async def initialize_mongo():
@@ -113,7 +114,7 @@ async def get_data():
     """
     Get history data.
     """
-
+    kafka_consumer = await initialize_kafka_consumer()
     return await select_all()
 
 
@@ -171,14 +172,41 @@ async def post_message(message: CreateMessage):
 @app.websocket("/history/stream")
 async def stream_history_data(
     websocket: WebSocket,
-    kafka_consumer: KafkaToMongoRepository = Depends(initialize_kafka_consumer),
+    # kafka_consumer: KafkaToMongoRepository = Depends(initialize_kafka_consumer),
 ):
     """
     Stream history data from Kafka to the client via WebSocket.
     """
     await websocket.accept()
+    while True:
+        logger.error("PIZDEC REBYATA")
+
+    logger.info("==================================")
+    kafka_config = {
+        "bootstrap_servers": settings.KAFKA_HISTORY_BOOTSTRAP_SERVERS,
+        "group_id": settings.KAFKA_GROUP_ID,
+    }
+    kafka_topic = settings.kafka_topic
+    mongo_collection = "history"
+
+    logger.info("Was kafka called")
+    kafka_consumer = KafkaToMongoRepository(
+        topic=kafka_topic, kafka_config=kafka_config, mongo_collection=mongo_collection
+    )
+
+    try:
+        await kafka_consumer.connect()
+        logger.info("Kafka consumer initialized successfully.")
+        await kafka_consumer.process_messages()
+    except Exception as e:
+        logger.error(f"Error initializing Kafka consumer: {e}")
+        raise
+    finally:
+        await kafka_consumer.disconnect()
+
     try:
         async for message in kafka_consumer.stream_messages():
+            logger.error(f"WEBSOCKET RECEIVED: {e}")
             await websocket.send_json(message.model_dump())
     except Exception as e:
         logger.error(f"Error during WebSocket streaming: {e}")

@@ -70,7 +70,7 @@ class KafkaToMongoRepository(Repository):
                 )  # Log received message
                 message = Message.model_validate_json(kafka_msg.value)
 
-                mongo_doc = self.transform_message_to_document(message)
+                mongo_doc = self._transform_message_to_document(message)
 
                 await self.mongo_service.insert_one(mongo_doc)
 
