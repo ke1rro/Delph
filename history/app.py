@@ -6,10 +6,11 @@ import asyncio
 
 import pymongo
 import pymongo.errors
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, WebSocket
 from pydantic import BaseModel, Field
 from schemas.message import Entity, Location, Message, Velocity
 
+from adapter.history_kafka_consumer import KafkaToMongoRepository
 from core.test import add_data_example, select_all
 from services.history_service import MongoHistoryService, MongoMessageService
 
@@ -48,7 +49,6 @@ Initialization Sequence:
 import asyncio
 import logging
 
-from adapter.history_kafka_consumer import KafkaToMongoRepository
 from core.config import settings
 from repositories.history_repository import MongoRepository
 
@@ -61,7 +61,7 @@ async def initialize_kafka_consumer():
     Initialize and start the Kafka consumer.
     """
     kafka_config = {
-        "bootstrap_servers": settings.KAFKA_HISTORY_BOOTSTRAP_SERVERS,  # Оновлено
+        "bootstrap_servers": settings.KAFKA_HISTORY_BOOTSTRAP_SERVERS,
         "group_id": settings.KAFKA_GROUP_ID,
     }
     kafka_topic = settings.KAFKA_TOPIC
@@ -166,6 +166,24 @@ async def post_message(message: CreateMessage):
     except pymongo.errors.DuplicateKeyError:
         return {"error": "Duplicate Key"}
     return msg
+
+
+@app.websocket("/history/stream")
+async def stream_history_data(
+    websocket: WebSocket,
+    kafka_consumer: KafkaToMongoRepository = Depends(initialize_kafka_consumer),
+):
+    """
+    Stream history data from Kafka to the client via WebSocket.
+    """
+    await websocket.accept()
+    try:
+        async for message in kafka_consumer.stream_messages():
+            await websocket.send_json(message.model_dump())
+    except Exception as e:
+        logger.error(f"Error during WebSocket streaming: {e}")
+    finally:
+        await websocket.close()
 
 
 if __name__ == "__main__":

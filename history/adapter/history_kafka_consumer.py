@@ -65,6 +65,9 @@ class KafkaToMongoRepository(Repository):
 
         async for kafka_msg in self.consumer:
             try:
+                logger.info(
+                    f"Received message from Kafka: {kafka_msg.value}"
+                )  # Log received message
                 message = Message.model_validate_json(kafka_msg.value)
 
                 mongo_doc = self.transform_message_to_document(message)
@@ -85,6 +88,30 @@ class KafkaToMongoRepository(Repository):
                     f"Error processing message: {str(e)}",
                     extra={"data": str(kafka_msg.value)},
                 )
+
+    async def stream_messages(self):
+        """
+        Stream messages from Kafka.
+
+        Yields:
+            Decoded and validated Kafka messages.
+        """
+        if not self.consumer:
+            raise RuntimeError("Consumer not connected. Call connect() first.")
+
+        async for kafka_msg in self.consumer:
+            try:
+                logger.info(
+                    f"Streaming message from Kafka: {kafka_msg.value}"
+                )  # Log received message
+                yield Message.model_validate_json(kafka_msg.value)
+            except ValidationError:
+                logger.exception(
+                    "Failed to decode message body",
+                    extra={"data": str(kafka_msg.value)},
+                )
+            except Exception as e:
+                logger.error(f"Error streaming Kafka message: {e}")
 
     def _transform_message_to_document(self, message: Message) -> Dict[str, Any]:
         """

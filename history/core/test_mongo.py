@@ -83,6 +83,37 @@ class ConsumerClass:
             self.client.close()
             logging.info("Kafka consumer and MongoDB connection closed.")
 
+    def stream_messages(self):
+        """
+        Stream messages from Kafka.
+
+        Yields:
+            Decoded Kafka messages.
+        """
+        self.consumer.subscribe([self.topic])
+        logging.info(f"Successfully subscribed to topic: {self.topic}")
+
+        try:
+            while True:
+                msg = self.consumer.poll(1.0)
+                if msg is None:
+                    continue
+                if msg.error():
+                    logging.error(f"Consumer error: {msg.error()}")
+                    continue
+                byte_message = msg.value()
+                try:
+                    message_str = byte_message.decode("utf-8")
+                    yield json.loads(message_str)
+                except Exception as e:
+                    logging.error(f"Error streaming Kafka message: {e}")
+        except KeyboardInterrupt:
+            pass
+        finally:
+            self.consumer.close()
+            self.client.close()
+            logging.info("Kafka consumer and MongoDB connection closed.")
+
 
 if __name__ == "__main__":
     utils.load_env()
