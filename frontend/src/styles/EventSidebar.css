@@ -64,6 +64,37 @@
   gap: 8px;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 8px; /* Add margin back to label */
+}
+
+.pick-location-button {
+  background-color: rgba(80, 115, 213, 0.7);
+  color: var(--color-white);
+  border: none;
+  border-radius: 6px; /* Match input radius */
+  padding: 10px 12px; /* Increase padding */
+  font-size: 14px; /* Increase font size */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center content */
+  gap: 8px; /* Increase gap */
+  transition: background-color 0.2s ease;
+  width: 100%; /* Make button full width */
+  margin-top: 10px; /* Add margin above the button */
+  box-sizing: border-box; /* Include padding/border in width */
+}
+
+.pick-location-button:hover {
+  background-color: rgba(80, 115, 213, 0.9);
+}
+
+.pick-location-button.active {
+  background-color: #e74c3c; /* Red color when active */
+}
+
+.pick-location-button.active:hover {
+  background-color: #c0392b;
 }
 
 .location-inputs {

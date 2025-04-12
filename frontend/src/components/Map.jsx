@@ -10,6 +10,7 @@ import ms from "milsymbol";
 import SidcDataService from "../utils/SidcDataService";
 import EventSidebar from "./EventSidebar";
 import "../styles/EventSidebar.css";
+import "../styles/Map.css"; // Import map specific styles
 
 async function createEventSVG(event) {
   const sidcDataService = SidcDataService.getInstance();
@@ -31,16 +32,42 @@ const Map = () => {
   const [markers, setMarkers] = useState([]);
   const [events, setEvents] = useState({});
   const [selectedEventId, setSelectedEventId] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // For editing existing event
+  const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false); // For adding new event
   const [storage] = useState(() => new EventStorage());
   const navigate = useNavigate();
+  const [isPickingLocationMode, setIsPickingLocationMode] = useState(false);
+  const [pickedCoords, setPickedCoords] = useState(null);
+
+  // Helper function to update marker classes based on selection
+  const updateMarkerSelectionClass = (currentMarkers, newSelectedEventId) => {
+    return currentMarkers.map(marker => {
+      const isSelected = marker.id === newSelectedEventId;
+      const newClassName = `custom-icon ${isSelected ? 'selected' : ''}`;
+      const newHtml = `<div class="event-icon ${isSelected ? 'selected' : ''}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ''}</div>`; // Extract existing SVG
+
+      // Avoid creating a new icon if class and html haven't changed
+      if (marker.icon.options.className === newClassName && marker.icon.options.html === newHtml) {
+        return marker;
+      }
+
+      return {
+        ...marker,
+        icon: L.divIcon({
+          className: newClassName,
+          html: newHtml,
+          iconSize: [40, 40],
+        }),
+      };
+    });
+  };
 
   useEffect(() => {
     const client = new BridgeClient(storage);
 
     client.onclose = async () => {
       await navigate("/login");
-    }
+    };
 
     client.onreconnect = async () => {
       while (true) {
@@ -53,41 +80,49 @@ const Map = () => {
           await new Promise((resolve) => setTimeout(resolve, 5000));
         }
       }
-    }
+    };
 
     client.connect();
 
     const addMarker = async (event) => {
       console.log("Event added", event);
 
-      // Check if we already have this event with the same data
-      if (events[event.id] &&
-          events[event.id].timestamp === event.timestamp &&
-          events[event.id].location.latitude === event.location.latitude &&
-          events[event.id].location.longitude === event.location.longitude) {
+      if (
+        events[event.id] &&
+        events[event.id].timestamp === event.timestamp &&
+        events[event.id].location.latitude === event.location.latitude &&
+        events[event.id].location.longitude === event.location.longitude
+      ) {
         console.log("Skipping duplicate event", event.id);
         return;
       }
 
       const svgString = await createEventSVG(event);
-      setEvents(prev => ({
+      setEvents((prev) => ({
         ...prev,
-        [event.id]: event
+        [event.id]: event,
       }));
 
+      const isSelected = event.id === selectedEventId;
       const icon = L.divIcon({
-        className: `custom-icon ${selectedEventId === event.id ? 'selected' : ''}`,
-        html: `<div class="event-icon ${selectedEventId === event.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
+        className: `custom-icon ${isSelected ? "selected" : ""}`,
+        html: `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${svgString}</div>`,
         iconSize: [40, 40],
       });
 
       setMarkers((prevMarkers) => {
-        const existingIndex = prevMarkers.findIndex(m => m.id === event.id);
+        const existingIndex = prevMarkers.findIndex((m) => m.id === event.id);
         if (existingIndex !== -1) {
-          // Marker for this event already exists; skip or update as needed
-          return prevMarkers;
+          const updatedMarkers = [...prevMarkers];
+          updatedMarkers[existingIndex] = {
+            ...prevMarkers[existingIndex],
+            position: { lat: event.location.latitude, lng: event.location.longitude },
+            icon,
+            event: event,
+          };
+          return updateMarkerSelectionClass(updatedMarkers, selectedEventId);
         }
-        return [
+        const newMarkers = [
           ...prevMarkers,
           {
             id: event.id,
@@ -99,69 +134,60 @@ const Map = () => {
             event: event,
           },
         ];
+        return updateMarkerSelectionClass(newMarkers, selectedEventId);
       });
     };
     storage.on("add", addMarker);
 
     const updateMarker = async (previous_event, event) => {
-      // Skip if this is the same event with no actual changes
-      if (previous_event.id === event.id &&
-          previous_event.timestamp === event.timestamp &&
-          previous_event.location.latitude === event.location.latitude &&
-          previous_event.location.longitude === event.location.longitude) {
+      if (
+        previous_event.id === event.id &&
+        previous_event.timestamp === event.timestamp &&
+        previous_event.location.latitude === event.location.latitude &&
+        previous_event.location.longitude === event.location.longitude
+      ) {
         console.log("Skipping redundant update for event", event.id);
         return;
       }
 
-      setEvents(prev => ({
+      setEvents((prev) => ({
         ...prev,
-        [event.id]: event
+        [event.id]: event,
       }));
       console.log("Event updated", previous_event, event);
       const svgString = await createEventSVG(event);
+      const isSelected = event.id === selectedEventId;
       const icon = L.divIcon({
-        className: `custom-icon ${selectedEventId === event.id ? 'selected' : ''}`,
-        html: `<div class="event-icon ${selectedEventId === event.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
+        className: `custom-icon ${isSelected ? "selected" : ""}`,
+        html: `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${svgString}</div>`,
         iconSize: [40, 40],
       });
 
       setMarkers((prevMarkers) => {
-        // Check if marker with new ID already exists
-        const existingIndex = prevMarkers.findIndex(m => m.id === event.id);
-        if (existingIndex !== -1) {
-          // If found, update it
-          const updatedMarkers = [...prevMarkers];
-          updatedMarkers[existingIndex] = {
-            ...prevMarkers[existingIndex],
-            position: { lat: event.location.latitude, lng: event.location.longitude },
-            icon,
-            event: event,
-          };
-          return updatedMarkers;
-        }
+        let markerUpdated = false;
+        let updatedMarkers = prevMarkers.map(marker => {
+          if (marker.id === event.id || marker.id === previous_event.id) {
+            markerUpdated = true;
+            return {
+              ...marker,
+              id: event.id,
+              position: { lat: event.location.latitude, lng: event.location.longitude },
+              icon,
+              event: event,
+            };
+          }
+          return marker;
+        });
 
-        // Otherwise, find old marker by previous_event.id
-        const oldIndex = prevMarkers.findIndex(m => m.id === previous_event.id);
-        if (oldIndex !== -1) {
-          const updatedMarkers = [...prevMarkers];
-          updatedMarkers[oldIndex] = {
-            ...prevMarkers[oldIndex],
-            id: event.id,
-            position: { lat: event.location.latitude, lng: event.location.longitude },
-            icon,
-            event: event,
-          };
-          return updatedMarkers;
-        }
-        return prevMarkers;
+        return updateMarkerSelectionClass(updatedMarkers, selectedEventId);
       });
     };
     storage.on("update", updateMarker);
 
     const removeMarker = async (event) => {
       console.log("Event removed", event);
-      setEvents(prev => {
-        const newEvents = {...prev};
+      setEvents((prev) => {
+        const newEvents = { ...prev };
         delete newEvents[event.id];
         return newEvents;
       });
@@ -170,11 +196,7 @@ const Map = () => {
         setSidebarOpen(false);
       }
 
-      setMarkers((prevMarkers) =>
-        prevMarkers.filter(
-          (marker) => marker.id !== event.id
-        )
-      );
+      setMarkers((prevMarkers) => prevMarkers.filter((marker) => marker.id !== event.id));
     };
     storage.on("remove", removeMarker);
 
@@ -193,56 +215,101 @@ const Map = () => {
 
     loadInitialEvents();
 
-    return () => {
-    };
-  }, [selectedEventId]);
+    return () => {};
+  }, []);
+
   const handleMarkerClick = (eventId) => {
     console.log("Marker clicked:", eventId);
     console.log("Event data:", events[eventId]);
     setSelectedEventId(eventId);
-    setSidebarOpen(true);
+    setSidebarOpen(true); // Open sidebar for editing
+    setAddEventSidebarOpen(false); // Ensure add mode is off
+    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, eventId));
+    handleTogglePickLocation(false); // Ensure picking mode is off
   };
+
+  // Handler for the plus button click
+  const handleAddEventClick = () => {
+    setSelectedEventId(null); // Deselect any selected event
+    setSidebarOpen(false); // Ensure edit mode is off
+    setAddEventSidebarOpen(true); // Open sidebar for adding
+    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
+    handleTogglePickLocation(false); // Ensure picking mode is off
+  };
+
+  // Combined close handler
+  const handleCloseSidebar = () => {
+    setSidebarOpen(false);
+    setAddEventSidebarOpen(false);
+    setSelectedEventId(null);
+    handleTogglePickLocation(false); // Turn off picking mode when closing
+    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
+  };
+
   const handleEventUpdate = (updatedEvent) => {
-    // Ensure updatedEvent has the full structure: { id, timestamp, ttl, source, location, velocity, entity }
     console.log("Event updated from sidebar, pushing to storage:", updatedEvent);
     storage.push(updatedEvent);
+    // No need to close sidebar here, EventSidebar calls onClose after successful submit
   };
 
-  useEffect(() => {
-    if (!markers.length) return;
+  const handleEventSubmit = (newEventData) => {
+    console.log("New event submitted from sidebar:", newEventData);
+    // Assuming the structure from EventSidebar's handleSubmit is correct
+    // We might need to generate ID and timestamp here if not done in sidebar/API
+    storage.push(newEventData);
+    // No need to close sidebar here, EventSidebar calls onClose after successful submit
+  };
 
-    const updateMarkerIcons = async () => {
-      const updatedMarkers = await Promise.all(markers.map(async (marker) => {
-        const svgString = await createEventSVG(marker.event);
-        const icon = L.divIcon({
-          className: `custom-icon ${selectedEventId === marker.id ? 'selected' : ''}`,
-          html: `<div class="event-icon ${selectedEventId === marker.id ? 'selected' : ''}" style="width:40px;height:40px;">${svgString}</div>`,
-          iconSize: [40, 40],
-        });
+  const handleTogglePickLocation = (isPicking) => {
+    console.log("Toggling pick location mode:", isPicking);
+    setIsPickingLocationMode(isPicking);
+    if (!isPicking && !pickedCoords) { // Reset only if not just picked
+        setPickedCoords(null);
+    }
+  };
 
-        return {
-          ...marker,
-          icon
-        };
-      }));
+  const handleLocationPicked = (coords) => {
+    console.log("Location picked:", coords);
+    setPickedCoords(coords);
+    setIsPickingLocationMode(false); // Turn off picking mode automatically after picking
+  };
 
-      setMarkers(updatedMarkers);
-    };
-
-    updateMarkerIcons();
-  }, [selectedEventId]);
   const MapClickHandler = () => {
-    useMapEvents({
-      click: () => {
-        setSelectedEventId(null);
-        setSidebarOpen(false);
-      }
+    const map = useMapEvents({
+      click: (e) => {
+        if (isPickingLocationMode) {
+          handleLocationPicked({ lat: e.latlng.lat, lng: e.latlng.lng });
+        } else {
+          // Close sidebar only if clicking outside a marker when sidebar is open
+          if (sidebarOpen || addEventSidebarOpen) {
+             handleCloseSidebar();
+          }
+        }
+      },
     });
+
+    useEffect(() => {
+      const mapContainer = map.getContainer();
+      if (isPickingLocationMode) {
+        mapContainer.classList.add("crosshair-cursor");
+      } else {
+        mapContainer.classList.remove("crosshair-cursor");
+      }
+      return () => {
+        mapContainer.classList.remove("crosshair-cursor");
+      };
+    }, [isPickingLocationMode, map]);
+
     return null;
   };
 
+  // Determine if the sidebar should be open (either adding or editing)
+  const isSidebarEffectivelyOpen = sidebarOpen || addEventSidebarOpen;
+  // Determine which event to pass (null if adding)
+  const eventForSidebar = addEventSidebarOpen ? null : events[selectedEventId];
+
   return (
-    <PageLayout>
+    <PageLayout onPlusClick={handleAddEventClick}>
       <div className="map-container">
         <MapContainer
           center={[55.7558, 37.6173]}
@@ -270,14 +337,14 @@ const Map = () => {
         </MapContainer>
 
         <EventSidebar
-          isOpen={sidebarOpen}
-          onClose={() => {
-            setSidebarOpen(false);
-            setSelectedEventId(null);
-          }}
-          onSubmit={(data) => console.log("Form submitted:", data)}
-          onUpdate={handleEventUpdate}
-          selectedEvent={events[selectedEventId]}
+          isOpen={isSidebarEffectivelyOpen}
+          onClose={handleCloseSidebar} // Use combined close handler
+          onSubmit={handleEventSubmit} // Use specific submit handler for new events
+          onUpdate={handleEventUpdate} // Use specific update handler for existing events
+          selectedEvent={eventForSidebar} // Pass null when adding, event when editing
+          onTogglePickLocation={handleTogglePickLocation} // Pass the handler
+          pickedLocation={pickedCoords} // Pass picked coordinates
+          isPickingLocation={isPickingLocationMode} // Pass picking mode status
         />
       </div>
     </PageLayout>

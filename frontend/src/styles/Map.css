@@ -16,3 +16,7 @@ html, body {
   width: 100vw;  /* Ensure the container takes full width */
   background-color: #262b35; /* Ensure the background color is applied */
 }
+
+.crosshair-cursor {
+  cursor: crosshair !important;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap } from "react-icons/fi";
+import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap, FiCrosshair } from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import "../styles/SidebarStyles.css";
 import ms from "milsymbol";
@@ -8,7 +8,16 @@ import SidcDataService from "../utils/SidcDataService";
 import Api from "../Api";
 import { v4 as uuidv4 } from 'uuid';
 
-const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdate = null }) => {
+const EventSidebar = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedEvent = null,
+  onUpdate = null,
+  onTogglePickLocation,
+  pickedLocation,
+  isPickingLocation
+}) => {
   const [sidcData, setSidcData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [entityTree, setEntityTree] = useState([]);
@@ -342,8 +351,25 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     }
   }, [sidcData, eventData.entity]);
 
+  // Effect to update location fields when pickedLocation changes
+  useEffect(() => {
+    if (pickedLocation) {
+      setEventData(prevData => ({
+        ...prevData,
+        location: {
+          latitude: pickedLocation.lat.toFixed(6),
+          longitude: pickedLocation.lng.toFixed(6)
+        }
+      }));
+    }
+  }, [pickedLocation]);
+
   const togglePreview = () => {
     setSvgPreviewVisible(!svgPreviewVisible);
+  };
+
+  const handlePickLocationClick = () => {
+    onTogglePickLocation(!isPickingLocation);
   };
 
   return (
@@ -372,6 +398,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
                 onChange={handleChange}
                 placeholder="Latitude"
                 required
+                readOnly={isPickingLocation}
               />
               <input
                 type="text"
@@ -380,8 +407,17 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
                 onChange={handleChange}
                 placeholder="Longitude"
                 required
+                readOnly={isPickingLocation}
               />
             </div>
+            <button
+              type="button"
+              className={`pick-location-button ${isPickingLocation ? 'active' : ''}`}
+              onClick={handlePickLocationClick}
+              title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
+            >
+              <FiCrosshair /> {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
+            </button>
           </div>
 
           <div className="form-group">
