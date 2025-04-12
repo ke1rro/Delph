@@ -6,8 +6,7 @@ import asyncio
 
 import pymongo
 import pymongo.errors
-import websockets
-from fastapi import Depends, FastAPI, WebSocket
+from fastapi import Depends, FastAPI
 from pydantic import BaseModel, Field
 from schemas.message import Entity, Location, Message, Velocity
 
@@ -186,6 +185,5 @@ async def post_message(message: CreateMessage):
 if __name__ == "__main__":
     try:
         asyncio.run(main())
-        asyncio.run(initialize_kafka_consumer())
     except KeyboardInterrupt:
         logger.info("History service stopped.")
