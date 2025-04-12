@@ -195,26 +195,27 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
         ...(isEditMode && { message_id: eventData.id })
       };
 
-      await Api.bridge.createMessage(payload);
+      const response = await Api.bridge.createMessage(payload);
+      const newMessage = response.data;
 
       const fullEventObject = {
-        id: isEditMode ? eventData.id : payload.message_id || uuidv4(),
-        timestamp: Date.now(),
-        ttl: payload.ttl,
+        id: newMessage.id,
+        timestamp: newMessage.timestamp,
+        ttl: newMessage.ttl,
         source: {
           id: localStorage.getItem('userId') || 'anonymous',
           name: localStorage.getItem('userName') || null,
-          comment: payload.comment
+          comment: newMessage.source?.comment
         },
-        location: payload.location,
-        velocity: payload.velocity,
-        entity: payload.entity
+        location: newMessage.location,
+        velocity: newMessage.velocity,
+        entity: newMessage.entity
       };
 
       if (isEditMode) {
         if (onUpdate) onUpdate(fullEventObject);
       } else {
-        if (onSubmit) onSubmit(eventData);
+        if (onSubmit) onSubmit(fullEventObject);
       }
 
       onClose();

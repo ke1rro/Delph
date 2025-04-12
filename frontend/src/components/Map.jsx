@@ -71,18 +71,25 @@ const Map = () => {
         iconSize: [40, 40],
       });
 
-      setMarkers((prevMarkers) => [
-        ...prevMarkers,
-        {
-          id: event.id,
-          position: {
-            lat: event.location.latitude,
-            lng: event.location.longitude,
+      setMarkers((prevMarkers) => {
+        const existingIndex = prevMarkers.findIndex(m => m.id === event.id);
+        if (existingIndex !== -1) {
+          // Marker for this event already exists; skip or update as needed
+          return prevMarkers;
+        }
+        return [
+          ...prevMarkers,
+          {
+            id: event.id,
+            position: {
+              lat: event.location.latitude,
+              lng: event.location.longitude,
+            },
+            icon,
+            event: event,
           },
-          icon,
-          event: event,
-        },
-      ]);
+        ];
+      });
     };
     storage.on("add", addMarker);
 
@@ -100,18 +107,28 @@ const Map = () => {
       });
 
       setMarkers((prevMarkers) => {
-        const index = prevMarkers.findIndex(
-          (marker) => marker.id === previous_event.id
-        );
-
-        if (index !== -1) {
+        // Check if marker with new ID already exists
+        const existingIndex = prevMarkers.findIndex(m => m.id === event.id);
+        if (existingIndex !== -1) {
+          // If found, update it
           const updatedMarkers = [...prevMarkers];
-          updatedMarkers[index] = {
+          updatedMarkers[existingIndex] = {
+            ...prevMarkers[existingIndex],
+            position: { lat: event.location.latitude, lng: event.location.longitude },
+            icon,
+            event: event,
+          };
+          return updatedMarkers;
+        }
+
+        // Otherwise, find old marker by previous_event.id
+        const oldIndex = prevMarkers.findIndex(m => m.id === previous_event.id);
+        if (oldIndex !== -1) {
+          const updatedMarkers = [...prevMarkers];
+          updatedMarkers[oldIndex] = {
+            ...prevMarkers[oldIndex],
             id: event.id,
-            position: {
-              lat: event.location.latitude,
-              lng: event.location.longitude,
-            },
+            position: { lat: event.location.latitude, lng: event.location.longitude },
             icon,
             event: event,
           };
