@@ -10,11 +10,11 @@ from config import settings
 from repositories.queue import QueueSubscription
 from services.adapter import AdapterService
 
-from api.dependencies import get_history_repository
+from api.dependencies import with_history_repository
 
 
 @asynccontextmanager
-async def get_queue_repository() -> AsyncGenerator[QueueSubscription, None]:
+async def with_queue_repository() -> AsyncGenerator[QueueSubscription, None]:
     """
     Create a new instance of the QueueSubscription.
 
@@ -36,8 +36,8 @@ async def main():
     Main function to run the adapter service.
     """
     async with (
-        get_history_repository() as history_repository,
-        get_queue_repository() as queue_repository,
+        with_history_repository() as history_repository,
+        with_queue_repository() as queue_repository,
     ):
         service = AdapterService(queue_repository, history_repository)
         await service.process()

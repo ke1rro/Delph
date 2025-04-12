@@ -10,7 +10,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from repositories.history import HistoryRepository
 
 
-@asynccontextmanager
 async def get_history_repository() -> AsyncGenerator[HistoryRepository, None]:
     """
     Create a new instance of the HistoryRepository.
@@ -25,3 +24,6 @@ async def get_history_repository() -> AsyncGenerator[HistoryRepository, None]:
         yield history_repository
     finally:
         client.close()
+
+
+with_history_repository = asynccontextmanager(get_history_repository)
