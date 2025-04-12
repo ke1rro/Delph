@@ -133,7 +133,7 @@ const Map = () => {
         setSelectedEventId(null);
         setSidebarOpen(false);
       }
-      
+
       setMarkers((prevMarkers) =>
         prevMarkers.filter(
           (marker) => marker.id !== event.id
@@ -141,7 +141,7 @@ const Map = () => {
       );
     };
     storage.on("remove", removeMarker);
-    
+
     const loadInitialEvents = async () => {
       try {
         const allEvents = storage.get();
@@ -162,6 +162,7 @@ const Map = () => {
   }, [selectedEventId]);
   const handleMarkerClick = (eventId) => {
     console.log("Marker clicked:", eventId);
+    console.log("Event data:", events[eventId]);
     setSelectedEventId(eventId);
     setSidebarOpen(true);
   };
