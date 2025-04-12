@@ -10,7 +10,7 @@ import ms from "milsymbol";
 import SidcDataService from "../utils/SidcDataService";
 import EventSidebar from "./EventSidebar";
 import "../styles/EventSidebar.css";
-import "../styles/Map.css"; // Import map specific styles
+import "../styles/Map.css";
 
 async function createEventSVG(event) {
   const sidcDataService = SidcDataService.getInstance();

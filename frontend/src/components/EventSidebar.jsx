@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap, FiCrosshair } from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import "../styles/SidebarStyles.css";
-import ms from "milsymbol";
 import DraggableSVGPreview from "./DraggableSVGPreview";
 import SidcDataService from "../utils/SidcDataService";
 import Api from "../Api";
-import { v4 as uuidv4 } from 'uuid';
 
 const EventSidebar = ({
   isOpen,
