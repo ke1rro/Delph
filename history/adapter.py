@@ -3,6 +3,7 @@ Adapter main module.
 """
 
 import asyncio
+import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -11,6 +12,8 @@ from repositories.queue import QueueSubscription
 from services.adapter import AdapterService
 
 from api.dependencies import with_history_repository
+
+logger = logging.getLogger("delta")
 
 
 @asynccontextmanager
@@ -40,6 +43,7 @@ async def main():
         with_queue_repository() as queue_repository,
     ):
         service = AdapterService(queue_repository, history_repository)
+        logger.info("Adapter service started")
         await service.process()
 
 
