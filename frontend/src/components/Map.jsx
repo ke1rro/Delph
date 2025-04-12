@@ -167,7 +167,8 @@ const Map = () => {
     setSidebarOpen(true);
   };
   const handleEventUpdate = (updatedEvent) => {
-    console.log("Event updated from sidebar:", updatedEvent);
+    // Ensure updatedEvent has the full structure: { id, timestamp, ttl, source, location, velocity, entity }
+    console.log("Event updated from sidebar, pushing to storage:", updatedEvent);
     storage.push(updatedEvent);
   };
 

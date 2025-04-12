@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiTrash2, FiZap } from "react-icons/fi";
+import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap } from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import "../styles/SidebarStyles.css";
 import ms from "milsymbol";
@@ -172,14 +172,11 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     setSubmitError(null);
 
     try {
-      const message = {
-        id: isEditMode ? eventData.id : uuidv4(),
-        timestamp: Date.now(),
-        ttl: 7 * 24 * 60 * 60 * 1000,
-        source: {
-          id: localStorage.getItem('userId') || 'anonymous',
-          name: localStorage.getItem('userName') || null,
-          comment: eventData.description || null
+      const payload = {
+        entity: {
+          affiliation: mapAffiliation(eventData.entity.affiliation),
+          entity: eventData.entity.entityPath,
+          status: mapStatus(eventData.entity.status)
         },
         location: {
           latitude: parseFloat(eventData.location.latitude),
@@ -193,18 +190,30 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
               direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
             }
           : null,
-        entity: {
-          affiliation: mapAffiliation(eventData.entity.affiliation),
-          entity: eventData.entity.entityPath,
-          status: mapStatus(eventData.entity.status)
-        }
+        ttl: 7 * 24 * 60 * 60 * 1000,
+        comment: eventData.description || null,
+        ...(isEditMode && { message_id: eventData.id })
+      };
+
+      await Api.bridge.createMessage(payload);
+
+      const fullEventObject = {
+        id: isEditMode ? eventData.id : payload.message_id || uuidv4(),
+        timestamp: Date.now(),
+        ttl: payload.ttl,
+        source: {
+          id: localStorage.getItem('userId') || 'anonymous',
+          name: localStorage.getItem('userName') || null,
+          comment: payload.comment
+        },
+        location: payload.location,
+        velocity: payload.velocity,
+        entity: payload.entity
       };
 
       if (isEditMode) {
-        await Api.bridge.updateMessage(message);
-        if (onUpdate) onUpdate(message);
+        if (onUpdate) onUpdate(fullEventObject);
       } else {
-        await Api.bridge.createMessage(message);
         if (onSubmit) onSubmit(eventData);
       }
 
@@ -212,61 +221,6 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     } catch (error) {
       console.error(`Error ${isEditMode ? 'updating' : 'creating'} event:`, error);
       setSubmitError(`Failed to ${isEditMode ? 'update' : 'create'} event. Please try again.`);
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
-
-  const handleStatusChange = async (newStatus) => {
-    if (!isEditMode || !eventData.id) return;
-
-    setSubmitLoading(true);
-    setSubmitError(null);
-
-    try {
-      const updatedMessage = {
-        id: eventData.id,
-        timestamp: Date.now(),
-        ttl: 7 * 24 * 60 * 60 * 1000,
-        source: {
-          id: localStorage.getItem('userId') || 'anonymous',
-          name: localStorage.getItem('userName') || null,
-          comment: eventData.description || null
-        },
-        location: {
-          latitude: parseFloat(eventData.location.latitude),
-          longitude: parseFloat(eventData.location.longitude),
-          altitude: null,
-          radius: null
-        },
-        velocity: eventData.velocity.speed || eventData.velocity.direction
-          ? {
-              speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
-              direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
-            }
-          : null,
-        entity: {
-          affiliation: mapAffiliation(eventData.entity.affiliation),
-          entity: eventData.entity.entityPath,
-          status: mapStatus(newStatus)
-        }
-      };
-
-      await Api.bridge.updateMessage(updatedMessage);
-
-      setEventData({
-        ...eventData,
-        entity: {
-          ...eventData.entity,
-          status: newStatus
-        }
-      });
-
-      if (onUpdate) onUpdate(updatedMessage);
-
-    } catch (error) {
-      console.error("Error updating event status:", error);
-      setSubmitError("Failed to update event status. Please try again.");
     } finally {
       setSubmitLoading(false);
     }
@@ -403,25 +357,6 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
             <FiX />
           </button>
         </div>
-
-        {isEditMode && (
-          <div className="quick-actions">
-            <button
-              className="status-button destroyed"
-              onClick={() => handleStatusChange('destroyed')}
-              disabled={eventData.entity.status === 'destroyed'}
-            >
-              <FiTrash2 /> Mark as Destroyed
-            </button>
-            <button
-              className="status-button disabled"
-              onClick={() => handleStatusChange('disabled')}
-              disabled={eventData.entity.status === 'disabled'}
-            >
-              Disable
-            </button>
-          </div>
-        )}
 
         <form className="event-form" onSubmit={handleSubmit}>
           <div className="form-group">
