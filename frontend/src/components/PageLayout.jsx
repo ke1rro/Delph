@@ -1,29 +1,20 @@
-import React, { useState } from "react";
+import React from "react"; // Removed useState
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
-import EventSidebar from "./EventSidebar";
 import "../styles/PageLayout.css";
 
-const PageLayout = ({ children }) => {
-  const [eventSidebarOpen, setEventSidebarOpen] = useState(false);
-
-  const toggleEventSidebar = () => {
-    setEventSidebarOpen(!eventSidebarOpen);
-  };
+const PageLayout = ({ children, onPlusClick }) => {
 
   return (
     <div className="page-layout">
-      <Sidebar onPlusClick={toggleEventSidebar} />
+      {/* Pass onPlusClick down to the Sidebar */}
+      <Sidebar onPlusClick={onPlusClick} />
       <div className="main-content">
         <Navbar />
         <div className="content">{children}</div>
       </div>
 
-      <EventSidebar
-        isOpen={eventSidebarOpen}
-        onClose={() => setEventSidebarOpen(false)}
-        onSubmit={(data) => console.log("Form submitted:", data)}
-      />
+      {/* Removed EventSidebar instance from here */}
     </div>
   );
 };

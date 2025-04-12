@@ -1,0 +1,126 @@
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 380px;
+  height: 100vh;
+  font-family: var(--font-family);
+  background-color: var(--color-primary);
+  transition: right var(--transition-duration) var(--transition-timing-function);
+  z-index: 1000;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+}
+
+.sidebar-container.open {
+  right: 0;
+}
+
+.quick-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.status-button {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-button.destroyed {
+  background-color: #f44336;
+  color: white;
+}
+
+.status-button.disabled {
+  background-color: #757575;
+  color: white;
+}
+
+.velocity-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.velocity-inputs input {
+  flex: 1;
+}
+
+.selected-event-active {
+  border-left: 4px solid #ffeb3b;
+}
+
+/* Additional form styles */
+.event-form {
+  padding: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.sidebar-container input,
+.sidebar-container select,
+.sidebar-container textarea {
+  background-color: rgba(80, 81, 108, 0.8);
+  color: var(--color-white);
+}
+
+.location-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--color-accent, #4caf50);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 16px;
+}
+
+.submit-button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #f44336;
+  margin: 10px 0;
+  padding: 8px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-radius: 4px;
+}

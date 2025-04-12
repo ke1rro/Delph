@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiTrash2, FiZap } from "react-icons/fi";
+import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap, FiCrosshair } from "react-icons/fi";
 import "../styles/EventSidebar.css";
-import ms from "milsymbol";
+import "../styles/SidebarStyles.css";
 import DraggableSVGPreview from "./DraggableSVGPreview";
 import SidcDataService from "../utils/SidcDataService";
 import Api from "../Api";
-import { v4 as uuidv4 } from 'uuid';
 
-const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdate = null }) => {
+const EventSidebar = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  selectedEvent = null,
+  onUpdate = null,
+  onTogglePickLocation,
+  pickedLocation,
+  isPickingLocation
+}) => {
   const [sidcData, setSidcData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [entityTree, setEntityTree] = useState([]);
@@ -18,13 +25,12 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
   const [svgPreviewVisible, setSvgPreviewVisible] = useState(false);
   const [currentSidc, setCurrentSidc] = useState(null);
   const [eventData, setEventData] = useState({
-    title: "",
     location: { latitude: "", longitude: "" },
     entity: {
       entity: "ground",
       entityPath: "",
       affiliation: "friend",
-      status: "present"
+      status: "active"
     },
     velocity: {
       speed: "",
@@ -61,11 +67,9 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     fetchSidcData();
   }, []);
 
-
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
-
 
   useEffect(() => {
     if (!sidcData) return;
@@ -175,15 +179,11 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     setSubmitError(null);
 
     try {
-      // Create message object according to schema
-      const message = {
-        id: isEditMode ? eventData.id : uuidv4(), // Use existing ID if editing
-        timestamp: Date.now(), // Current timestamp in ms
-        ttl: 7 * 24 * 60 * 60 * 1000, // Default 7 days TTL
-        source: {
-          id: localStorage.getItem('userId') || 'anonymous', // Use authenticated user ID if available
-          name: localStorage.getItem('userName') || null,
-          comment: eventData.description || null
+      const payload = {
+        entity: {
+          affiliation: mapAffiliation(eventData.entity.affiliation),
+          entity: eventData.entity.entityPath,
+          status: mapStatus(eventData.entity.status)
         },
         location: {
           latitude: parseFloat(eventData.location.latitude),
@@ -197,23 +197,34 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
               direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
             }
           : null,
-        entity: {
-          affiliation: mapAffiliation(eventData.entity.affiliation),
-          entity: eventData.entity.entityPath,
-          status: mapStatus(eventData.entity.status)
-        }
+        ttl: 7 * 24 * 60 * 60 * 1000,
+        comment: eventData.description || null,
+        ...(isEditMode && { message_id: eventData.id })
       };
 
-      // Call API to create or update message
+      const response = await Api.bridge.createMessage(payload);
+      const newMessage = response.data;
+
+      const fullEventObject = {
+        id: newMessage.id,
+        timestamp: newMessage.timestamp,
+        ttl: newMessage.ttl,
+        source: {
+          id: localStorage.getItem('userId') || 'anonymous',
+          name: localStorage.getItem('userName') || null,
+          comment: newMessage.source?.comment
+        },
+        location: newMessage.location,
+        velocity: newMessage.velocity,
+        entity: newMessage.entity
+      };
+
       if (isEditMode) {
-        await Api.bridge.updateMessage(message);
-        if (onUpdate) onUpdate(message);
+        if (onUpdate) onUpdate(fullEventObject);
       } else {
-        await Api.bridge.createMessage(message);
-        if (onSubmit) onSubmit(eventData);
+        if (onSubmit) onSubmit(fullEventObject);
       }
 
-      // Close sidebar
       onClose();
     } catch (error) {
       console.error(`Error ${isEditMode ? 'updating' : 'creating'} event:`, error);
@@ -223,76 +234,19 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     }
   };
 
-  const handleStatusChange = async (newStatus) => {
-    if (!isEditMode || !eventData.id) return;
-
-    setSubmitLoading(true);
-    setSubmitError(null);
-
-    try {
-      // Create an updated message with the new status
-      const updatedMessage = {
-        id: eventData.id,
-        timestamp: Date.now(),
-        ttl: 7 * 24 * 60 * 60 * 1000,
-        source: {
-          id: localStorage.getItem('userId') || 'anonymous',
-          name: localStorage.getItem('userName') || null,
-          comment: eventData.description || null
-        },
-        location: {
-          latitude: parseFloat(eventData.location.latitude),
-          longitude: parseFloat(eventData.location.longitude),
-          altitude: null,
-          radius: null
-        },
-        velocity: eventData.velocity.speed || eventData.velocity.direction
-          ? {
-              speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
-              direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
-            }
-          : null,
-        entity: {
-          affiliation: mapAffiliation(eventData.entity.affiliation),
-          entity: eventData.entity.entityPath,
-          status: mapStatus(newStatus)
-        }
-      };
-
-      // Update the event
-      await Api.bridge.updateMessage(updatedMessage);
-
-      // Update local state
-      setEventData({
-        ...eventData,
-        entity: {
-          ...eventData.entity,
-          status: newStatus
-        }
-      });
-
-      if (onUpdate) onUpdate(updatedMessage);
-
-    } catch (error) {
-      console.error("Error updating event status:", error);
-      setSubmitError("Failed to update event status. Please try again.");
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
-
-  // Map UI affiliation values to API schema values
   const mapAffiliation = (affiliation) => {
     const affiliationMap = {
+      'assumed_friend': 'assumed_friend',
       'friend': 'friend',
       'hostile': 'hostile',
       'neutral': 'neutral',
+      'pending': 'pending',
+      'suspect': 'suspect',
       'unknown': 'unknown'
     };
     return affiliationMap[affiliation] || 'unknown';
   };
 
-  // Map UI status values to API schema values
   const mapStatus = (status) => {
     const statusMap = {
       'active': 'active',
@@ -309,7 +263,6 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
         setIsEditMode(true);
         setEventData({
           id: selectedEvent.id,
-          title: selectedEvent.source?.comment || "",
           location: {
             latitude: selectedEvent.location?.latitude?.toString() || "",
             longitude: selectedEvent.location?.longitude?.toString() || "",
@@ -318,7 +271,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
             entity: selectedEvent.entity?.entity?.split(':')[0] || "ground",
             entityPath: selectedEvent.entity?.entity || "",
             affiliation: reverseMapAffiliation(selectedEvent.entity?.affiliation) || "friend",
-            status: reverseMapStatus(selectedEvent.entity?.status) || "present"
+            status: reverseMapStatus(selectedEvent.entity?.status) || "active"
           },
           velocity: {
             speed: selectedEvent.velocity?.speed?.toString() || "",
@@ -328,16 +281,14 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
         });
         setEntityPath(selectedEvent.entity?.entity || "");
       } else {
-        // Create mode - reset form
         setIsEditMode(false);
         setEventData({
-          title: "",
           location: { latitude: "", longitude: "" },
           entity: {
             entity: "ground",
             entityPath: "",
             affiliation: "friend",
-            status: "present"
+            status: "active"
           },
           velocity: {
             speed: "",
@@ -351,18 +302,19 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     }
   }, [isOpen, selectedEvent]);
 
-  // Reverse map API schema values to UI affiliation values
   const reverseMapAffiliation = (affiliation) => {
     const reverseMap = {
+      'assumed_friend': 'assumed_friend',
       'friend': 'friend',
       'hostile': 'hostile',
       'neutral': 'neutral',
+      'pending': 'pending',
+      'suspect': 'suspect',
       'unknown': 'unknown'
     };
     return reverseMap[affiliation] || 'unknown';
   };
 
-  // Reverse map API schema values to UI status values
   const reverseMapStatus = (status) => {
     const reverseMap = {
       'active': 'active',
@@ -370,7 +322,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
       'destroyed': 'destroyed',
       'unknown': 'unknown'
     };
-    return reverseMap[status] || 'present';
+    return reverseMap[status] || 'unknown';
   };
 
   useEffect(() => {
@@ -397,13 +349,30 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     }
   }, [sidcData, eventData.entity]);
 
+  // Effect to update location fields when pickedLocation changes
+  useEffect(() => {
+    if (pickedLocation) {
+      setEventData(prevData => ({
+        ...prevData,
+        location: {
+          latitude: pickedLocation.lat.toFixed(6),
+          longitude: pickedLocation.lng.toFixed(6)
+        }
+      }));
+    }
+  }, [pickedLocation]);
+
   const togglePreview = () => {
     setSvgPreviewVisible(!svgPreviewVisible);
   };
 
+  const handlePickLocationClick = () => {
+    onTogglePickLocation(!isPickingLocation);
+  };
+
   return (
     <>
-      <StyledSidebar className={`event-sidebar ${isOpen ? 'open' : ''}`}>
+      <div className={`sidebar-container event-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="event-sidebar-header">
           <h2>
             {isEditMode ? <FiEdit /> : <FiCalendar />}
@@ -414,41 +383,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
           </button>
         </div>
 
-        {isEditMode && (
-          <div className="quick-actions">
-            <button
-              className="status-button destroyed"
-              onClick={() => handleStatusChange('destroyed')}
-              disabled={eventData.entity.status === 'destroyed'}
-            >
-              <FiTrash2 /> Mark as Destroyed
-            </button>
-            <button
-              className="status-button disabled"
-              onClick={() => handleStatusChange('disabled')}
-              disabled={eventData.entity.status === 'disabled'}
-            >
-              Disable
-            </button>
-          </div>
-        )}
-
         <form className="event-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="title">
-              <FiInfo /> Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={eventData.title}
-              onChange={handleChange}
-              required
-              placeholder="Event title"
-            />
-          </div>
-
           <div className="form-group">
             <label>
               <FiMapPin /> Location
@@ -461,6 +396,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
                 onChange={handleChange}
                 placeholder="Latitude"
                 required
+                readOnly={isPickingLocation}
               />
               <input
                 type="text"
@@ -469,8 +405,17 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
                 onChange={handleChange}
                 placeholder="Longitude"
                 required
+                readOnly={isPickingLocation}
               />
             </div>
+            <button
+              type="button"
+              className={`pick-location-button ${isPickingLocation ? 'active' : ''}`}
+              onClick={handlePickLocationClick}
+              title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
+            >
+              <FiCrosshair /> {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
+            </button>
           </div>
 
           <div className="form-group">
@@ -534,9 +479,12 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
               value={eventData.entity.affiliation}
               onChange={handleChange}
             >
+              <option value="assumed_friend">Assumed Friend</option>
               <option value="friend">Friend</option>
               <option value="hostile">Hostile</option>
               <option value="neutral">Neutral</option>
+              <option value="pending">Pending</option>
+              <option value="suspect">Suspect</option>
               <option value="unknown">Unknown</option>
             </select>
           </div>
@@ -550,9 +498,6 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
               value={eventData.entity.status}
               onChange={handleChange}
             >
-              <option value="present">Present</option>
-              <option value="planned">Planned</option>
-              <option value="anticipated">Anticipated</option>
               <option value="active">Active</option>
               <option value="destroyed">Destroyed</option>
               <option value="disabled">Disabled</option>
@@ -561,12 +506,12 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
           </div>
 
           <div className="form-group">
-            <label>Description</label>
+            <label><FiInfo /> Description</label>
             <textarea
               name="description"
               value={eventData.description}
               onChange={handleChange}
-              placeholder="Event description"
+              placeholder="Event description or comment"
               rows="4"
             />
           </div>
@@ -588,7 +533,7 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
             }
           </button>
         </form>
-      </StyledSidebar>
+      </div>
 
       <DraggableSVGPreview
         sidc={currentSidc}
@@ -598,69 +543,5 @@ const EventSidebar = ({ isOpen, onClose, onSubmit, selectedEvent = null, onUpdat
     </>
   );
 };
-
-const StyledSidebar = styled.div`
-  position: fixed;
-  top: 0;
-  right: -400px;
-  width: 380px;
-  height: 100vh;
-  font-family: "Inter", sans-serif;
-  background-color: var(--color-primary);
-  transition: right 0.3s ease;
-  z-index: 1000;
-  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
-  overflow-y: auto;
-
-  &.open {
-    right: 0;
-  }
-
-  .quick-actions {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 16px;
-    background-color: rgba(0, 0, 0, 0.05);
-
-    .status-button {
-      padding: 6px 12px;
-      border-radius: 4px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-
-      &.destroyed {
-        background-color: #f44336;
-        color: white;
-      }
-
-      &.disabled {
-        background-color: #757575;
-        color: white;
-      }
-    }
-  }
-
-  .velocity-inputs {
-    display: flex;
-    gap: 10px;
-  }
-
-  .velocity-inputs input {
-    flex: 1;
-  }
-
-  &.selected-event-active {
-    border-left: 4px solid #ffeb3b;
-  }
-`;
 
 export default EventSidebar;

@@ -74,33 +74,37 @@ class UserService:
     async def check_can_read(self, user: User, point: Point) -> bool:
         """
         Check if the user has read permissions for the given point.
+        Checks specific user permissions first, then falls back to global permission.
 
         Args:
             user: User object.
-            point: Point to check.
+            point: Point to check (longitude, latitude).
 
         Returns:
             True if the user has read permissions for the given point, False otherwise
         """
-        for permission in user.permissions:
-            if permission.shape.contains(point) and permission.can_read:
-                return True
+
+        global_permission = await self.get_global_permission()
+        if global_permission.shape.contains(point) and global_permission.can_read:
+            return True
 
         return False
 
     async def check_can_write(self, user: User, point: Point) -> bool:
         """
         Check if the user has write permissions for the given point.
+        Checks specific user permissions first, then falls back to global permission.
 
         Args:
             user: User object.
-            point: Point to check.
+            point: Point to check (longitude, latitude).
 
         Returns:
             True if the user has write permissions for the given point, False otherwise
         """
-        for permission in user.permissions:
-            if permission.shape.contains(point) and permission.can_write:
-                return True
+
+        global_permission = await self.get_global_permission()
+        if global_permission.shape.contains(point) and global_permission.can_write:
+            return True
 
         return False

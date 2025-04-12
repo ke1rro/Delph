@@ -74,7 +74,7 @@ class QueuePublishService:
         """
         # TODO: Previous message_id/location mismatch
         if not await self.user_service.check_can_write(
-            user, Point(location.latitude, location.longitude)
+            user, Point(location.longitude, location.latitude)
         ):
             raise NoPermissionError
 
@@ -125,6 +125,6 @@ class QueueSubscribeService:
         async with self.repo.subscribe() as subscription:
             async for message in subscription:
                 if await self.user_service.check_can_read(
-                    user, Point(message.location.latitude, message.location.longitude)
+                    user, Point(message.location.longitude, message.location.latitude)
                 ):
                     yield message
