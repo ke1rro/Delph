@@ -59,6 +59,16 @@ const Map = () => {
 
     const addMarker = async (event) => {
       console.log("Event added", event);
+
+      // Check if we already have this event with the same data
+      if (events[event.id] &&
+          events[event.id].timestamp === event.timestamp &&
+          events[event.id].location.latitude === event.location.latitude &&
+          events[event.id].location.longitude === event.location.longitude) {
+        console.log("Skipping duplicate event", event.id);
+        return;
+      }
+
       const svgString = await createEventSVG(event);
       setEvents(prev => ({
         ...prev,
@@ -94,6 +104,15 @@ const Map = () => {
     storage.on("add", addMarker);
 
     const updateMarker = async (previous_event, event) => {
+      // Skip if this is the same event with no actual changes
+      if (previous_event.id === event.id &&
+          previous_event.timestamp === event.timestamp &&
+          previous_event.location.latitude === event.location.latitude &&
+          previous_event.location.longitude === event.location.longitude) {
+        console.log("Skipping redundant update for event", event.id);
+        return;
+      }
+
       setEvents(prev => ({
         ...prev,
         [event.id]: event

@@ -15,6 +15,14 @@ class EventStorage {
     async push(event) {
         const time = Date.now();
         if(event.id in this.events) {
+            // Skip if the event is identical to what we already have
+            const existing = this.events[event.id];
+            if(event.timestamp === existing.timestamp &&
+               JSON.stringify(event.location) === JSON.stringify(existing.location) &&
+               JSON.stringify(event.entity) === JSON.stringify(existing.entity)) {
+                return;
+            }
+
             if(event.timestamp < this.events[event.id].timestamp) {
                 return;
             }
