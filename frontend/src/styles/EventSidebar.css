@@ -268,17 +268,16 @@
   stroke: #ffeb3b !important;
   stroke-width: 3px !important;
   filter: drop-shadow(0 0 8px rgb(255 235 59 / 80%)) !important;
-  transform: scale(1.15);
   z-index: 1000 !important;
 }
 
-@keyframes pulse {
+@keyframes gentle-glow {
   0% {
     filter: drop-shadow(0 0 5px rgb(255 235 59 / 70%));
   }
 
   50% {
-    filter: drop-shadow(0 0 10px rgb(255 235 59 / 100%));
+    filter: drop-shadow(0 0 10px rgb(255 235 59 / 90%));
   }
 
   100% {
@@ -287,7 +286,7 @@
 }
 
 .custom-icon.selected {
-  animation: pulse 2s infinite;
+  animation: gentle-glow 2s infinite;
   z-index: 1000 !important;
 }
 
@@ -298,5 +297,5 @@
   border: 3px solid #ffeb3b;
   border-radius: 50%;
   z-index: -1;
-  animation: pulse 2s infinite;
+  animation: gentle-glow 2s infinite;
 }

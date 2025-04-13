@@ -348,8 +348,8 @@ const Map = () => {
     <PageLayout onPlusClick={handleAddEventClick}>
       <div className="map-container">
         <MapContainer
-          center={[55.7558, 37.6173]}
-          zoom={10}
+          center={[0, 0]}
+          zoom={2}
           style={{ height: "100vh", width: "100%" }}
         >
           <TileLayer
