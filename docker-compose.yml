@@ -42,11 +42,6 @@ services:
     depends_on:
       history-db:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
 
   history-adapter:
     build:
