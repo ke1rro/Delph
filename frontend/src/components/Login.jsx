@@ -77,9 +77,6 @@ const Login = () => {
         <a href="/about" className="footer-link">
           About Us
         </a>
-        <a href="/news" className="footer-link">
-          News
-        </a>
       </footer>
     </div>
   );

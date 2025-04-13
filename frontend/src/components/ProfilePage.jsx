@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navbar } from "./Navbar";
-import { FiUser, FiMail, FiShield } from "react-icons/fi";
+import { FiUser, FiShield } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import api from "../Api.js";
 import "../styles/ProfilePage.css";
@@ -88,13 +88,6 @@ const ProfilePage = () => {
             <p className="profile-id">ID: {userData.user_id}</p>
           </div>
           <div className="profile-details">
-            <div className="detail-item">
-              <FiMail className="detail-icon" />
-              <div className="detail-content">
-                <h3>Email</h3>
-                <p>{userData.email || "Not provided"}</p>
-              </div>
-            </div>
             <div className="detail-item">
               <FiUser className="detail-icon" />
               <div className="detail-content">
