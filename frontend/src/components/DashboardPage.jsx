@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiMap, FiUsers, FiAlertCircle, FiClock, FiCheckCircle, FiMapPin, FiInfo, FiRefreshCw, FiX, FiShield, FiBatteryCharging, FiSlash } from "react-icons/fi";
+import { FiMap, FiUsers, FiAlertCircle, FiClock, FiCheckCircle, FiMapPin, FiInfo, FiRefreshCw, FiShield, FiBatteryCharging, FiSlash, FiChevronDown, FiChevronUp, FiMessageSquare } from "react-icons/fi";
 import { Navbar } from "./Navbar";
 import api from "../Api.js";
 import EventStorage from "../api/EventStorage";
@@ -13,7 +13,7 @@ const DashboardPage = () => {
   const [error, setError] = useState(null);
   const [latestEvents, setLatestEvents] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("connecting");
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [expandedEventId, setExpandedEventId] = useState(null);
   const [stats, setStats] = useState({
     totalEvents: 0,
     activeEvents: 0,
@@ -160,17 +160,15 @@ const DashboardPage = () => {
   };
 
   const handleEventClick = (event) => {
-    setSelectedEvent(event);
-  };
-
-  const closeEventDetails = () => {
-    setSelectedEvent(null);
-  };
-
-  const navigateToEventOnMap = () => {
-    if (selectedEvent) {
-      navigate(`/map?eventId=${selectedEvent.id}`);
+    if (expandedEventId === event.id) {
+      setExpandedEventId(null);
+    } else {
+      setExpandedEventId(event.id);
     }
+  };
+
+  const handleViewOnMap = (event) => {
+    navigate(`/map?eventId=${event.id}`);
   };
 
   const handleReconnect = () => {
@@ -233,47 +231,6 @@ const DashboardPage = () => {
     ).join(' ');
 
     return label || parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-  };
-
-  const EventDetailsModal = ({ event }) => {
-    if (!event) return null;
-
-    return (
-      <div className="event-details-modal">
-        <div className="event-details-content">
-          <div className="event-details-header">
-            <h3>{getEntityLabel(event.entity)}</h3>
-            <button className="close-button" onClick={closeEventDetails}>
-              <FiX />
-            </button>
-          </div>
-          <div className="event-details-body">
-            <p><strong>ID:</strong> {event.id}</p>
-            <p><strong>Time:</strong> {formatDate(event.timestamp)}</p>
-            <p><strong>Affiliation:</strong> {event.entity?.affiliation || 'Unknown'}</p>
-            {event.location && (
-              <p><strong>Location:</strong> {event.location.latitude.toFixed(4)}, {event.location.longitude.toFixed(4)}</p>
-            )}
-            <p><strong>Description:</strong> {event.description || 'No description available'}</p>
-            {event.properties && Object.keys(event.properties).length > 0 && (
-              <>
-                <p><strong>Properties:</strong></p>
-                <ul>
-                  {Object.entries(event.properties).map(([key, value]) => (
-                    <li key={key}><strong>{key}:</strong> {value.toString()}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </div>
-          <div className="event-details-footer">
-            <button className="view-on-map-button" onClick={navigateToEventOnMap}>
-              <FiMap /> View on Map
-            </button>
-          </div>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -369,21 +326,51 @@ const DashboardPage = () => {
                 latestEvents.map((event) => (
                   <div
                     key={event.id}
-                    className="status-item event-item"
+                    className={`status-item event-item ${expandedEventId === event.id ? 'expanded' : ''}`}
                     onClick={() => handleEventClick(event)}
                   >
-                    <div className={`status-icon ${event.entity?.affiliation === 'hostile' ? 'danger' : event.entity?.affiliation === 'friend' ? 'success' : 'warning'}`}>
-                      <FiMapPin />
+                    <div className="event-item-header">
+                      <div className={`status-icon ${event.entity?.affiliation === 'hostile' ? 'danger' : event.entity?.affiliation === 'friend' ? 'success' : 'warning'}`}>
+                        <FiMapPin />
+                      </div>
+                      <div className="status-text">
+                        <h4>{getEntityLabel(event.entity)}</h4>
+                        <span>
+                          {formatTimeAgo(event.timestamp)} •
+                          {event.location ?
+                            ` ${event.location.latitude.toFixed(2)}, ${event.location.longitude.toFixed(2)}` :
+                            ' Unknown location'}
+                        </span>
+                      </div>
+                      <div className="event-expand-icon">
+                        {expandedEventId === event.id ? <FiChevronUp /> : <FiChevronDown />}
+                      </div>
                     </div>
-                    <div className="status-text">
-                      <h4>{getEntityLabel(event.entity)}</h4>
-                      <span>
-                        {formatTimeAgo(event.timestamp)} •
-                        {event.location ?
-                          ` ${event.location.latitude.toFixed(2)}, ${event.location.longitude.toFixed(2)}` :
-                          ' Unknown location'}
-                      </span>
-                    </div>
+
+                    {expandedEventId === event.id && (
+                      <div className="event-expanded-content">
+                        <div className="event-comment">
+                          <FiMessageSquare />
+                          <span>{event.source?.comment || "No comment available"}</span>
+                        </div>
+                        <div className="event-status">
+                          <span className={`status-badge ${event.entity?.status || 'unknown'}`}>
+                            {event.entity?.status || 'unknown'}
+                          </span>
+                        </div>
+                        <div className="event-actions">
+                          <button
+                            className="view-on-map-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewOnMap(event);
+                            }}
+                          >
+                            <FiMap /> View on Map
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))
               ) : connectionStatus === "connected" ? (
@@ -412,12 +399,11 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="dashboard-footer"></div>
+        <div className="dashboard-footer">
           <p>DELTA MONITOR v1.0 — Last refreshed: {formatDate(new Date().toISOString())}</p>
         </div>
-
-        {selectedEvent && <EventDetailsModal event={selectedEvent} />}
       </div>
+    </div>
   );
 };
 

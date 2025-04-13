@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
+import { useNavigate, useLocation } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import PageLayout from "./PageLayout";
@@ -28,6 +28,37 @@ async function createEventSVG(event) {
   return new ms.Symbol(sidc, { size: 35 }).asSVG();
 }
 
+// New component to handle map centering
+const MapController = ({ events, selectedEventId, setSelectedEventId, setSidebarOpen }) => {
+  const map = useMap();
+  const location = useLocation();
+  const initialCenterRef = useRef(false);
+
+  useEffect(() => {
+    // Parse eventId from URL if present
+    const searchParams = new URLSearchParams(location.search);
+    const eventId = searchParams.get('eventId');
+
+    if (eventId && events[eventId] && !initialCenterRef.current) {
+      const event = events[eventId];
+      // Center map on event coordinates
+      if (event.location && event.location.latitude && event.location.longitude) {
+        map.setView(
+          [event.location.latitude, event.location.longitude],
+          15, // Zoom level
+          { animate: true }
+        );
+        // Select the event and open sidebar
+        setSelectedEventId(eventId);
+        setSidebarOpen(true);
+        initialCenterRef.current = true;
+      }
+    }
+  }, [events, location, map, setSelectedEventId, setSidebarOpen]);
+
+  return null;
+};
+
 const Map = () => {
   const [markers, setMarkers] = useState([]);
   const [events, setEvents] = useState({});
@@ -36,6 +67,7 @@ const Map = () => {
   const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false); // For adding new event
   const [storage] = useState(() => new EventStorage());
   const navigate = useNavigate();
+  const location = useLocation();
   const [isPickingLocationMode, setIsPickingLocationMode] = useState(false);
   const [pickedCoords, setPickedCoords] = useState(null);
 
@@ -321,6 +353,12 @@ const Map = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <MapClickHandler />
+          <MapController
+            events={events}
+            selectedEventId={selectedEventId}
+            setSelectedEventId={setSelectedEventId}
+            setSidebarOpen={setSidebarOpen}
+          />
           {markers.map((marker) => (
             <Marker
               key={marker.id}

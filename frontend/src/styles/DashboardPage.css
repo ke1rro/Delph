@@ -1,5 +1,15 @@
 @import "./variables.css";
 
+html, body {
+  overflow-y: auto !important;
+  height: 100% !important;
+}
+
+#root {
+  overflow-y: auto !important;
+  height: 100% !important;
+}
+
 .dashboard-page {
   display: flex;
   flex-direction: column;
@@ -7,13 +17,18 @@
   background-color: var(--color-primary);
   color: var(--color-white);
   font-family: "Inter", sans-serif;
+  overflow-y: auto !important; /* Force scrolling capability with !important */
+  height: auto !important; /* Allow content to determine height */
+  max-height: none !important; /* Remove height constraint */
 }
 
 .dashboard-container {
   max-width: 1200px;
   margin: 20px auto;
-  padding: 0 20px;
+  padding: 0 20px 40px; /* Keep bottom padding for spacing */
   width: 100%;
+  overflow-y: visible !important; /* Ensure content can expand */
+  height: auto !important; /* Allow full expansion */
 }
 
 .dashboard-header {
@@ -518,6 +533,118 @@
 
 .view-on-map-button:hover {
   background-color: #2980b9;
+}
+
+.event-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.event-item-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.event-item.expanded {
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-expand-icon {
+  margin-left: auto;
+  color: #6c757d;
+  opacity: 0.6;
+  padding: 4px;
+}
+
+.event-expanded-content {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 40px;
+  padding-bottom: 8px; /* Add bottom padding */
+}
+
+.event-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+.event-comment svg {
+  margin-top: 3px;
+  color: #888;
+}
+
+.event-status {
+  margin-bottom: 8px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background-color: rgba(40, 167, 69, 0.2);
+  color: #28a745;
+}
+
+.status-badge.destroyed {
+  background-color: rgba(220, 53, 69, 0.2);
+  color: #dc3545;
+}
+
+.status-badge.disabled {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+.status-badge.unknown {
+  background-color: rgba(108, 117, 125, 0.2);
+  color: #6c757d;
+}
+
+.event-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.event-actions button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: transparent;
+  color: #6c757d;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.event-actions .view-on-map-button {
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #0d6efd;
+  border-color: rgba(13, 110, 253, 0.3);
+}
+
+.event-actions button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.event-actions .view-on-map-button:hover {
+  background-color: rgba(0, 123, 255, 0.2);
 }
 
 @media (max-width: 768px) {
