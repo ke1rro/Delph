@@ -59,12 +59,11 @@ async def auth_user(
     if existing_token:
         is_whitelisted = await redis_client.is_user_whitelisted(existing_token)
         if is_whitelisted:
-            logging.info(
-                f"User session with token {existing_token} already exists in the whitelist."
-            )
             return {
                 "message": "Successfully logged in",
                 "user_id": user.user_id,
+                "user_name": user.name,
+                "user_surname": user.surname,
             }
 
     token = await create_jwt_token(user, response)
@@ -81,6 +80,8 @@ async def auth_user(
     return {
         "message": "Successfully logged in",
         "user_id": user.user_id,
+        "user_name": user.name,
+        "user_surname": user.surname,
     }
 
 

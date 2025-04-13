@@ -27,7 +27,7 @@ const Login = () => {
 
       setSuccess("Login successful!");
       console.log("Login successful.");
-      navigate("/map");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Error during login. Try again.");
