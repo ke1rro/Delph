@@ -37,11 +37,11 @@ const DashboardPage = () => {
           setUserData(response.data);
 
           setStats({
-            totalEvents: 128,
-            activeEvents: 42,
-            activeStatus: 25,
-            destroyedStatus: 10,
-            disabledStatus: 7,
+            totalEvents: 0,
+            activeEvents: 0,
+            activeStatus: 0,
+            destroyedStatus: 0,
+            disabledStatus: 0,
             lastUpdate: new Date().toISOString()
           });
         } else {
