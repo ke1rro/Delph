@@ -66,7 +66,14 @@ Pages available:
   - docs: http://localhost:8003/docs
   - streaming endpoint: http://localhost:8003/api/bridge/messages
 
-### To run Frontend
+### Frontend
+
+### Code formatting
+```bash
+cd frontend
+npx prettier --write "delta/frontend/src/styles/**/*css"
+npx prettier --write "delta/frontend/src/components/**/*.jsx"
+```
 
 #### locally
 
