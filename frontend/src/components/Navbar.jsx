@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiGrid, FiMap, FiUser, FiMessageSquare } from "react-icons/fi";
+import { FiMap, FiUser, FiMessageSquare, FiHome } from "react-icons/fi";
 import "../styles/Navbar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -37,9 +37,10 @@ export const Navbar = ({ className = "" }) => {
         <span className="brand-subtitle">MONITOR</span>
         <div className="left-icons">
           <IconButton
-            Icon={FiGrid}
-            title="Menu"
-            onClick={() => alert("Menu clicked")}
+            Icon={FiHome}
+            title="Dashboard"
+            onClick={() => navigate("/dashboard")}
+            isActive={currentPath === "/dashboard"}
           />
           <IconButton
             Icon={FiMap}
