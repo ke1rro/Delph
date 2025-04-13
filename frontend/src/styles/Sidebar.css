@@ -1,54 +1,54 @@
-@import "./variables.css";
+@import url("./variables.css");
 
 .sidebar {
-    background-color: var(--color-primary);
-    width: 60px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 10px;
+  background-color: var(--color-primary);
+  width: 60px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
 }
 
 .logo {
-    width: 40px;
-    height: 45px;
-    object-fit: cover;
-    margin-bottom: 20px;
+  width: 40px;
+  height: 45px;
+  object-fit: cover;
+  margin-bottom: 20px;
 }
 
 .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
 .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
 }
 
 .icon-button .sidebar-nav-icon {
-    width: 24px;
-    height: 24px;
-    color: white;
-    transition: all var(--transition-duration) ease-in-out;
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: all var(--transition-duration) ease-in-out;
 }
 
 .icon-button.plus-icon .sidebar-nav-icon {
-    color: #007bff;
+  color: #007bff;
 }
 
 .icon-button:hover .sidebar-nav-icon {
-    opacity: 0.9;
-    transform: scale(1.15) rotate(2deg);
-    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.3));
+  opacity: 0.9;
+  transform: scale(1.15) rotate(2deg);
+  filter: drop-shadow(0 0 5px rgb(255 255 255 / 30%));
 }
 
 .icon-button:active .sidebar-nav-icon {
-    transform: scale(1.05);
-    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.5));
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgb(255 255 255 / 50%));
 }

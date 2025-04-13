@@ -64,10 +64,7 @@ const ProfilePage = () => {
         <div className="profile-container">
           <div className="error-message">
             {error}
-            <button
-              className="retry-button"
-              onClick={() => window.location.reload()}
-            >
+            <button className="retry-button" onClick={() => window.location.reload()}>
               Retry
             </button>
           </div>

@@ -9,7 +9,7 @@ import {
   FiAlertTriangle,
   FiList,
   FiFilter,
-  FiPlusCircle,
+  FiPlusCircle
 } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
@@ -21,17 +21,13 @@ const icons = [
   { Icon: FiImage, alt: "Image" },
   { Icon: FiAlertTriangle, alt: "Warning" },
   { Icon: FiList, alt: "List dashes" },
-  { Icon: FiFilter, alt: "Funnel" },
+  { Icon: FiFilter, alt: "Funnel" }
   // Removed PlusCircle from icons array to handle it separately
 ];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
   return (
-    <button
-      className={`icon-button ${className || ""}`}
-      onClick={onClick}
-      title={title}
-    >
+    <button className={`icon-button ${className || ""}`} onClick={onClick} title={title}>
       <Icon className="sidebar-nav-icon" />
     </button>
   );
@@ -41,7 +37,7 @@ IconButton.propTypes = {
   Icon: PropTypes.elementType.isRequired,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
 export const Sidebar = ({ className = "", onPlusClick }) => {
@@ -72,5 +68,5 @@ export const Sidebar = ({ className = "", onPlusClick }) => {
 
 Sidebar.propTypes = {
   className: PropTypes.string,
-  onPlusClick: PropTypes.func,
+  onPlusClick: PropTypes.func
 };

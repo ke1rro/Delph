@@ -2,9 +2,8 @@
 User repository to interact with the database.
 """
 
-from motor.motor_asyncio import AsyncIOMotorCollection
-
 from models.event import Event
+from motor.motor_asyncio import AsyncIOMotorCollection
 
 
 class HistoryRepository:

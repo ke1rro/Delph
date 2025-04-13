@@ -18,7 +18,7 @@ const Login = () => {
     try {
       const response = await api.auth.login({
         user_id: identifier,
-        password: password,
+        password: password
       });
 
       if (response.status !== 200) {

@@ -42,7 +42,8 @@ async def validate_token(
     return {
         "user_id": str(user.user_id),
         "user_name": user.username,
-        "user_surname": user.user_surname,}
+        "user_surname": user.user_surname,
+    }
 
 
 @router.post("/login", response_model=LoginResponse)

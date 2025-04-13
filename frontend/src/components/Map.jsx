@@ -37,7 +37,7 @@ const MapController = ({ events, selectedEventId, setSelectedEventId, setSidebar
   useEffect(() => {
     // Parse eventId from URL if present
     const searchParams = new URLSearchParams(location.search);
-    const eventId = searchParams.get('eventId');
+    const eventId = searchParams.get("eventId");
 
     if (eventId && events[eventId] && !initialCenterRef.current) {
       const event = events[eventId];
@@ -73,10 +73,10 @@ const Map = () => {
 
   // Helper function to update marker classes based on selection
   const updateMarkerSelectionClass = (currentMarkers, newSelectedEventId) => {
-    return currentMarkers.map(marker => {
+    return currentMarkers.map((marker) => {
       const isSelected = marker.id === newSelectedEventId;
-      const newClassName = `custom-icon ${isSelected ? 'selected' : ''}`;
-      const newHtml = `<div class="event-icon ${isSelected ? 'selected' : ''}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ''}</div>`; // Extract existing SVG
+      const newClassName = `custom-icon ${isSelected ? "selected" : ""}`;
+      const newHtml = `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ""}</div>`; // Extract existing SVG
 
       // Avoid creating a new icon if class and html haven't changed
       if (marker.icon.options.className === newClassName && marker.icon.options.html === newHtml) {
@@ -88,8 +88,8 @@ const Map = () => {
         icon: L.divIcon({
           className: newClassName,
           html: newHtml,
-          iconSize: [40, 40],
-        }),
+          iconSize: [40, 40]
+        })
       };
     });
   };
@@ -132,14 +132,14 @@ const Map = () => {
       const svgString = await createEventSVG(event);
       setEvents((prev) => ({
         ...prev,
-        [event.id]: event,
+        [event.id]: event
       }));
 
       const isSelected = event.id === selectedEventId;
       const icon = L.divIcon({
         className: `custom-icon ${isSelected ? "selected" : ""}`,
         html: `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${svgString}</div>`,
-        iconSize: [40, 40],
+        iconSize: [40, 40]
       });
 
       setMarkers((prevMarkers) => {
@@ -150,7 +150,7 @@ const Map = () => {
             ...prevMarkers[existingIndex],
             position: { lat: event.location.latitude, lng: event.location.longitude },
             icon,
-            event: event,
+            event: event
           };
           return updateMarkerSelectionClass(updatedMarkers, selectedEventId);
         }
@@ -160,11 +160,11 @@ const Map = () => {
             id: event.id,
             position: {
               lat: event.location.latitude,
-              lng: event.location.longitude,
+              lng: event.location.longitude
             },
             icon,
-            event: event,
-          },
+            event: event
+          }
         ];
         return updateMarkerSelectionClass(newMarkers, selectedEventId);
       });
@@ -184,7 +184,7 @@ const Map = () => {
 
       setEvents((prev) => ({
         ...prev,
-        [event.id]: event,
+        [event.id]: event
       }));
       console.log("Event updated", previous_event, event);
       const svgString = await createEventSVG(event);
@@ -192,20 +192,23 @@ const Map = () => {
       const icon = L.divIcon({
         className: `custom-icon ${isSelected ? "selected" : ""}`,
         html: `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${svgString}</div>`,
-        iconSize: [40, 40],
+        iconSize: [40, 40]
       });
 
       setMarkers((prevMarkers) => {
         let markerUpdated = false;
-        let updatedMarkers = prevMarkers.map(marker => {
+        let updatedMarkers = prevMarkers.map((marker) => {
           if (marker.id === event.id || marker.id === previous_event.id) {
             markerUpdated = true;
             return {
               ...marker,
               id: event.id,
-              position: { lat: event.location.latitude, lng: event.location.longitude },
+              position: {
+                lat: event.location.latitude,
+                lng: event.location.longitude
+              },
               icon,
-              event: event,
+              event: event
             };
           }
           return marker;
@@ -256,7 +259,7 @@ const Map = () => {
     setSelectedEventId(eventId);
     setSidebarOpen(true); // Open sidebar for editing
     setAddEventSidebarOpen(false); // Ensure add mode is off
-    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, eventId));
+    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, eventId));
     handleTogglePickLocation(false); // Ensure picking mode is off
   };
 
@@ -265,7 +268,7 @@ const Map = () => {
     setSelectedEventId(null); // Deselect any selected event
     setSidebarOpen(false); // Ensure edit mode is off
     setAddEventSidebarOpen(true); // Open sidebar for adding
-    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
+    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
     handleTogglePickLocation(false); // Ensure picking mode is off
   };
 
@@ -275,7 +278,7 @@ const Map = () => {
     setAddEventSidebarOpen(false);
     setSelectedEventId(null);
     handleTogglePickLocation(false); // Turn off picking mode when closing
-    setMarkers(prevMarkers => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
+    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
   };
 
   const handleEventUpdate = (updatedEvent) => {
@@ -295,8 +298,9 @@ const Map = () => {
   const handleTogglePickLocation = (isPicking) => {
     console.log("Toggling pick location mode:", isPicking);
     setIsPickingLocationMode(isPicking);
-    if (!isPicking && !pickedCoords) { // Reset only if not just picked
-        setPickedCoords(null);
+    if (!isPicking && !pickedCoords) {
+      // Reset only if not just picked
+      setPickedCoords(null);
     }
   };
 
@@ -314,10 +318,10 @@ const Map = () => {
         } else {
           // Close sidebar only if clicking outside a marker when sidebar is open
           if (sidebarOpen || addEventSidebarOpen) {
-             handleCloseSidebar();
+            handleCloseSidebar();
           }
         }
-      },
+      }
     });
 
     useEffect(() => {
@@ -368,7 +372,7 @@ const Map = () => {
                 click: (e) => {
                   e.originalEvent.stopPropagation();
                   handleMarkerClick(marker.id);
-                },
+                }
               }}
             />
           ))}

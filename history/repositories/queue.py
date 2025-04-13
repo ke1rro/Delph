@@ -6,9 +6,9 @@ import logging
 
 from aiokafka import AIOKafkaConsumer
 from pydantic import ValidationError
-from schemas.message import Message
-
 from repositories.base import Repository
+
+from schemas.message import Message
 
 logger = logging.getLogger("delta")
 

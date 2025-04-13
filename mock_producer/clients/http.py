@@ -1,5 +1,4 @@
 import requests
-
 from simulator.client import Client
 
 

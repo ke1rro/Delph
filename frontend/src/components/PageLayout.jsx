@@ -4,7 +4,6 @@ import { Navbar } from "./Navbar";
 import "../styles/PageLayout.css";
 
 const PageLayout = ({ children, onPlusClick }) => {
-
   return (
     <div className="page-layout">
       {/* Pass onPlusClick down to the Sidebar */}

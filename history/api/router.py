@@ -4,12 +4,12 @@ History data service API routers.
 
 from fastapi import APIRouter, Depends
 from fastapi.requests import Request
+from models.event import Event
 from pydantic import BaseModel, Field
+from repositories.history import HistoryRepository
 from starlette.authentication import requires
 
 from api.dependencies import get_history_repository
-from models.event import Event
-from repositories.history import HistoryRepository
 
 router = APIRouter(tags=["test"])
 

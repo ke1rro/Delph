@@ -1,6 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiMap, FiUsers, FiAlertCircle, FiClock, FiCheckCircle, FiMapPin, FiInfo, FiRefreshCw, FiShield, FiBatteryCharging, FiSlash, FiChevronDown, FiChevronUp, FiMessageSquare } from "react-icons/fi";
+import {
+  FiMap,
+  FiUsers,
+  FiAlertCircle,
+  FiClock,
+  FiCheckCircle,
+  FiMapPin,
+  FiInfo,
+  FiRefreshCw,
+  FiShield,
+  FiBatteryCharging,
+  FiSlash,
+  FiChevronDown,
+  FiChevronUp,
+  FiMessageSquare
+} from "react-icons/fi";
 import { Navbar } from "./Navbar";
 import api from "../Api.js";
 import EventStorage from "../api/EventStorage";
@@ -20,7 +35,7 @@ const DashboardPage = () => {
     activeStatus: 0,
     destroyedStatus: 0,
     disabledStatus: 0,
-    lastUpdate: new Date().toISOString(),
+    lastUpdate: new Date().toISOString()
   });
   const navigate = useNavigate();
 
@@ -126,7 +141,7 @@ const DashboardPage = () => {
     const seenTypes = new Set();
 
     for (const event of sortedEvents) {
-      const entityType = event.entity?.entity || 'unknown';
+      const entityType = event.entity?.entity || "unknown";
 
       if (!seenTypes.has(entityType) && uniqueEvents.length < 5) {
         seenTypes.add(entityType);
@@ -138,14 +153,14 @@ const DashboardPage = () => {
 
     setLatestEvents(uniqueEvents);
 
-    const activeCount = allEvents.filter(e => e.entity?.status === 'active').length;
-    const destroyedCount = allEvents.filter(e => e.entity?.status === 'destroyed').length;
-    const disabledCount = allEvents.filter(e => e.entity?.status === 'disabled').length;
+    const activeCount = allEvents.filter((e) => e.entity?.status === "active").length;
+    const destroyedCount = allEvents.filter((e) => e.entity?.status === "destroyed").length;
+    const disabledCount = allEvents.filter((e) => e.entity?.status === "disabled").length;
 
-    setStats(prev => ({
+    setStats((prev) => ({
       ...prev,
       totalEvents: allEvents.length,
-      activeEvents: allEvents.filter(e => {
+      activeEvents: allEvents.filter((e) => {
         return Date.now() - e.timestamp < 24 * 60 * 60 * 1000;
       }).length,
       activeStatus: activeCount,
@@ -193,10 +208,7 @@ const DashboardPage = () => {
         <div className="dashboard-container">
           <div className="error-message">
             {error}
-            <button
-              className="retry-button"
-              onClick={() => window.location.reload()}
-            >
+            <button className="retry-button" onClick={() => window.location.reload()}>
               Retry
             </button>
           </div>
@@ -207,9 +219,9 @@ const DashboardPage = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-      dateStyle: 'medium',
-      timeStyle: 'short'
+    return new Intl.DateTimeFormat("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short"
     }).format(date);
   };
 
@@ -223,12 +235,13 @@ const DashboardPage = () => {
   };
 
   const getEntityLabel = (entity) => {
-    if (!entity || !entity.entity) return 'Unknown';
+    if (!entity || !entity.entity) return "Unknown";
 
-    const parts = entity.entity.split(':');
-    const label = parts.slice(1).map(part =>
-      part.charAt(0).toUpperCase() + part.slice(1)
-    ).join(' ');
+    const parts = entity.entity.split(":");
+    const label = parts
+      .slice(1)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
 
     return label || parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
   };
@@ -293,11 +306,11 @@ const DashboardPage = () => {
           <div className="panel quick-access">
             <h2>Quick Access</h2>
             <div className="quick-cards">
-              <div className="quick-card" onClick={() => handleCardClick('/map')}>
+              <div className="quick-card" onClick={() => handleCardClick("/map")}>
                 <FiMap />
                 <span>Map View</span>
               </div>
-              <div className="quick-card" onClick={() => handleCardClick('/profile')}>
+              <div className="quick-card" onClick={() => handleCardClick("/profile")}>
                 <FiUsers />
                 <span>Profile</span>
               </div>
@@ -326,20 +339,22 @@ const DashboardPage = () => {
                 latestEvents.map((event) => (
                   <div
                     key={event.id}
-                    className={`status-item event-item ${expandedEventId === event.id ? 'expanded' : ''}`}
+                    className={`status-item event-item ${expandedEventId === event.id ? "expanded" : ""}`}
                     onClick={() => handleEventClick(event)}
                   >
                     <div className="event-item-header">
-                      <div className={`status-icon ${event.entity?.affiliation === 'hostile' ? 'danger' : event.entity?.affiliation === 'friend' ? 'success' : 'warning'}`}>
+                      <div
+                        className={`status-icon ${event.entity?.affiliation === "hostile" ? "danger" : event.entity?.affiliation === "friend" ? "success" : "warning"}`}
+                      >
                         <FiMapPin />
                       </div>
                       <div className="status-text">
                         <h4>{getEntityLabel(event.entity)}</h4>
                         <span>
                           {formatTimeAgo(event.timestamp)} •
-                          {event.location ?
-                            ` ${event.location.latitude.toFixed(2)}, ${event.location.longitude.toFixed(2)}` :
-                            ' Unknown location'}
+                          {event.location
+                            ? ` ${event.location.latitude.toFixed(2)}, ${event.location.longitude.toFixed(2)}`
+                            : " Unknown location"}
                         </span>
                       </div>
                       <div className="event-expand-icon">
@@ -354,8 +369,8 @@ const DashboardPage = () => {
                           <span>{event.source?.comment || "No comment available"}</span>
                         </div>
                         <div className="event-status">
-                          <span className={`status-badge ${event.entity?.status || 'unknown'}`}>
-                            {event.entity?.status || 'unknown'}
+                          <span className={`status-badge ${event.entity?.status || "unknown"}`}>
+                            {event.entity?.status || "unknown"}
                           </span>
                         </div>
                         <div className="event-actions">

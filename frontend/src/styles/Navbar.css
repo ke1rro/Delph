@@ -1,77 +1,76 @@
-@import "./variables.css";
+@import url("./variables.css");
 
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: var(--color-primary);
-    padding: 0 20px;
-    height: 50px;
-    margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-primary);
+  padding: 0 20px;
+  height: 50px;
+  margin: 0;
 }
 
 .navbar-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .brand-name {
-    color: #ffffff;
-    font-family: var(--font-family);
-    font-size: 20px;
-    font-weight: 400;
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 20px;
+  font-weight: 400;
 }
 
 .separator {
-    color: #747896;
-    font-size: 20px;
-    font-family: var(--font-family);
-    font-weight: 400;
+  color: #747896;
+  font-size: 20px;
+  font-family: var(--font-family);
+  font-weight: 400;
 }
 
 .brand-subtitle {
-    color: #747896;
-    font-size: 16px;
-    font-family: "Inria Sans", sans-serif;
-    font-weight: 400;
+  color: #747896;
+  font-size: 16px;
+  font-family: "Inria Sans", sans-serif;
+  font-weight: 400;
 }
 
-
 .navbar-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .left-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-left: 10px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: 10px;
 }
 
 .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
 }
 
 .icon-button .navbar-icon {
-    width: 24px;
-    height: 24px;
-    color: white;
-    transition: all var(--transition-duration) ease-in-out;
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: all var(--transition-duration) ease-in-out;
 }
 
 .icon-button:hover .navbar-icon {
-    opacity: 0.9;
-    transform: scale(1.15) rotate(2deg);
-    filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.3));
+  opacity: 0.9;
+  transform: scale(1.15) rotate(2deg);
+  filter: drop-shadow(0 0 5px rgb(255 255 255 / 30%));
 }
 
 .icon-button:active .navbar-icon {
-    transform: scale(1.05);
-    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 0.5));
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgb(255 255 255 / 50%));
 }

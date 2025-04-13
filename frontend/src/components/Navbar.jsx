@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const IconButton = ({ Icon, title, onClick, className, isActive }) => {
   return (
     <button
-      className={`icon-button ${isActive ? 'active' : ''} ${className || ""}`}
+      className={`icon-button ${isActive ? "active" : ""} ${className || ""}`}
       onClick={onClick}
       title={title}
     >
@@ -21,7 +21,7 @@ IconButton.propTypes = {
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
   className: PropTypes.string,
-  isActive: PropTypes.bool,
+  isActive: PropTypes.bool
 };
 
 export const Navbar = ({ className = "" }) => {
@@ -57,16 +57,12 @@ export const Navbar = ({ className = "" }) => {
           onClick={() => navigate("/profile")}
           isActive={currentPath === "/profile"}
         />
-        <IconButton
-          Icon={FiMessageSquare}
-          title="Chat"
-          onClick={() => alert("Chat clicked")}
-        />
+        <IconButton Icon={FiMessageSquare} title="Chat" onClick={() => alert("Chat clicked")} />
       </div>
     </nav>
   );
 };
 
 Navbar.propTypes = {
-  className: PropTypes.string,
+  className: PropTypes.string
 };

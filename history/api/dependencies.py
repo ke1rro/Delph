@@ -5,9 +5,8 @@ This module contains the dependencies for the FastAPI application.
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from motor.motor_asyncio import AsyncIOMotorClient
-
 from config import settings
+from motor.motor_asyncio import AsyncIOMotorClient
 from repositories.history import HistoryRepository
 
 

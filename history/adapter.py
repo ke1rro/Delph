@@ -7,10 +7,11 @@ import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
-from api.dependencies import with_history_repository
 from config import settings
 from repositories.queue import QueueSubscription
 from services.adapter import AdapterService
+
+from api.dependencies import with_history_repository
 
 logger = logging.getLogger("delta")
 

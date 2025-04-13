@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FiX, FiCalendar, FiMapPin, FiInfo, FiTag, FiUsers, FiActivity, FiEdit, FiZap, FiCrosshair } from "react-icons/fi";
+import {
+  FiX,
+  FiCalendar,
+  FiMapPin,
+  FiInfo,
+  FiTag,
+  FiUsers,
+  FiActivity,
+  FiEdit,
+  FiZap,
+  FiCrosshair
+} from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import "../styles/SidebarStyles.css";
 import DraggableSVGPreview from "./DraggableSVGPreview";
@@ -20,7 +31,7 @@ const EventSidebar = ({
   const [loading, setLoading] = useState(false);
   const [entityTree, setEntityTree] = useState([]);
   const [entitySelections, setEntitySelections] = useState([]);
-  const [entityPath, setEntityPath] = useState('');
+  const [entityPath, setEntityPath] = useState("");
   const [selectedValues, setSelectedValues] = useState([]);
   const [svgPreviewVisible, setSvgPreviewVisible] = useState(false);
   const [currentSidc, setCurrentSidc] = useState(null);
@@ -36,7 +47,7 @@ const EventSidebar = ({
       speed: "",
       direction: ""
     },
-    description: "",
+    description: ""
   });
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
@@ -51,8 +62,8 @@ const EventSidebar = ({
         setSidcData(data);
 
         const topLevelEntities = Object.keys(data.entity)
-          .filter(key => !key.includes(':'))
-          .map(key => ({
+          .filter((key) => !key.includes(":"))
+          .map((key) => ({
             value: key,
             label: capitalizeFirstLetter(key)
           }));
@@ -81,14 +92,14 @@ const EventSidebar = ({
     }
 
     const getChildEntities = (path) => {
-      const prefix = path ? path + ':' : '';
+      const prefix = path ? path + ":" : "";
       const directChildPaths = new Map();
 
-      Object.keys(sidcData.entity).forEach(key => {
+      Object.keys(sidcData.entity).forEach((key) => {
         if (key.startsWith(prefix) && key !== path) {
           const remaining = key.substring(prefix.length);
-          const nextSegment = remaining.includes(':')
-            ? remaining.substring(0, remaining.indexOf(':'))
+          const nextSegment = remaining.includes(":")
+            ? remaining.substring(0, remaining.indexOf(":"))
             : remaining;
 
           if (nextSegment) {
@@ -110,9 +121,9 @@ const EventSidebar = ({
     };
 
     const selections = [entityTree];
-    const pathParts = entityPath.split(':');
+    const pathParts = entityPath.split(":");
 
-    const newSelectedValues = [entityPath.split(':')[0]];
+    const newSelectedValues = [entityPath.split(":")[0]];
 
     let currentPath = pathParts[0];
     for (let i = 1; i < pathParts.length; i++) {
@@ -120,7 +131,7 @@ const EventSidebar = ({
       if (children) {
         selections.push(children);
       }
-      currentPath = currentPath + ':' + pathParts[i];
+      currentPath = currentPath + ":" + pathParts[i];
       newSelectedValues.push(currentPath);
     }
 
@@ -137,10 +148,10 @@ const EventSidebar = ({
     if (level === 0) {
       setEntityPath(value);
     } else {
-      const pathParts = entityPath.split(':');
+      const pathParts = entityPath.split(":");
       const newPathParts = pathParts.slice(0, level);
 
-      newPathParts.push(value.split(':').pop());
+      newPathParts.push(value.split(":").pop());
 
       const newPath = value;
       setEntityPath(newPath);
@@ -150,7 +161,7 @@ const EventSidebar = ({
       ...eventData,
       entity: {
         ...eventData.entity,
-        entity: value.split(':')[0],
+        entity: value.split(":")[0],
         entityPath: value
       }
     });
@@ -191,12 +202,15 @@ const EventSidebar = ({
           altitude: null,
           radius: null
         },
-        velocity: eventData.velocity.speed || eventData.velocity.direction
-          ? {
-              speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
-              direction: eventData.velocity.direction ? parseFloat(eventData.velocity.direction) : null
-            }
-          : null,
+        velocity:
+          eventData.velocity.speed || eventData.velocity.direction
+            ? {
+                speed: eventData.velocity.speed ? parseFloat(eventData.velocity.speed) : null,
+                direction: eventData.velocity.direction
+                  ? parseFloat(eventData.velocity.direction)
+                  : null
+              }
+            : null,
         ttl: 7 * 24 * 60 * 60 * 1000,
         comment: eventData.description || null,
         ...(isEditMode && { message_id: eventData.id })
@@ -210,8 +224,8 @@ const EventSidebar = ({
         timestamp: newMessage.timestamp,
         ttl: newMessage.ttl,
         source: {
-          id: localStorage.getItem('userId') || 'anonymous',
-          name: localStorage.getItem('userName') || null,
+          id: localStorage.getItem("userId") || "anonymous",
+          name: localStorage.getItem("userName") || null,
           comment: newMessage.source?.comment
         },
         location: newMessage.location,
@@ -227,8 +241,8 @@ const EventSidebar = ({
 
       onClose();
     } catch (error) {
-      console.error(`Error ${isEditMode ? 'updating' : 'creating'} event:`, error);
-      setSubmitError(`Failed to ${isEditMode ? 'update' : 'create'} event. Please try again.`);
+      console.error(`Error ${isEditMode ? "updating" : "creating"} event:`, error);
+      setSubmitError(`Failed to ${isEditMode ? "update" : "create"} event. Please try again.`);
     } finally {
       setSubmitLoading(false);
     }
@@ -236,25 +250,25 @@ const EventSidebar = ({
 
   const mapAffiliation = (affiliation) => {
     const affiliationMap = {
-      'assumed_friend': 'assumed_friend',
-      'friend': 'friend',
-      'hostile': 'hostile',
-      'neutral': 'neutral',
-      'pending': 'pending',
-      'suspect': 'suspect',
-      'unknown': 'unknown'
+      assumed_friend: "assumed_friend",
+      friend: "friend",
+      hostile: "hostile",
+      neutral: "neutral",
+      pending: "pending",
+      suspect: "suspect",
+      unknown: "unknown"
     };
-    return affiliationMap[affiliation] || 'unknown';
+    return affiliationMap[affiliation] || "unknown";
   };
 
   const mapStatus = (status) => {
     const statusMap = {
-      'active': 'active',
-      'disabled': 'disabled',
-      'destroyed': 'destroyed',
-      'unknown': 'unknown'
+      active: "active",
+      disabled: "disabled",
+      destroyed: "destroyed",
+      unknown: "unknown"
     };
-    return statusMap[status] || 'unknown';
+    return statusMap[status] || "unknown";
   };
 
   useEffect(() => {
@@ -265,10 +279,10 @@ const EventSidebar = ({
           id: selectedEvent.id,
           location: {
             latitude: selectedEvent.location?.latitude?.toString() || "",
-            longitude: selectedEvent.location?.longitude?.toString() || "",
+            longitude: selectedEvent.location?.longitude?.toString() || ""
           },
           entity: {
-            entity: selectedEvent.entity?.entity?.split(':')[0] || "ground",
+            entity: selectedEvent.entity?.entity?.split(":")[0] || "ground",
             entityPath: selectedEvent.entity?.entity || "",
             affiliation: reverseMapAffiliation(selectedEvent.entity?.affiliation) || "friend",
             status: reverseMapStatus(selectedEvent.entity?.status) || "active"
@@ -277,7 +291,7 @@ const EventSidebar = ({
             speed: selectedEvent.velocity?.speed?.toString() || "",
             direction: selectedEvent.velocity?.direction?.toString() || ""
           },
-          description: selectedEvent.source?.comment || "",
+          description: selectedEvent.source?.comment || ""
         });
         setEntityPath(selectedEvent.entity?.entity || "");
       } else {
@@ -294,7 +308,7 @@ const EventSidebar = ({
             speed: "",
             direction: ""
           },
-          description: "",
+          description: ""
         });
         const basicEntityType = "ground";
         setEntityPath(basicEntityType);
@@ -304,25 +318,25 @@ const EventSidebar = ({
 
   const reverseMapAffiliation = (affiliation) => {
     const reverseMap = {
-      'assumed_friend': 'assumed_friend',
-      'friend': 'friend',
-      'hostile': 'hostile',
-      'neutral': 'neutral',
-      'pending': 'pending',
-      'suspect': 'suspect',
-      'unknown': 'unknown'
+      assumed_friend: "assumed_friend",
+      friend: "friend",
+      hostile: "hostile",
+      neutral: "neutral",
+      pending: "pending",
+      suspect: "suspect",
+      unknown: "unknown"
     };
-    return reverseMap[affiliation] || 'unknown';
+    return reverseMap[affiliation] || "unknown";
   };
 
   const reverseMapStatus = (status) => {
     const reverseMap = {
-      'active': 'active',
-      'disabled': 'disabled',
-      'destroyed': 'destroyed',
-      'unknown': 'unknown'
+      active: "active",
+      disabled: "disabled",
+      destroyed: "destroyed",
+      unknown: "unknown"
     };
-    return reverseMap[status] || 'unknown';
+    return reverseMap[status] || "unknown";
   };
 
   useEffect(() => {
@@ -335,8 +349,8 @@ const EventSidebar = ({
         return;
       }
 
-      const affiliation = sidcData.affiliation[eventData.entity.affiliation] || 'F';
-      const status = sidcData.status[eventData.entity.status] || 'P';
+      const affiliation = sidcData.affiliation[eventData.entity.affiliation] || "F";
+      const status = sidcData.status[eventData.entity.status] || "P";
 
       const updatedSidc = sidc.replace("@", affiliation).replace("#", status);
       console.log("Generated SIDC:", updatedSidc);
@@ -352,7 +366,7 @@ const EventSidebar = ({
   // Effect to update location fields when pickedLocation changes
   useEffect(() => {
     if (pickedLocation) {
-      setEventData(prevData => ({
+      setEventData((prevData) => ({
         ...prevData,
         location: {
           latitude: pickedLocation.lat.toFixed(6),
@@ -372,11 +386,11 @@ const EventSidebar = ({
 
   return (
     <>
-      <div className={`sidebar-container event-sidebar ${isOpen ? 'open' : ''}`}>
+      <div className={`sidebar-container event-sidebar ${isOpen ? "open" : ""}`}>
         <div className="event-sidebar-header">
           <h2>
             {isEditMode ? <FiEdit /> : <FiCalendar />}
-            {isEditMode ? 'Update Event' : 'Add New Event'}
+            {isEditMode ? "Update Event" : "Add New Event"}
           </h2>
           <button className="close-button" onClick={onClose}>
             <FiX />
@@ -410,11 +424,12 @@ const EventSidebar = ({
             </div>
             <button
               type="button"
-              className={`pick-location-button ${isPickingLocation ? 'active' : ''}`}
+              className={`pick-location-button ${isPickingLocation ? "active" : ""}`}
               onClick={handlePickLocationClick}
               title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
             >
-              <FiCrosshair /> {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
+              <FiCrosshair />{" "}
+              {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
             </button>
           </div>
 
@@ -455,10 +470,10 @@ const EventSidebar = ({
                   <select
                     key={level}
                     className="entity-select"
-                    value={selectedValues[level] || ''}
+                    value={selectedValues[level] || ""}
                     onChange={(e) => handleEntitySelect(e.target.value, level)}
                   >
-                    <option value="">Select {level === 0 ? 'Type' : 'Subtype'}</option>
+                    <option value="">Select {level === 0 ? "Type" : "Subtype"}</option>
                     {options.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
@@ -493,11 +508,7 @@ const EventSidebar = ({
             <label>
               <FiActivity /> Status
             </label>
-            <select
-              name="entity.status"
-              value={eventData.entity.status}
-              onChange={handleChange}
-            >
+            <select name="entity.status" value={eventData.entity.status} onChange={handleChange}>
               <option value="active">Active</option>
               <option value="destroyed">Destroyed</option>
               <option value="disabled">Disabled</option>
@@ -506,7 +517,9 @@ const EventSidebar = ({
           </div>
 
           <div className="form-group">
-            <label><FiInfo /> Description</label>
+            <label>
+              <FiInfo /> Description
+            </label>
             <textarea
               name="description"
               value={eventData.description}
@@ -516,21 +529,16 @@ const EventSidebar = ({
             />
           </div>
 
-          {submitError && (
-            <div className="error-message">
-              {submitError}
-            </div>
-          )}
+          {submitError && <div className="error-message">{submitError}</div>}
 
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={submitLoading}
-          >
-            {submitLoading ?
-              (isEditMode ? "Updating..." : "Creating...") :
-              (isEditMode ? "Update Event" : "Create Event")
-            }
+          <button type="submit" className="submit-button" disabled={submitLoading}>
+            {submitLoading
+              ? isEditMode
+                ? "Updating..."
+                : "Creating..."
+              : isEditMode
+                ? "Update Event"
+                : "Create Event"}
           </button>
         </form>
       </div>
