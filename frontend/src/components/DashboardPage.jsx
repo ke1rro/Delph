@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FiMap, FiUsers, FiAlertCircle, FiClock, FiCheckCircle, FiMapPin, FiInfo, FiRefreshCw } from "react-icons/fi";
+import { FiMap, FiUsers, FiAlertCircle, FiClock, FiCheckCircle, FiMapPin, FiInfo, FiRefreshCw, FiX, FiShield, FiBatteryCharging, FiSlash } from "react-icons/fi";
 import { Navbar } from "./Navbar";
 import api from "../Api.js";
 import EventStorage from "../api/EventStorage";
@@ -13,15 +13,17 @@ const DashboardPage = () => {
   const [error, setError] = useState(null);
   const [latestEvents, setLatestEvents] = useState([]);
   const [connectionStatus, setConnectionStatus] = useState("connecting");
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const [stats, setStats] = useState({
     totalEvents: 0,
     activeEvents: 0,
-    users: 0,
+    activeStatus: 0,
+    destroyedStatus: 0,
+    disabledStatus: 0,
     lastUpdate: new Date().toISOString(),
   });
   const navigate = useNavigate();
 
-  // Create refs to keep instances across renders
   const storageRef = useRef(null);
   const clientRef = useRef(null);
 
@@ -34,12 +36,12 @@ const DashboardPage = () => {
         if (response.status === 200 && response.data) {
           setUserData(response.data);
 
-          // In a real app, you would fetch actual statistics from an API
-          // This is just mock data
           setStats({
             totalEvents: 128,
             activeEvents: 42,
-            users: 15,
+            activeStatus: 25,
+            destroyedStatus: 10,
+            disabledStatus: 7,
             lastUpdate: new Date().toISOString()
           });
         } else {
@@ -59,14 +61,10 @@ const DashboardPage = () => {
 
     fetchUserData();
 
-    // Initialize EventStorage and BridgeClient only once
     if (!storageRef.current) {
       storageRef.current = new EventStorage();
-
-      // Initialize the BridgeClient with our EventStorage
       clientRef.current = new BridgeClient(storageRef.current);
 
-      // Handle WebSocket connection status
       clientRef.current.onclose = () => {
         setConnectionStatus("disconnected");
         console.log("WebSocket connection closed");
@@ -77,11 +75,9 @@ const DashboardPage = () => {
         console.log("Attempting to reconnect...");
       };
 
-      // Connect to the WebSocket
       connectBridgeClient();
     }
 
-    // Set up callbacks for new events
     const handleEventAdded = async (event) => {
       updateLatestEvents();
     };
@@ -90,16 +86,12 @@ const DashboardPage = () => {
       updateLatestEvents();
     };
 
-    // Register event listeners
     storageRef.current.on("add", handleEventAdded);
     storageRef.current.on("update", handleEventUpdated);
 
-    // Initial event fetch
     updateLatestEvents();
 
-    // Cleanup function
     return () => {
-      // Keep the client and storage instances but remove event listeners
       if (storageRef.current) {
         storageRef.current.on("add", () => {});
         storageRef.current.on("update", () => {});
@@ -128,10 +120,8 @@ const DashboardPage = () => {
 
     const allEvents = storageRef.current.get();
 
-    // Sort events by timestamp (newest first)
     const sortedEvents = [...allEvents].sort((a, b) => b.timestamp - a.timestamp);
 
-    // Take the first 5 non-duplicate events (based on entity type)
     const uniqueEvents = [];
     const seenTypes = new Set();
 
@@ -148,14 +138,19 @@ const DashboardPage = () => {
 
     setLatestEvents(uniqueEvents);
 
-    // Update stats
+    const activeCount = allEvents.filter(e => e.entity?.status === 'active').length;
+    const destroyedCount = allEvents.filter(e => e.entity?.status === 'destroyed').length;
+    const disabledCount = allEvents.filter(e => e.entity?.status === 'disabled').length;
+
     setStats(prev => ({
       ...prev,
       totalEvents: allEvents.length,
       activeEvents: allEvents.filter(e => {
-        // Consider events active if they're less than 24 hours old
         return Date.now() - e.timestamp < 24 * 60 * 60 * 1000;
       }).length,
+      activeStatus: activeCount,
+      destroyedStatus: destroyedCount,
+      disabledStatus: disabledCount,
       lastUpdate: new Date().toISOString()
     }));
   };
@@ -164,8 +159,18 @@ const DashboardPage = () => {
     navigate(destination);
   };
 
-  const handleEventClick = (eventId) => {
-    navigate(`/map?eventId=${eventId}`);
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const closeEventDetails = () => {
+    setSelectedEvent(null);
+  };
+
+  const navigateToEventOnMap = () => {
+    if (selectedEvent) {
+      navigate(`/map?eventId=${selectedEvent.id}`);
+    }
   };
 
   const handleReconnect = () => {
@@ -222,13 +227,53 @@ const DashboardPage = () => {
   const getEntityLabel = (entity) => {
     if (!entity || !entity.entity) return 'Unknown';
 
-    // Convert "ground:civilian:vehicle" to "Civilian Vehicle"
     const parts = entity.entity.split(':');
     const label = parts.slice(1).map(part =>
       part.charAt(0).toUpperCase() + part.slice(1)
     ).join(' ');
 
     return label || parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+  };
+
+  const EventDetailsModal = ({ event }) => {
+    if (!event) return null;
+
+    return (
+      <div className="event-details-modal">
+        <div className="event-details-content">
+          <div className="event-details-header">
+            <h3>{getEntityLabel(event.entity)}</h3>
+            <button className="close-button" onClick={closeEventDetails}>
+              <FiX />
+            </button>
+          </div>
+          <div className="event-details-body">
+            <p><strong>ID:</strong> {event.id}</p>
+            <p><strong>Time:</strong> {formatDate(event.timestamp)}</p>
+            <p><strong>Affiliation:</strong> {event.entity?.affiliation || 'Unknown'}</p>
+            {event.location && (
+              <p><strong>Location:</strong> {event.location.latitude.toFixed(4)}, {event.location.longitude.toFixed(4)}</p>
+            )}
+            <p><strong>Description:</strong> {event.description || 'No description available'}</p>
+            {event.properties && Object.keys(event.properties).length > 0 && (
+              <>
+                <p><strong>Properties:</strong></p>
+                <ul>
+                  {Object.entries(event.properties).map(([key, value]) => (
+                    <li key={key}><strong>{key}:</strong> {value.toString()}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+          <div className="event-details-footer">
+            <button className="view-on-map-button" onClick={navigateToEventOnMap}>
+              <FiMap /> View on Map
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -261,18 +306,28 @@ const DashboardPage = () => {
               <FiCheckCircle />
             </div>
             <div className="stat-details">
-              <h3>Active Events</h3>
-              <div className="stat-value">{stats.activeEvents}</div>
+              <h3>Active Status</h3>
+              <div className="stat-value">{stats.activeStatus}</div>
             </div>
           </div>
 
           <div className="stat-card">
-            <div className="stat-icon users-icon">
-              <FiUsers />
+            <div className="stat-icon destroyed-icon">
+              <FiSlash />
             </div>
             <div className="stat-details">
-              <h3>Active Users</h3>
-              <div className="stat-value">{stats.users}</div>
+              <h3>Destroyed</h3>
+              <div className="stat-value">{stats.destroyedStatus}</div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon disabled-icon">
+              <FiBatteryCharging />
+            </div>
+            <div className="stat-details">
+              <h3>Disabled</h3>
+              <div className="stat-value">{stats.disabledStatus}</div>
             </div>
           </div>
         </div>
@@ -315,7 +370,7 @@ const DashboardPage = () => {
                   <div
                     key={event.id}
                     className="status-item event-item"
-                    onClick={() => handleEventClick(event.id)}
+                    onClick={() => handleEventClick(event)}
                   >
                     <div className={`status-icon ${event.entity?.affiliation === 'hostile' ? 'danger' : event.entity?.affiliation === 'friend' ? 'success' : 'warning'}`}>
                       <FiMapPin />
@@ -357,11 +412,12 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        <div className="dashboard-footer">
+        <div className="dashboard-footer"></div>
           <p>DELTA MONITOR v1.0 — Last refreshed: {formatDate(new Date().toISOString())}</p>
         </div>
+
+        {selectedEvent && <EventDetailsModal event={selectedEvent} />}
       </div>
-    </div>
   );
 };
 

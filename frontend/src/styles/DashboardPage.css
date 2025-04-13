@@ -61,6 +61,9 @@
   align-items: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex: 1;
+  min-width: 200px;
+  max-width: calc(25% - 16px);
 }
 
 .stat-card:hover {
@@ -92,6 +95,14 @@
 .users-icon {
   background-color: rgba(33, 150, 243, 0.2);
   color: #2196f3;
+}
+
+.destroyed-icon {
+  background-color: #e74c3c;
+}
+
+.disabled-icon {
+  background-color: #f39c12;
 }
 
 .stat-details h3 {
@@ -435,6 +446,78 @@
   background-color: #6b8ff7;
   transform: scale(1.05);
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.event-details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.event-details-content {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 500px;
+  max-width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.event-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.event-details-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #666;
+}
+
+.event-details-body {
+  padding: 20px;
+}
+
+.event-details-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.view-on-map-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.view-on-map-button:hover {
+  background-color: #2980b9;
 }
 
 @media (max-width: 768px) {
