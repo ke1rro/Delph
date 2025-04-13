@@ -1,5 +1,5 @@
 """
-History data  service entry point.
+History data service API routers.
 """
 
 from fastapi import APIRouter, Depends
@@ -32,13 +32,6 @@ async def get_data(
     """
 
     return await db.get_all_events()
-
-
-# @router.post("")
-@requires(["authenticated"])
-# async def post_message(request: Request, event: Event, db=Depends(get_history_repository)):
-#     await db.save_event(event)
-#     return await db.get_event_by_id(event.id)
 
 
 @router.get("/{id}")
