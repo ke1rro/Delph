@@ -1,0 +1,8 @@
+fastapi==0.115.8
+uvicorn==0.34.0
+pydantic==2.10.6
+pydantic-settings==2.8.1
+motor==3.7.0
+redis==5.2.1
+PyJWT[crypto]==2.10.1
+bcrypt==4.3.0

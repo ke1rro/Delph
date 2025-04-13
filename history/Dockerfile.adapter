@@ -1,0 +1,15 @@
+FROM python:3.12
+
+WORKDIR /history
+
+COPY history/requirements.txt .
+COPY history/requirements.adapter.txt .
+
+RUN pip install --upgrade setuptools
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.adapter.txt
+
+COPY history/. .
+COPY schemas/. ./schemas/.
+
+CMD [ "python", "adapter.py" ]

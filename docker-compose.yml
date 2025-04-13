@@ -4,11 +4,57 @@
 # 8001 - frontend service
 # 8002 - core service
 # 8003 - bridge service
+# 8004 - history service
 
+# 27017 - history-db
 # 6380 - redis
 # 5433 - core db
 
 services:
+
+  history-db:
+    image: mongo:latest
+    container_name: history-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/history-db:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017 --quiet
+      interval: 25s
+      retries: 1
+      start_period: 5s
+
+  history:
+    build:
+      dockerfile: history/Dockerfile.service
+    container_name: history
+    env_file:
+      - .env
+
+    ports:
+      - "8004:80"
+    depends_on:
+      history-db:
+        condition: service_healthy
+
+  history-adapter:
+    build:
+      dockerfile: history/Dockerfile.adapter
+    container_name: history-adapter
+    env_file:
+      - .env
+    depends_on:
+      history-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
   redis:
     build: redis
     container_name: redis
@@ -38,6 +84,8 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
+    ports:
+      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
       KAFKA_ZOOKEEPER_CONNECT: ${KAFKA_ZOOKEEPER_CONNECT}
@@ -87,7 +135,6 @@ services:
     build: frontend
     ports:
       - "8001:80"
-
   bridge:
     build:
       dockerfile: bridge/Dockerfile
