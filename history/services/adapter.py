@@ -4,11 +4,11 @@ Services for publishing and subscribing to the message queue.
 
 import uuid
 
+from schemas.message import Message
+
 from models.event import Event
 from repositories.history import HistoryRepository
 from repositories.queue import QueueSubscription
-
-from schemas.message import Message
 
 
 class AdapterService:

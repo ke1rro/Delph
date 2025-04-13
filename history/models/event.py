@@ -3,7 +3,6 @@ Event schema.
 """
 
 from pydantic import BaseModel, Field
-
 from schemas.message import Message
 
 
