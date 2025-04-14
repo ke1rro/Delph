@@ -2,16 +2,16 @@
 History data service API routers.
 """
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.requests import Request
 from models.event import Event
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from repositories.history import HistoryRepository
 from starlette.authentication import requires
 
 from api.dependencies import get_history_repository
 
-router = APIRouter(tags=["test"])
+router = APIRouter(tags=["history"])
 
 
 class CreateEvent(BaseModel):
@@ -22,35 +22,30 @@ class CreateEvent(BaseModel):
     event: Event
 
 
-@router.get("/")
+@router.get("/events/aggregated-by-message/")
 @requires(["authenticated"])
-async def get_data(
-    request: Request, db: HistoryRepository = Depends(get_history_repository)
+async def get_events_aggregated_by_message(
+    request: Request,
+    start_timestamp: int,
+    end_timestamp: int,
+    db: HistoryRepository = Depends(get_history_repository),
 ):
     """
-    Get history data.
-    """
+    Get events within a time range, aggregated by message.id.
+    Returns only the latest version of each message in the specified time range.
 
-    return await db.get_all_events()
+    Args:
+        start_timestamp: Start time as Unix timestamp (e.g., for July 1, 2025)
+        end_timestamp: End time as Unix timestamp (e.g., for July 3, 2025)
 
-
-@router.get("/{id}")
-@requires(["authenticated"])
-async def get_active_event_by_message_id(
-    request: Request, id: str, timestamp: int, db=Depends(get_history_repository)
-):
+    Returns:
+        List of latest events for each unique message.id in the time range
     """
-    Get active event by message_id
-    """
-    return await db.get_active_event_by_message_id(id, timestamp)
-
-
-@router.get("/active/")
-@requires(["authenticated"])
-async def get_active_events(
-    request: Request, timestamp: int, db=Depends(get_history_repository)
-):
-    """
-    Get all active events
-    """
-    return await db.get_active_events(timestamp)
+    try:
+        events = await db.get_events_aggregated_by_message_id(
+            start_timestamp, end_timestamp
+        )
+        return events
+    except Exception as e:
+        print(f"Error in get_events_aggregated_by_message: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

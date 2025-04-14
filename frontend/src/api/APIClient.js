@@ -1,7 +1,7 @@
 import axios from "axios";
 import AuthContext from "./AuthContext";
 import BridgeContext from "./BridgeContext";
-
+import HistoryContext from "./HistoryContext";
 
 class APIClient {
     constructor () {
@@ -14,6 +14,7 @@ class APIClient {
         });
         this.auth = new AuthContext(this.client, "/core/auth");
         this.bridge = new BridgeContext(this.client, "/bridge");
+        this.history = new HistoryContext(this.client, "/history");
     }
 }
 

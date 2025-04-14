@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 import {
   FiBox,
   FiClock,
@@ -12,7 +12,6 @@ import {
   FiPlusCircle
 } from "react-icons/fi";
 import "../styles/Sidebar.css";
-import TimeFilter from "./TimeFilter";
 
 const icons = [
   { Icon: FiBox, alt: "Stack" },
@@ -25,9 +24,13 @@ const icons = [
   { Icon: FiFilter, alt: "Funnel" }
 ];
 
-const IconButton = ({ Icon, title, onClick, className }) => {
+const IconButton = ({ Icon, title, onClick, className, isActive }) => {
   return (
-    <button className={`icon-button ${className || ""}`} onClick={onClick} title={title}>
+    <button
+      className={`icon-button ${className || ""} ${isActive ? "active" : ""}`}
+      onClick={onClick}
+      title={title}
+    >
       <Icon className="sidebar-nav-icon" />
     </button>
   );
@@ -37,54 +40,48 @@ IconButton.propTypes = {
   Icon: PropTypes.elementType.isRequired,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func,
-  className: PropTypes.string
+  className: PropTypes.string,
+  isActive: PropTypes.bool
 };
 
-export const Sidebar = ({ className = "", onPlusClick }) => {
-  const [timeFilterOpen, setTimeFilterOpen] = useState(false);
-
+export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick, isFilterActive }) => {
   const handleIconClick = (action) => {
     if (action === "timeFilter") {
-      setTimeFilterOpen(true);
+      if (onTimeFilterClick) onTimeFilterClick();
     } else {
       alert(`${action} clicked`);
     }
   };
 
   return (
-    <>
-      <aside className={`sidebar ${className}`}>
-        <img className="logo" src="logo.webp" alt="Logo" />
-        <nav className="sidebar-nav">
-          {icons.map((icon, index) => (
-            <IconButton
-              key={index}
-              Icon={icon.Icon}
-              title={icon.alt}
-              className={icon.className}
-              onClick={() => handleIconClick(icon.action || icon.alt)}
-            />
-          ))}
-          {/* Add the plus icon separately at the bottom */}
+    <aside className={`sidebar ${className}`}>
+      <img className="logo" src="logo.webp" alt="Logo" />
+      <nav className="sidebar-nav">
+        {icons.map((icon, index) => (
           <IconButton
-            Icon={FiPlusCircle}
-            title="Add Event"
-            className="plus-icon"
-            onClick={onPlusClick}
+            key={index}
+            Icon={icon.Icon}
+            title={icon.alt}
+            className={icon.className}
+            onClick={() => handleIconClick(icon.action || icon.alt)}
+            isActive={icon.action === "timeFilter" && isFilterActive}
           />
-        </nav>
-      </aside>
-
-      {/* Add the TimeFilter component */}
-      <TimeFilter
-        isOpen={timeFilterOpen}
-        onClose={() => setTimeFilterOpen(false)}
-      />
-    </>
+        ))}
+        {/* Add the plus icon separately at the bottom */}
+        <IconButton
+          Icon={FiPlusCircle}
+          title="Add Event"
+          className="plus-icon"
+          onClick={onPlusClick}
+        />
+      </nav>
+    </aside>
   );
 };
 
 Sidebar.propTypes = {
   className: PropTypes.string,
-  onPlusClick: PropTypes.func
+  onPlusClick: PropTypes.func,
+  onTimeFilterClick: PropTypes.func,
+  isFilterActive: PropTypes.bool
 };

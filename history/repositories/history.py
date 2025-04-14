@@ -103,3 +103,64 @@ class HistoryRepository:
         ).to_list()
         # Convert each dictionary to Event model
         return [Event.model_validate(d) for d in data]
+
+    async def get_events_aggregated_by_message_id(
+        self,
+        start_timestamp: int,
+        end_timestamp: int,
+    ) -> list[Event]:
+        """
+        Get events within a time range, aggregated by message.id.
+        Returns only the latest version of each message in the specified time range.
+
+        Args:
+            start_timestamp: Start time as Unix timestamp
+            end_timestamp: End time as Unix timestamp
+
+        Returns:
+            List of latest events for each unique message.id in the time range
+        """
+        try:
+            pipeline = [
+                {
+                    "$match": {
+                        "$or": [
+                            {
+                                "$and": [
+                                    {"created_at": {"$gte": start_timestamp}},
+                                    {"created_at": {"$lte": end_timestamp}},
+                                ]
+                            },
+                            {
+                                "$and": [
+                                    {"outdated_at": {"$gte": start_timestamp}},
+                                    {"outdated_at": {"$lte": end_timestamp}},
+                                ]
+                            },
+                        ]
+                    }
+                },
+                {
+                    "$sort": {
+                        "created_at": -1,
+                        "outdated_at": -1,
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$message.id",
+                        "latest_event": {"$first": "$$ROOT"},
+                    }
+                },
+                {"$replaceRoot": {"newRoot": "$latest_event"}},
+            ]
+
+            data = await self.client.aggregate(pipeline).to_list(length=None)
+            print(f"Found {len(data)} aggregated events")
+
+            events = [Event.model_validate(d) for d in data]
+            return events
+
+        except Exception as e:
+            print(f"Error in aggregation pipeline: {str(e)}")
+            raise

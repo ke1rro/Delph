@@ -209,3 +209,27 @@
   text-align: center;
   margin-top: 20px;
 }
+
+.time-filter-error {
+  background-color: rgba(231, 76, 60, 0.2);
+  border-left: 4px solid #e74c3c;
+  color: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 14px;
+}
+
+.loading-icon {
+  animation: rotate 1.5s linear infinite;
+  margin-right: 6px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
