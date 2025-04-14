@@ -5,52 +5,28 @@ History data service API routers.
 from fastapi import APIRouter, Depends
 from fastapi.requests import Request
 from models.event import Event
-from pydantic import BaseModel, Field
 from repositories.history import HistoryRepository
 from starlette.authentication import requires
 
 from api.dependencies import get_history_repository
 
-router = APIRouter(tags=["test"])
+router = APIRouter(prefix="/filter", tags=["filter"])
 
 
-class CreateEvent(BaseModel):
-    """
-    Create message request schema.
-    """
-
-    event: Event
-
-
-@router.get("/")
+@router.get("/events")
 @requires(["authenticated"])
-async def get_data(
-    request: Request, db: HistoryRepository = Depends(get_history_repository)
-):
+async def filter_events_by_time_stamp(
+    request: Request,
+    start_timestamp: int,
+    end_timestamp: int,
+    db: HistoryRepository = Depends(get_history_repository),
+) -> list[Event,]:
     """
-    Get history data.
-    """
+    Returns the events that match the timestamp
 
-    return await db.get_all_events()
-
-
-@router.get("/{id}")
-@requires(["authenticated"])
-async def get_active_event_by_message_id(
-    request: Request, id: str, timestamp: int, db=Depends(get_history_repository)
-):
+    Args:
+        start_time (int): The start time to match the events
+        end_time (int): The end time to match the evenets
+        db (HistoryRepository, optional): The mongo session
     """
-    Get active event by message_id
-    """
-    return await db.get_active_event_by_message_id(id, timestamp)
-
-
-@router.get("/active/")
-@requires(["authenticated"])
-async def get_active_events(
-    request: Request, timestamp: int, db=Depends(get_history_repository)
-):
-    """
-    Get all active events
-    """
-    return await db.get_active_events(timestamp)
+    return await db.get_events_aggregated_by_message_id(start_timestamp * 1000, end_timestamp * 1000)
