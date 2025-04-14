@@ -71,13 +71,13 @@ def main():
     longitude_delta = 0.01
     speed = 20
     speed_delta = 5
-    user_id = "b567f41e-76dd-4728-a5d9-4df9927dfc8e"
-    password = "qwerty!23Q"
+    user_id = "81ab4d00-dd83-4b42-8301-e82c6bf5372f"
+    password = "StrongPass!2"
 
     client = HttpClient("http://localhost:8000/")
 
     bf = Battlefield(
-        client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(5000000)
+        client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(1000)
     )
 
     for _ in range(10):
