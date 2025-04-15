@@ -431,11 +431,11 @@ const EventSidebar = ({
 
   return (
     <>
-      <div className={`sidebar-container event-sidebar ${isOpen ? "open" : ""} ${isHistoricalMode ? "historical-mode" : ""}`}>
+      <div
+        className={`sidebar-container event-sidebar ${isOpen ? "open" : ""} ${isHistoricalMode ? "historical-mode" : ""}`}
+      >
         <div className="event-sidebar-header">
-          <h2>
-            {headerTitle()}
-          </h2>
+          <h2>{headerTitle()}</h2>
           <button className="close-button" onClick={onClose}>
             <FiX />
           </button>
@@ -476,7 +476,9 @@ const EventSidebar = ({
                 title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
               >
                 <FiCrosshair />{" "}
-                {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
+                {isPickingLocation
+                  ? "Picking Location... (Click on Map)"
+                  : "Pick Location from Map"}
               </button>
             )}
           </div>

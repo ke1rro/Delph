@@ -1,4 +1,5 @@
 .time-filter-sidebar {
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   color: var(--color-white);
@@ -6,6 +7,7 @@
 }
 
 .sidebar-header {
+  font-family: "Inter", sans-serif;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,6 +16,7 @@
 }
 
 .sidebar-header h2 {
+  font-family: "Inter", sans-serif;
   margin: 0;
   display: flex;
   align-items: center;
@@ -24,6 +27,7 @@
 }
 
 .filter-form {
+  font-family: "Inter", sans-serif;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -31,6 +35,7 @@
 }
 
 .time-input-container {
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -39,6 +44,7 @@
 
 .date-input,
 .timestamp-input {
+  font-family: "Inter", sans-serif;
   width: 100%;
   padding: 10px 12px;
   border-radius: 6px;
@@ -111,6 +117,7 @@
 }
 
 .active-filter-indicator {
+  font-family: "Inter", sans-serif;
   background-color: rgb(52 152 219 / 30%);
   padding: 12px 16px;
   display: flex;
@@ -124,17 +131,20 @@
 }
 
 .filter-details {
+  font-family: "Inter", sans-serif;
   flex: 1;
   font-size: 12px;
 }
 
 .filter-details span {
+  font-family: "Inter", sans-serif;
   display: block;
   opacity: 0.8;
   margin-bottom: 2px;
 }
 
 .filter-details strong {
+  font-family: "Inter", sans-serif;
   font-weight: 600;
   font-size: 13px;
 }

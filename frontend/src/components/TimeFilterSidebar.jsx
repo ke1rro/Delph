@@ -11,80 +11,120 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const [activeFilter, setActiveFilter] = useState(null);
+  const [invalidStartFormat, setInvalidStartFormat] = useState(false);
+  const [invalidEndFormat, setInvalidEndFormat] = useState(false);
 
-  // Helper to convert human date to Unix timestamp (seconds)
   const dateToUnixSeconds = (dateString) => {
     if (!dateString) return "";
     return Math.floor(new Date(dateString).getTime() / 1000).toString();
   };
 
-  // Helper to convert Unix timestamp (seconds) to human-readable date
   const unixSecondsToDate = (timestamp) => {
     if (!timestamp) return "";
-    const date = new Date(timestamp * 1000);
-    return date.toISOString().substring(0, 16); // Format as YYYY-MM-DDTHH:MM
+    const tsNum = Number(timestamp);
+    if (isNaN(tsNum) || tsNum < 0 || tsNum > 4102444800) {
+      return "";
+    }
+    try {
+      const date = new Date(tsNum * 1000);
+      if (isNaN(date.getTime())) {
+        return "";
+      }
+      return date.toISOString().substring(0, 16);
+    } catch (e) {
+      console.error("Invalid timestamp:", timestamp);
+      return "";
+    }
   };
 
-  // Handle date input changes
   const handleStartDateChange = (e) => {
     const dateValue = e.target.value;
     setStartTimestamp(dateToUnixSeconds(dateValue));
+    setInvalidStartFormat(false);
   };
 
   const handleEndDateChange = (e) => {
     const dateValue = e.target.value;
     setEndTimestamp(dateToUnixSeconds(dateValue));
+    setInvalidEndFormat(false);
   };
 
-  // Handle timestamp input changes directly
   const handleStartTimestampChange = (e) => {
-    setStartTimestamp(e.target.value);
+    const value = e.target.value;
+    setStartTimestamp(value);
+    if (value && (!/^\d+$/.test(value) || Number(value) < 0)) {
+      setInvalidStartFormat(true);
+    } else {
+      setInvalidStartFormat(false);
+    }
   };
 
   const handleEndTimestampChange = (e) => {
-    setEndTimestamp(e.target.value);
+    const value = e.target.value;
+    setEndTimestamp(value);
+
+    if (value && (!/^\d+$/.test(value) || Number(value) < 0)) {
+      setInvalidEndFormat(true);
+    } else {
+      setInvalidEndFormat(false);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(false);
+
+    if (invalidStartFormat || invalidEndFormat) {
+      setError("Invalid timestamp format. Please enter valid UNIX timestamps (seconds).");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Convert 10-digit (seconds) to 13-digit (milliseconds) timestamps
-      const startMillis = startTimestamp ? parseInt(startTimestamp) * 1000 : null;
-      const endMillis = endTimestamp ? parseInt(endTimestamp) * 1000 : null;
+      let startSeconds = null;
+      let endSeconds = null;
 
-      // Call the API to filter events
+      if (startTimestamp) {
+        if (!/^\d+$/.test(startTimestamp)) {
+          throw new Error("Start timestamp must be a positive number");
+        }
+        startSeconds = parseInt(startTimestamp);
+      }
+
+      if (endTimestamp) {
+        if (!/^\d+$/.test(endTimestamp)) {
+          throw new Error("End timestamp must be a positive number");
+        }
+        endSeconds = parseInt(endTimestamp);
+      }
+
       const filterParams = {
-        start_timestamp: startMillis,
-        end_timestamp: endMillis
+        start_timestamp: startSeconds,
+        end_timestamp: endSeconds
       };
 
       const historicalEvents = await Api.history.filterEvents(filterParams);
 
-      // Notify parent component that filter was applied
       if (onFilterApplied) {
         onFilterApplied(historicalEvents, { start: startTimestamp, end: endTimestamp });
       }
-
-      // Save active filter for display
       setActiveFilter({
-        start: startTimestamp ? new Date(startMillis).toLocaleString() : "earliest",
-        end: endTimestamp ? new Date(endMillis).toLocaleString() : "latest"
+        start: startTimestamp
+          ? new Date(parseInt(startTimestamp) * 1000).toLocaleString()
+          : "earliest",
+        end: endTimestamp ? new Date(parseInt(endTimestamp) * 1000).toLocaleString() : "latest"
       });
 
       setSuccess(true);
 
-      // Clear success message after 3 seconds
       setTimeout(() => {
         setSuccess(false);
       }, 3000);
-
     } catch (error) {
       console.error("Error filtering events:", error);
-      setError("Failed to apply time filter. Please try again.");
+      setError(error.message || "Failed to apply time filter. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +134,9 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
     setStartTimestamp("");
     setEndTimestamp("");
     setActiveFilter(null);
+    setInvalidStartFormat(false);
+    setInvalidEndFormat(false);
+    setError(null);
     if (onFilterApplied) {
       onFilterApplied(null, null);
     }
@@ -138,12 +181,13 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
             />
             <input
               type="text"
-              className="timestamp-input"
+              className={`timestamp-input ${invalidStartFormat ? "invalid-input" : ""}`}
               placeholder="Unix timestamp (seconds)"
               value={startTimestamp}
               onChange={handleStartTimestampChange}
             />
           </div>
+          {invalidStartFormat && <small className="error-text">Invalid timestamp format</small>}
           <small>Enter either date or Unix timestamp (seconds)</small>
         </div>
 
@@ -160,12 +204,13 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
             />
             <input
               type="text"
-              className="timestamp-input"
+              className={`timestamp-input ${invalidEndFormat ? "invalid-input" : ""}`}
               placeholder="Unix timestamp (seconds)"
               value={endTimestamp}
               onChange={handleEndTimestampChange}
             />
           </div>
+          {invalidEndFormat && <small className="error-text">Invalid timestamp format</small>}
           <small>Enter either date or Unix timestamp (seconds)</small>
         </div>
 
@@ -185,7 +230,11 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
           <button type="button" className="clear-button" onClick={clearFilters}>
             Clear
           </button>
-          <button type="submit" className="submit-button" disabled={isLoading}>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isLoading || invalidStartFormat || invalidEndFormat}
+          >
             {isLoading ? (
               "Filtering..."
             ) : (

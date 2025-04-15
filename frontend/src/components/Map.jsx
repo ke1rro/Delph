@@ -30,27 +30,19 @@ async function createEventSVG(event) {
   return new ms.Symbol(sidc, { size: 35 }).asSVG();
 }
 
-// New component to handle map centering
 const MapController = ({ events, selectedEventId, setSelectedEventId, setSidebarOpen }) => {
   const map = useMap();
   const location = useLocation();
   const initialCenterRef = useRef(false);
 
   useEffect(() => {
-    // Parse eventId from URL if present
     const searchParams = new URLSearchParams(location.search);
     const eventId = searchParams.get("eventId");
 
     if (eventId && events[eventId] && !initialCenterRef.current) {
       const event = events[eventId];
-      // Center map on event coordinates
       if (event.location && event.location.latitude && event.location.longitude) {
-        map.setView(
-          [event.location.latitude, event.location.longitude],
-          15, // Zoom level
-          { animate: true }
-        );
-        // Select the event and open sidebar
+        map.setView([event.location.latitude, event.location.longitude], 15, { animate: true });
         setSelectedEventId(eventId);
         setSidebarOpen(true);
         initialCenterRef.current = true;
@@ -62,29 +54,27 @@ const MapController = ({ events, selectedEventId, setSelectedEventId, setSidebar
 };
 
 const Map = () => {
-  const [markers, setMarkers] = useState([]); // Live markers
+  const [markers, setMarkers] = useState([]);
   const [events, setEvents] = useState({});
-  const [historicalMarkers, setHistoricalMarkers] = useState([]); // Historical markers
+  const [historicalMarkers, setHistoricalMarkers] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // For editing existing event
-  const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false); // For adding new event
-  const [timeFilterSidebarOpen, setTimeFilterSidebarOpen] = useState(false); // For time filtering
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false);
+  const [timeFilterSidebarOpen, setTimeFilterSidebarOpen] = useState(false);
   const [storage] = useState(() => new EventStorage());
   const navigate = useNavigate();
   const location = useLocation();
   const [isPickingLocationMode, setIsPickingLocationMode] = useState(false);
   const [pickedCoords, setPickedCoords] = useState(null);
-  const [isHistoricalMode, setIsHistoricalMode] = useState(false); // Toggle for historical vs live
-  const [filterParams, setFilterParams] = useState(null); // Store current filter params
+  const [isHistoricalMode, setIsHistoricalMode] = useState(false);
+  const [filterParams, setFilterParams] = useState(null);
 
-  // Helper function to update marker classes based on selection
   const updateMarkerSelectionClass = (currentMarkers, newSelectedEventId) => {
     return currentMarkers.map((marker) => {
       const isSelected = marker.id === newSelectedEventId;
       const newClassName = `custom-icon ${isSelected ? "selected" : ""}`;
-      const newHtml = `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ""}</div>`; // Extract existing SVG
+      const newHtml = `<div class="event-icon ${isSelected ? "selected" : ""}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ""}</div>`;
 
-      // Avoid creating a new icon if class and html haven't changed
       if (marker.icon.options.className === newClassName && marker.icon.options.html === newHtml) {
         return marker;
       }
@@ -258,8 +248,6 @@ const Map = () => {
 
     return () => {};
   }, []);
-
-  // Create markers from historical events
   const createHistoricalMarkers = async (historicalEvents) => {
     if (!historicalEvents || !Array.isArray(historicalEvents) || historicalEvents.length === 0) {
       setHistoricalMarkers([]);
@@ -270,7 +258,6 @@ const Map = () => {
       const newMarkers = [];
 
       for (const event of historicalEvents) {
-        // Skip events without proper location data
         if (!event?.location?.latitude || !event?.location?.longitude) {
           console.log("Skipping historical event without location:", event);
           continue;
@@ -278,7 +265,7 @@ const Map = () => {
 
         const svgString = await createEventSVG(event);
         const icon = L.divIcon({
-          className: 'custom-icon historical',
+          className: "custom-icon historical",
           html: `<div class="event-icon historical" style="width:40px;height:40px;">${svgString}</div>`,
           iconSize: [40, 40]
         });
@@ -302,11 +289,11 @@ const Map = () => {
   };
 
   const handleMarkerClick = (eventId, isHistorical = false) => {
-    console.log(`${isHistorical ? 'Historical' : 'Live'} marker clicked:`, eventId);
+    console.log(`${isHistorical ? "Historical" : "Live"} marker clicked:`, eventId);
 
     let eventData;
     if (isHistorical) {
-      eventData = historicalMarkers.find(marker => marker.id === eventId)?.event;
+      eventData = historicalMarkers.find((marker) => marker.id === eventId)?.event;
     } else {
       eventData = events[eventId];
     }
@@ -314,91 +301,72 @@ const Map = () => {
     console.log("Event data:", eventData);
 
     setSelectedEventId(eventId);
-    setSidebarOpen(true); // Open sidebar for editing
-    setAddEventSidebarOpen(false); // Ensure add mode is off
+    setSidebarOpen(true);
+    setAddEventSidebarOpen(false);
 
     if (isHistorical) {
-      // For historical markers, we need to update the selection class differently
       setHistoricalMarkers((prevMarkers) => {
-        return prevMarkers.map(marker => ({
+        return prevMarkers.map((marker) => ({
           ...marker,
           icon: L.divIcon({
-            className: `custom-icon historical ${marker.id === eventId ? 'selected' : ''}`,
-            html: `<div class="event-icon historical ${marker.id === eventId ? 'selected' : ''}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ""}</div>`,
+            className: `custom-icon historical ${marker.id === eventId ? "selected" : ""}`,
+            html: `<div class="event-icon historical ${marker.id === eventId ? "selected" : ""}" style="width:40px;height:40px;">${marker.icon.options.html.match(/<svg.*<\/svg>/s)?.[0] || ""}</div>`,
             iconSize: [40, 40]
           })
         }));
       });
     } else {
-      // For live markers, use the existing function
       setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, eventId));
     }
 
-    handleTogglePickLocation(false); // Ensure picking mode is off
+    handleTogglePickLocation(false);
   };
 
-  // Handler for the plus button click
   const handleAddEventClick = () => {
-    setSelectedEventId(null); // Deselect any selected event
-    setSidebarOpen(false); // Ensure edit mode is off
-    setAddEventSidebarOpen(true); // Open sidebar for adding
+    setSelectedEventId(null);
+    setSidebarOpen(false);
+    setAddEventSidebarOpen(true);
     setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
-    handleTogglePickLocation(false); // Ensure picking mode is off
+    handleTogglePickLocation(false);
   };
 
-  // Handler for the clock button click
   const handleTimeFilterClick = () => {
     setTimeFilterSidebarOpen(true);
   };
-
-  // Handle closing the time filter sidebar
   const handleCloseTimeFilterSidebar = () => {
     setTimeFilterSidebarOpen(false);
   };
 
-  // Handle applying time filter
   const handleFilterApplied = (historicalEvents, filterParams) => {
     if (!historicalEvents) {
-      // Clear filters and return to live mode
       setHistoricalMarkers([]);
       setIsHistoricalMode(false);
       setFilterParams(null);
       return;
     }
-
-    // Store filter parameters for display
     setFilterParams(filterParams);
-
-    // Switch to historical mode
     setIsHistoricalMode(true);
-
-    // Create markers for historical events
     createHistoricalMarkers(historicalEvents);
 
     console.log("Time filter applied:", filterParams);
   };
 
-  // Combined close handler
   const handleCloseSidebar = () => {
     setSidebarOpen(false);
     setAddEventSidebarOpen(false);
     setSelectedEventId(null);
-    handleTogglePickLocation(false); // Turn off picking mode when closing
-    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
+    handleTogglePickLocation(false);
+    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null));
   };
 
   const handleEventUpdate = (updatedEvent) => {
     console.log("Event updated from sidebar, pushing to storage:", updatedEvent);
     storage.push(updatedEvent);
-    // No need to close sidebar here, EventSidebar calls onClose after successful submit
   };
 
   const handleEventSubmit = (newEventData) => {
     console.log("New event submitted from sidebar:", newEventData);
-    // Assuming the structure from EventSidebar's handleSubmit is correct
-    // We might need to generate ID and timestamp here if not done in sidebar/API
     storage.push(newEventData);
-    // No need to close sidebar here, EventSidebar calls onClose after successful submit
   };
 
   const handleTogglePickLocation = (isPicking) => {
@@ -413,7 +381,7 @@ const Map = () => {
   const handleLocationPicked = (coords) => {
     console.log("Location picked:", coords);
     setPickedCoords(coords);
-    setIsPickingLocationMode(false); // Turn off picking mode automatically after picking
+    setIsPickingLocationMode(false);
   };
 
   const MapClickHandler = () => {
@@ -422,7 +390,6 @@ const Map = () => {
         if (isPickingLocationMode) {
           handleLocationPicked({ lat: e.latlng.lat, lng: e.latlng.lng });
         } else {
-          // Close sidebar only if clicking outside a marker when sidebar is open
           if (sidebarOpen || addEventSidebarOpen) {
             handleCloseSidebar();
           }
@@ -445,14 +412,12 @@ const Map = () => {
     return null;
   };
 
-  // Determine if the sidebar should be open (either adding or editing)
   const isSidebarEffectivelyOpen = sidebarOpen || addEventSidebarOpen;
-
-  // Determine which event to pass (null if adding)
-  const eventForSidebar = addEventSidebarOpen ? null :
-    isHistoricalMode && selectedEventId ?
-      historicalMarkers.find(marker => marker.id === selectedEventId)?.event :
-      events[selectedEventId];
+  const eventForSidebar = addEventSidebarOpen
+    ? null
+    : isHistoricalMode && selectedEventId
+      ? historicalMarkers.find((marker) => marker.id === selectedEventId)?.event
+      : events[selectedEventId];
 
   // Toggle back to live mode
   const handleToggleLiveMode = () => {
@@ -462,10 +427,7 @@ const Map = () => {
   };
 
   return (
-    <PageLayout
-      onPlusClick={handleAddEventClick}
-      onTimeFilterClick={handleTimeFilterClick}
-    >
+    <PageLayout onPlusClick={handleAddEventClick} onTimeFilterClick={handleTimeFilterClick}>
       <div className="map-container">
         {isHistoricalMode && (
           <div className="historical-mode-banner">
@@ -474,9 +436,13 @@ const Map = () => {
               <span>Viewing historical events</span>
               {filterParams && (
                 <span className="filter-details">
-                  {filterParams.start ? new Date(parseInt(filterParams.start) * 1000).toLocaleString() : "earliest"}
+                  {filterParams.start
+                    ? new Date(parseInt(filterParams.start) * 1000).toLocaleString()
+                    : "earliest"}
                   {" to "}
-                  {filterParams.end ? new Date(parseInt(filterParams.end) * 1000).toLocaleString() : "latest"}
+                  {filterParams.end
+                    ? new Date(parseInt(filterParams.end) * 1000).toLocaleString()
+                    : "latest"}
                 </span>
               )}
             </div>
@@ -486,11 +452,7 @@ const Map = () => {
           </div>
         )}
 
-        <MapContainer
-          center={[0, 0]}
-          zoom={2}
-          style={{ height: "100vh", width: "100%" }}
-        >
+        <MapContainer center={[0, 0]} zoom={2} style={{ height: "100vh", width: "100%" }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -504,35 +466,33 @@ const Map = () => {
           />
 
           {/* Render either live or historical markers based on mode */}
-          {!isHistoricalMode ? (
-            markers.map((marker) => (
-              <Marker
-                key={marker.id}
-                position={marker.position}
-                icon={marker.icon}
-                eventHandlers={{
-                  click: (e) => {
-                    e.originalEvent.stopPropagation();
-                    handleMarkerClick(marker.id, false);
-                  }
-                }}
-              />
-            ))
-          ) : (
-            historicalMarkers.map((marker) => (
-              <Marker
-                key={`historical-${marker.id}`}
-                position={marker.position}
-                icon={marker.icon}
-                eventHandlers={{
-                  click: (e) => {
-                    e.originalEvent.stopPropagation();
-                    handleMarkerClick(marker.id, true);
-                  }
-                }}
-              />
-            ))
-          )}
+          {!isHistoricalMode
+            ? markers.map((marker) => (
+                <Marker
+                  key={marker.id}
+                  position={marker.position}
+                  icon={marker.icon}
+                  eventHandlers={{
+                    click: (e) => {
+                      e.originalEvent.stopPropagation();
+                      handleMarkerClick(marker.id, false);
+                    }
+                  }}
+                />
+              ))
+            : historicalMarkers.map((marker) => (
+                <Marker
+                  key={`historical-${marker.id}`}
+                  position={marker.position}
+                  icon={marker.icon}
+                  eventHandlers={{
+                    click: (e) => {
+                      e.originalEvent.stopPropagation();
+                      handleMarkerClick(marker.id, true);
+                    }
+                  }}
+                />
+              ))}
         </MapContainer>
 
         <EventSidebar
@@ -544,7 +504,7 @@ const Map = () => {
           onTogglePickLocation={handleTogglePickLocation}
           pickedLocation={pickedCoords}
           isPickingLocation={isPickingLocationMode}
-          isHistoricalMode={isHistoricalMode} // Pass mode to disable editing for historical events
+          isHistoricalMode={isHistoricalMode}
         />
 
         <TimeFilterSidebar

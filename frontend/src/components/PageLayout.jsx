@@ -7,10 +7,7 @@ const PageLayout = ({ children, onPlusClick, onTimeFilterClick }) => {
   return (
     <div className="page-layout">
       {/* Pass onTimeFilterClick down to Sidebar */}
-      <Sidebar
-        onPlusClick={onPlusClick}
-        onTimeFilterClick={onTimeFilterClick}
-      />
+      <Sidebar onPlusClick={onPlusClick} onTimeFilterClick={onTimeFilterClick} />
       <div className="main-content">
         <Navbar />
         <div className="content">{children}</div>
