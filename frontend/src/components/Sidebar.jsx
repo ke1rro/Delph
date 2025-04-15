@@ -1,26 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {
-  FiBox,
-  FiClock,
-  FiGlobe,
-  FiCamera,
-  FiImage,
-  FiAlertTriangle,
-  FiList,
-  FiFilter,
-  FiPlusCircle
-} from "react-icons/fi";
+import { FiClock, FiFilter, FiPlusCircle } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
 const icons = [
-  { Icon: FiBox, alt: "Stack", id: "stack" },
   { Icon: FiClock, alt: "Time Filter", id: "timeFilter" },
-  { Icon: FiGlobe, alt: "Globe", id: "globe" },
-  { Icon: FiCamera, alt: "Security Camera", id: "camera" },
-  { Icon: FiImage, alt: "Image", id: "image" },
-  { Icon: FiAlertTriangle, alt: "Warning", id: "warning" },
-  { Icon: FiList, alt: "List dashes", id: "list" },
   { Icon: FiFilter, alt: "Funnel", id: "funnel" }
 ];
 

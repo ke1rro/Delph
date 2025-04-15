@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiMap, FiUser, FiMessageSquare, FiHome } from "react-icons/fi";
+import { FiMap, FiUser, FiHome } from "react-icons/fi";
 import "../styles/Navbar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -57,7 +57,6 @@ export const Navbar = ({ className = "" }) => {
           onClick={() => navigate("/profile")}
           isActive={currentPath === "/profile"}
         />
-        <IconButton Icon={FiMessageSquare} title="Chat" onClick={() => alert("Chat clicked")} />
       </div>
     </nav>
   );
