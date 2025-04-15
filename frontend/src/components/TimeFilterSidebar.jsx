@@ -1,8 +1,18 @@
-import React, { useState } from "react";
-import { FiX, FiClock, FiCalendar, FiFilter, FiCheck, FiAlertTriangle } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
+import {
+  FiX,
+  FiClock,
+  FiCalendar,
+  FiFilter,
+  FiCheck,
+  FiAlertTriangle,
+  FiTag,
+  FiActivity
+} from "react-icons/fi";
 import "../styles/TimeFilterSidebar.css";
 import "../styles/SidebarStyles.css";
 import Api from "../Api";
+import SidcDataService from "../utils/SidcDataService";
 
 const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
   const [startTimestamp, setStartTimestamp] = useState("");
@@ -13,6 +23,42 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
   const [activeFilter, setActiveFilter] = useState(null);
   const [invalidStartFormat, setInvalidStartFormat] = useState(false);
   const [invalidEndFormat, setInvalidEndFormat] = useState(false);
+
+  // New state for entity and status filters
+  const [entityTypes, setEntityTypes] = useState([]);
+  const [selectedEntities, setSelectedEntities] = useState([]);
+  const [statuses, setStatuses] = useState([
+    { id: "active", label: "Active" },
+    { id: "destroyed", label: "Destroyed" },
+    { id: "disabled", label: "Disabled" },
+    { id: "unknown", label: "Unknown" }
+  ]);
+  const [selectedStatuses, setSelectedStatuses] = useState([]);
+  const [loadingEntityData, setLoadingEntityData] = useState(true);
+
+  useEffect(() => {
+    const fetchSidcData = async () => {
+      setLoadingEntityData(true);
+      try {
+        const sidcDataService = SidcDataService.getInstance();
+        const data = await sidcDataService.getData();
+        setEntityTypes([
+          { id: "space", label: "Space", prefix: "space:" },
+          { id: "air", label: "Air", prefix: "air:" },
+          { id: "ground", label: "Ground", prefix: "ground:" },
+          { id: "water", label: "Water", prefix: "water:" },
+          { id: "subsurface", label: "Subsurface", prefix: "subsurface:" }
+        ]);
+      } catch (error) {
+        console.error("Error fetching SIDC data:", error);
+        setError("Failed to load entity types");
+      } finally {
+        setLoadingEntityData(false);
+      }
+    };
+
+    fetchSidcData();
+  }, []);
 
   const dateToUnixSeconds = (dateString) => {
     if (!dateString) return "";
@@ -70,6 +116,26 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
     }
   };
 
+  const handleEntityChange = (entityId) => {
+    setSelectedEntities((prev) => {
+      if (prev.includes(entityId)) {
+        return prev.filter((id) => id !== entityId);
+      } else {
+        return [...prev, entityId];
+      }
+    });
+  };
+
+  const handleStatusChange = (statusId) => {
+    setSelectedStatuses((prev) => {
+      if (prev.includes(statusId)) {
+        return prev.filter((id) => id !== statusId);
+      } else {
+        return [...prev, statusId];
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -105,16 +171,43 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
         end_timestamp: endSeconds
       };
 
+      // Add entity prefixes for filtering if selected
+      if (selectedEntities.length > 0) {
+        filterParams.entities = selectedEntities.map((id) => {
+          const entity = entityTypes.find((e) => e.id === id);
+          return entity ? entity.prefix : id;
+        });
+      }
+
+      // Add status filters if selected
+      if (selectedStatuses.length > 0) {
+        filterParams.statuses = selectedStatuses;
+      }
+
       const historicalEvents = await Api.history.filterEvents(filterParams);
 
       if (onFilterApplied) {
-        onFilterApplied(historicalEvents, { start: startTimestamp, end: endTimestamp });
+        onFilterApplied(historicalEvents, {
+          start: startTimestamp,
+          end: endTimestamp,
+          entities: selectedEntities.length > 0 ? selectedEntities : null,
+          statuses: selectedStatuses.length > 0 ? selectedStatuses : null
+        });
       }
+
       setActiveFilter({
         start: startTimestamp
           ? new Date(parseInt(startTimestamp) * 1000).toLocaleString()
           : "earliest",
-        end: endTimestamp ? new Date(parseInt(endTimestamp) * 1000).toLocaleString() : "latest"
+        end: endTimestamp ? new Date(parseInt(endTimestamp) * 1000).toLocaleString() : "latest",
+        entities:
+          selectedEntities.length > 0
+            ? selectedEntities.map((id) => entityTypes.find((e) => e.id === id)?.label || id)
+            : [],
+        statuses:
+          selectedStatuses.length > 0
+            ? selectedStatuses.map((id) => statuses.find((s) => s.id === id)?.label || id)
+            : []
       });
 
       setSuccess(true);
@@ -124,7 +217,7 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
       }, 3000);
     } catch (error) {
       console.error("Error filtering events:", error);
-      setError(error.message || "Failed to apply time filter. Please try again.");
+      setError(error.message || "Failed to apply filters. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -133,6 +226,8 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
   const clearFilters = () => {
     setStartTimestamp("");
     setEndTimestamp("");
+    setSelectedEntities([]);
+    setSelectedStatuses([]);
     setActiveFilter(null);
     setInvalidStartFormat(false);
     setInvalidEndFormat(false);
@@ -147,7 +242,7 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
     <div className={`sidebar-container time-filter-sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
         <h2>
-          <FiClock /> Time Filter
+          <FiFilter /> Filters
         </h2>
         <button className="close-button" onClick={onClose}>
           <FiX />
@@ -160,6 +255,16 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
           <div className="filter-details">
             <span>Filter active:</span>
             <strong>{activeFilter.start}</strong> to <strong>{activeFilter.end}</strong>
+            {activeFilter.entities.length > 0 && (
+              <div className="filter-entity-list">
+                <span>Entities:</span> {activeFilter.entities.join(", ")}
+              </div>
+            )}
+            {activeFilter.statuses.length > 0 && (
+              <div className="filter-status-list">
+                <span>Statuses:</span> {activeFilter.statuses.join(", ")}
+              </div>
+            )}
           </div>
           <button className="clear-filter-btn" onClick={clearFilters}>
             <FiX />
@@ -168,50 +273,98 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
       )}
 
       <form className="filter-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>
-            <FiCalendar /> Start Time
-          </label>
-          <div className="time-input-container">
-            <input
-              type="datetime-local"
-              className="date-input"
-              value={unixSecondsToDate(startTimestamp)}
-              onChange={handleStartDateChange}
-            />
-            <input
-              type="text"
-              className={`timestamp-input ${invalidStartFormat ? "invalid-input" : ""}`}
-              placeholder="Unix timestamp (seconds)"
-              value={startTimestamp}
-              onChange={handleStartTimestampChange}
-            />
+        <div className="filter-section">
+          <h3>
+            <FiClock /> Time Filter
+          </h3>
+
+          <div className="form-group">
+            <label>
+              <FiCalendar /> Start Time
+            </label>
+            <div className="time-input-container">
+              <input
+                type="datetime-local"
+                className="date-input"
+                value={unixSecondsToDate(startTimestamp)}
+                onChange={handleStartDateChange}
+              />
+              <input
+                type="text"
+                className={`timestamp-input ${invalidStartFormat ? "invalid-input" : ""}`}
+                placeholder="Unix timestamp (seconds)"
+                value={startTimestamp}
+                onChange={handleStartTimestampChange}
+              />
+            </div>
+            {invalidStartFormat && <small className="error-text">Invalid timestamp format</small>}
+            <small>Enter either date or Unix timestamp (seconds)</small>
           </div>
-          {invalidStartFormat && <small className="error-text">Invalid timestamp format</small>}
-          <small>Enter either date or Unix timestamp (seconds)</small>
+
+          <div className="form-group">
+            <label>
+              <FiCalendar /> End Time
+            </label>
+            <div className="time-input-container">
+              <input
+                type="datetime-local"
+                className="date-input"
+                value={unixSecondsToDate(endTimestamp)}
+                onChange={handleEndDateChange}
+              />
+              <input
+                type="text"
+                className={`timestamp-input ${invalidEndFormat ? "invalid-input" : ""}`}
+                placeholder="Unix timestamp (seconds)"
+                value={endTimestamp}
+                onChange={handleEndTimestampChange}
+              />
+            </div>
+            {invalidEndFormat && <small className="error-text">Invalid timestamp format</small>}
+            <small>Enter either date or Unix timestamp (seconds)</small>
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>
-            <FiCalendar /> End Time
-          </label>
-          <div className="time-input-container">
-            <input
-              type="datetime-local"
-              className="date-input"
-              value={unixSecondsToDate(endTimestamp)}
-              onChange={handleEndDateChange}
-            />
-            <input
-              type="text"
-              className={`timestamp-input ${invalidEndFormat ? "invalid-input" : ""}`}
-              placeholder="Unix timestamp (seconds)"
-              value={endTimestamp}
-              onChange={handleEndTimestampChange}
-            />
+        <div className="filter-section">
+          <h3>
+            <FiTag /> Entity Filter
+          </h3>
+          {loadingEntityData ? (
+            <div className="loading-entities">Loading entity types...</div>
+          ) : (
+            <div className="entity-checkbox-container">
+              {entityTypes.map((entity) => (
+                <div key={entity.id} className="filter-checkbox">
+                  <input
+                    type="checkbox"
+                    id={`entity-${entity.id}`}
+                    checked={selectedEntities.includes(entity.id)}
+                    onChange={() => handleEntityChange(entity.id)}
+                  />
+                  <label htmlFor={`entity-${entity.id}`}>{entity.label}</label>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="filter-section">
+          <h3>
+            <FiActivity /> Status Filter
+          </h3>
+          <div className="status-checkbox-container">
+            {statuses.map((status) => (
+              <div key={status.id} className="filter-checkbox">
+                <input
+                  type="checkbox"
+                  id={`status-${status.id}`}
+                  checked={selectedStatuses.includes(status.id)}
+                  onChange={() => handleStatusChange(status.id)}
+                />
+                <label htmlFor={`status-${status.id}`}>{status.label}</label>
+              </div>
+            ))}
           </div>
-          {invalidEndFormat && <small className="error-text">Invalid timestamp format</small>}
-          <small>Enter either date or Unix timestamp (seconds)</small>
         </div>
 
         {error && (
@@ -239,7 +392,7 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
               "Filtering..."
             ) : (
               <>
-                <FiFilter /> Apply Filter
+                <FiFilter /> Apply Filters
               </>
             )}
           </button>

@@ -163,3 +163,76 @@
 .clear-filter-btn:hover {
   color: #e74c3c;
 }
+
+/* New styles for entity filtering */
+.filter-section {
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+  padding-bottom: 16px;
+}
+
+.filter-section h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--color-white);
+  font-weight: 500;
+}
+
+.entity-checkbox-container,
+.status-checkbox-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.filter-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.filter-checkbox label {
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+
+.loading-entities {
+  color: rgb(255 255 255 / 60%);
+  font-size: 14px;
+  font-style: italic;
+  padding: 8px 0;
+}
+
+.filter-entity-list,
+.filter-status-list {
+  display: block;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.filter-entity-list span,
+.filter-status-list span {
+  opacity: 0.8;
+  margin-right: 4px;
+}
+
+.invalid-input {
+  border-color: #e74c3c !important;
+}
+
+.error-text {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 4px;
+}

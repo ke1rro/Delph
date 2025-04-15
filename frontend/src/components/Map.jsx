@@ -348,7 +348,7 @@ const Map = () => {
     setIsHistoricalMode(true);
     createHistoricalMarkers(historicalEvents);
 
-    console.log("Time filter applied:", filterParams);
+    console.log("Filters applied:", filterParams);
   };
 
   const handleCloseSidebar = () => {
@@ -443,6 +443,12 @@ const Map = () => {
                   {filterParams.end
                     ? new Date(parseInt(filterParams.end) * 1000).toLocaleString()
                     : "latest"}
+                  {filterParams.entities && filterParams.entities.length > 0 && (
+                    <span className="entity-filter-badge"> • Entity Filters Active</span>
+                  )}
+                  {filterParams.statuses && filterParams.statuses.length > 0 && (
+                    <span className="status-filter-badge"> • Status Filters Active</span>
+                  )}
                 </span>
               )}
             </div>

@@ -45,9 +45,14 @@ async def filter_events_by_time_stamp(
     Returns:
         A list of message rows that match the filters.
     """
+    if start_timestamp is not None:
+        start_timestamp = start_timestamp * 1000
+    if end_timestamp is not None:
+        end_timestamp = end_timestamp * 1000
+
     return await repo.filter_events(
-        start_timestamp=start_timestamp * 1000,
-        end_timestamp=end_timestamp * 1000,
+        start_timestamp=start_timestamp,
+        end_timestamp=end_timestamp,
         entities=entities,
         statuses=statuses,
         affiliations=affiliations,
