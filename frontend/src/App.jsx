@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProfilePage from "./components/ProfilePage";
 import DashboardPage from "./components/DashboardPage";
 import AboutUs from "./components/AboutUs";
+import Manual from "./components/Manual"; // Import the Manual component
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Route path="/signup" element={<RegistrationPage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/about" element={<AboutUs />} />
+      <Route path="/manual" element={<Manual />} /> {/* Add this line */}
       <Route path="/dashboard" element={<ProtectedRoute element={<DashboardPage />} />} />
       <Route path="/map" element={<ProtectedRoute element={<Map />} />} />
       <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} />} />
