@@ -10,7 +10,7 @@ from repositories.base import Repository
 
 from schemas.message import Message
 
-logger = logging.getLogger("delta")
+logger = logging.getLogger("delph")
 
 
 class QueuePublishRepository(Repository):

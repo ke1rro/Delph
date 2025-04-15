@@ -13,7 +13,7 @@ from services.adapter import AdapterService
 
 from api.dependencies import with_history_repository
 
-logger = logging.getLogger("delta")
+logger = logging.getLogger("delph")
 
 
 @asynccontextmanager
