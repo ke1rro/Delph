@@ -48,8 +48,16 @@ class HistoryContext {
             });
         }
 
-        data = await this.client.get(this.prefix + "/events", params, config);
-        return data.forEach(event => {event.message});
+        try {
+            const response = await this.client.get(this.prefix + "/events", { params }, config);
+            if (response && response.data && Array.isArray(response.data)) {
+                return response.data.map(item => item.message || item);
+            }
+            return [];
+        } catch (error) {
+            console.error("Error filtering events:", error);
+            return [];
+        }
     }
 }
 

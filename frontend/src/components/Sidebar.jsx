@@ -14,15 +14,14 @@ import {
 import "../styles/Sidebar.css";
 
 const icons = [
-  { Icon: FiBox, alt: "Stack" },
-  { Icon: FiClock, alt: "Clock counter" },
-  { Icon: FiGlobe, alt: "Globe" },
-  { Icon: FiCamera, alt: "Security Camera" },
-  { Icon: FiImage, alt: "Image" },
-  { Icon: FiAlertTriangle, alt: "Warning" },
-  { Icon: FiList, alt: "List dashes" },
-  { Icon: FiFilter, alt: "Funnel" }
-  // Removed PlusCircle from icons array to handle it separately
+  { Icon: FiBox, alt: "Stack", id: "stack" },
+  { Icon: FiClock, alt: "Time Filter", id: "timeFilter" },
+  { Icon: FiGlobe, alt: "Globe", id: "globe" },
+  { Icon: FiCamera, alt: "Security Camera", id: "camera" },
+  { Icon: FiImage, alt: "Image", id: "image" },
+  { Icon: FiAlertTriangle, alt: "Warning", id: "warning" },
+  { Icon: FiList, alt: "List dashes", id: "list" },
+  { Icon: FiFilter, alt: "Funnel", id: "funnel" }
 ];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
@@ -40,7 +39,15 @@ IconButton.propTypes = {
   className: PropTypes.string
 };
 
-export const Sidebar = ({ className = "", onPlusClick }) => {
+export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick }) => {
+  const handleIconClick = (icon) => {
+    if (icon.id === "timeFilter" && onTimeFilterClick) {
+      onTimeFilterClick();
+    } else {
+      alert(`${icon.alt} clicked`);
+    }
+  };
+
   return (
     <aside className={`sidebar ${className}`}>
       <img className="logo" src="logo.webp" alt="Logo" />
@@ -51,7 +58,7 @@ export const Sidebar = ({ className = "", onPlusClick }) => {
             Icon={icon.Icon}
             title={icon.alt}
             className={icon.className}
-            onClick={() => alert(`${icon.alt} clicked`)}
+            onClick={() => handleIconClick(icon)}
           />
         ))}
         {/* Add the plus icon separately at the bottom */}
@@ -68,5 +75,6 @@ export const Sidebar = ({ className = "", onPlusClick }) => {
 
 Sidebar.propTypes = {
   className: PropTypes.string,
-  onPlusClick: PropTypes.func
+  onPlusClick: PropTypes.func,
+  onTimeFilterClick: PropTypes.func
 };

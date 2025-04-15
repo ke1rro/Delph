@@ -27,3 +27,83 @@ body {
 .crosshair-cursor {
   cursor: crosshair !important;
 }
+
+.historical-mode-banner {
+  position: fixed;
+  top: 70px;
+  left: 70px;
+  right: 10px;
+  background-color: rgba(52, 152, 219, 0.85);
+  color: white;
+  z-index: 1000;
+  padding: 10px 15px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+}
+
+.historical-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.historical-icon {
+  font-size: 1.2rem;
+}
+
+.filter-details {
+  margin-left: 10px;
+  padding: 3px 8px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-toggle-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.live-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.event-icon.historical {
+  opacity: 0.9;
+  filter: hue-rotate(180deg) saturate(0.8);
+}
+
+.event-icon.historical.selected {
+  stroke: #3498db !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.8)) !important;
+}
+
+.custom-icon.historical.selected {
+  animation: historical-glow 2s infinite;
+}
+
+@keyframes historical-glow {
+  0% {
+    filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.7));
+  }
+  50% {
+    filter: drop-shadow(0 0 10px rgba(52, 152, 219, 0.9));
+  }
+  100% {
+    filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.7));
+  }
+}
