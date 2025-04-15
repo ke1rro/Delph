@@ -46,8 +46,8 @@ async def filter_events_by_time_stamp(
         A list of message rows that match the filters.
     """
     return await repo.filter_events(
-        start_timestamp=start_timestamp,
-        end_timestamp=end_timestamp,
+        start_timestamp=start_timestamp * 1000,
+        end_timestamp=end_timestamp * 1000,
         entities=entities,
         statuses=statuses,
         affiliations=affiliations,
