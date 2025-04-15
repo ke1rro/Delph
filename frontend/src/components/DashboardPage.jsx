@@ -415,7 +415,7 @@ const DashboardPage = () => {
         </div>
 
         <div className="dashboard-footer">
-          <p>DELTA MONITOR v1.0 — Last refreshed: {formatDate(new Date().toISOString())}</p>
+          <p>DELPH MONITOR v1.0 — Last refreshed: {formatDate(new Date().toISOString())}</p>
         </div>
       </div>
     </div>

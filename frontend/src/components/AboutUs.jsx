@@ -8,16 +8,16 @@ const AboutUs = () => {
       <div className="about-us-header">
         <img
           src="/logo.webp" // Assuming the logo is located in the public folder
-          alt="Delta Logo"
+          alt="Delph Logo"
           className="about-us-logo"
         />
-        <h1>About Delta</h1>
+        <h1>About Delph</h1>
       </div>
 
       <section className="about-us-section">
         <h2>Our Mission</h2>
         <p>
-          Delta is a cutting-edge platform designed to provide secure real-time communication,
+          Delph is a cutting-edge platform designed to provide secure real-time communication,
           location tracking, and operational insights. Our goal is to empower teams with the tools
           they need to coordinate effectively and make informed decisions in critical situations.
         </p>
@@ -46,7 +46,7 @@ const AboutUs = () => {
       <section className="about-us-section">
         <h2>Our Vision</h2>
         <p>
-          At Delta, we envision a world where technology bridges the gap between field operations
+          At Delph, we envision a world where technology bridges the gap between field operations
           and command centers, ensuring safety, efficiency, and success in every mission.
         </p>
       </section>

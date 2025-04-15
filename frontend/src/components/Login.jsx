@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div className="component">
       <img className="logo_login" src="logo_login.webp" alt="Delta Logo" />
-      <h1 className="title">DELTA</h1>
+      <h1 className="title">DELPH</h1>
 
       <form className="login-form" onSubmit={handleSubmit}>
         <input

@@ -32,7 +32,7 @@ export const Navbar = ({ className = "" }) => {
   return (
     <nav className={`navbar ${className}`}>
       <div className="navbar-brand">
-        <span className="brand-name">DELTA</span>
+        <span className="brand-name">DELPH</span>
         <span className="separator">/</span>
         <span className="brand-subtitle">MONITOR</span>
         <div className="left-icons">
