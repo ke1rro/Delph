@@ -4,9 +4,9 @@ import uuid
 
 from db.models import User
 from repositories.user_repo import UserRepository
+from utils import hash_password
 
 from schemas.user import UserReg
-from utils.utils import hash_password
 
 
 class UserService:

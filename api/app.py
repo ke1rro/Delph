@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from routers.auth import router as auth_router
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from middleware.jwt_auth import JWTAuthBackend
+from auth.middleware import JWTAuthBackend
 
 
 @asynccontextmanager

@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from starlette.middleware.authentication import AuthenticationMiddleware
 
 from api.router import router
-from middleware.jwt_auth import JWTAuthBackend
+from auth.middleware import JWTAuthBackend
 
 app = FastAPI(root_path="/api/history")
 app.include_router(router)

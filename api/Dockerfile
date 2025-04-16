@@ -11,9 +11,8 @@ RUN chmod 755 .
 
 COPY /shared_config/. ./shared_config/.
 COPY /certificates/. ./certificates/.
-COPY /utils/. ./utils/.
 COPY /cache/. ./cache/.
-COPY /middleware/. ./middleware/.
+COPY /auth/. ./auth/.
 COPY /api/. .
 
 EXPOSE 80

@@ -10,9 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY /schemas/. ./schemas/.
 COPY /shared_config/. ./shared_config/.
 COPY /certificates/. ./certificates/.
-COPY /utils/. ./utils/.
 COPY /cache/. ./cache/.
-COPY /middleware/. ./middleware/.
+COPY /auth/. ./auth/.
 COPY /bridge/. .
 
 EXPOSE 80

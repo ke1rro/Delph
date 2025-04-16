@@ -9,8 +9,8 @@ from datetime import datetime, timezone
 from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
 from starlette.requests import Request
 
+from auth.jwt import decode_jwt
 from cache.redis import redis_client
-from utils.utils import decode_jwt
 
 
 class SimpleUser(SimpleUser):

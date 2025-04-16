@@ -11,10 +11,11 @@ from pydantic import BaseModel
 from repositories.user_repo import UserRepository
 from services.user_service import UserService
 from sqlalchemy.ext.asyncio import AsyncSession
+from utils import validate_password
 
+from auth.jwt import decode_jwt, encode_jwt
 from schemas.token import TokenInfo
 from schemas.user import UserLogin
-from utils.utils import decode_jwt, encode_jwt, validate_password
 
 
 class LogingData(BaseModel):
