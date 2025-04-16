@@ -12,4 +12,6 @@ RUN pip install --no-cache-dir -r requirements.adapter.txt
 COPY /history/. .
 COPY /schemas/. ./schemas/.
 
+VOLUME [ "/config" ]
+
 CMD [ "python", "adapter.py" ]

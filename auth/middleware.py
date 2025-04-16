@@ -3,13 +3,13 @@ This module contains the JWTAuthBackend class, which is an authentication
 backend that validates a JWT token provided either in the Authorization header
 """
 
-import logging
 from datetime import datetime, timezone
 
 from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
 from starlette.requests import Request
 
 from auth.jwt import decode_jwt
+from auth.logger import logger
 from auth.redis import redis_client
 
 
@@ -59,7 +59,7 @@ class JWTAuthBackend(AuthenticationBackend):
         token = request.cookies.get("access_token")
 
         if not token:
-            logging.error("No access token found in cookies")
+            logger.error("No access token found in cookies", extra={"request": request})
             return None
 
         # jwt_payload
@@ -76,16 +76,27 @@ class JWTAuthBackend(AuthenticationBackend):
         if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
             timezone.utc
         ):
-            logging.error("JWT token is expired")
+            logger.error(
+                "JWT token is expired", extra={"request": request, "payload": payload}
+            )
             return None
+
         is_whitelisted = await redis_client.is_user_whitelisted(token)
         if not is_whitelisted:
-            logging.error("JWT token is not in the whitelist")
+            logger.error(
+                "JWT token is not in the whitelist",
+                extra={"request": request, "payload": payload},
+            )
             return None
+
         user_id = payload.get("sub")
         if not user_id:
-            logging.error("User ID is missing in the JWT payload")
+            logger.error(
+                "User ID is missing in the JWT payload",
+                extra={"request": request, "payload": payload},
+            )
             return None
+
         return AuthCredentials(["authenticated"]), SimpleUser(
             username=name, user_id=user_id, user_surname=surname, token=token
         )

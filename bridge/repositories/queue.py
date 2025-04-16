@@ -2,15 +2,12 @@
 Repositories for publishing and subscribing to the message queue.
 """
 
-import logging
-
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
+from logger import logger
 from pydantic import ValidationError
 from repositories.base import Repository
 
 from schemas.message import Message
-
-logger = logging.getLogger("delph")
 
 
 class QueuePublishRepository(Repository):
@@ -26,6 +23,7 @@ class QueuePublishRepository(Repository):
 
     def __init__(self, topic: str, config: dict):
         self.topic = topic
+        self.config = config
         self.producer = AIOKafkaProducer(
             **config,
         )
@@ -35,7 +33,11 @@ class QueuePublishRepository(Repository):
         Connect repository to the message queue.
         """
         await self.producer.start()
-        logger.info("Queue producer connected")
+        logger.info(
+            "Queue producer connected to topic %s",
+            self.topic,
+            extra={"config": self.config},
+        )
 
     async def disconnect(self):
         """
@@ -51,7 +53,6 @@ class QueuePublishRepository(Repository):
         Args:
             message: Message to publish.
         """
-        logger.debug("New message: %s", message)
         await self.producer.send_and_wait(
             self.topic,
             message.model_dump_json().encode(),
@@ -70,6 +71,8 @@ class QueueSubscription(Repository):
     """
 
     def __init__(self, topic: str, config: dict):
+        self.topic = topic
+        self.config = config
         self.consumer = AIOKafkaConsumer(
             topic,
             **config,
@@ -81,7 +84,11 @@ class QueueSubscription(Repository):
         Connect repository to the message queue.
         """
         await self.consumer.start()
-        logger.info("Queue consumer connected")
+        logger.info(
+            "Queue consumer connected to topic %s",
+            self.topic,
+            extra={"config": self.config},
+        )
 
     async def disconnect(self):
         """
@@ -121,13 +128,17 @@ class QueueSubscribeRepository(Repository):
         """
         Connect repository to the message queue.
         """
-        logger.info("Queue subscription connected")
+        logger.info(
+            "Queue subscription created for topic %s",
+            self.topic,
+            extra={"config": self.config},
+        )
 
     async def disconnect(self):
         """
         Disconnect repository from the message queue.
         """
-        logger.info("Queue subscription disconnected")
+        logger.info("Queue subscription removed")
 
     def subscribe(self):
         """

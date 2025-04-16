@@ -41,6 +41,7 @@ services:
       - "8004:80"
     volumes:
       - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     depends_on:
       history-db:
         condition: service_healthy
@@ -51,6 +52,8 @@ services:
     container_name: history-adapter
     env_file:
       - .env
+    volumes:
+      - ./logging.ini:/config/logging.ini
     depends_on:
       history-db:
         condition: service_healthy
@@ -128,6 +131,7 @@ services:
       - "8002:80"
     volumes:
       - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     depends_on:
       core-db:
         condition: service_healthy
@@ -155,6 +159,7 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
     volumes:
       - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     ports:
       - 8003:80
 

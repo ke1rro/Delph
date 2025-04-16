@@ -3,19 +3,20 @@ Adapter main module.
 """
 
 import asyncio
-import logging
+import logging.config
 import signal
 from contextlib import asynccontextmanager
 from functools import partial
 from typing import AsyncGenerator
 
 from config import settings
+from logger import logger
 from repositories.queue import QueueSubscription
 from services.adapter import AdapterService
 
 from api.dependencies import with_history_repository
 
-logger = logging.getLogger("delph")
+logging.config.fileConfig("/config/logging.ini", disable_existing_loggers=False)
 
 
 @asynccontextmanager
