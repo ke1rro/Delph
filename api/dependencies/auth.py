@@ -18,7 +18,7 @@ from schemas.token import TokenInfo
 from schemas.user import UserLogin
 
 
-class LogingData(BaseModel):
+class LoginData(BaseModel):
     """
     Schema for login data.
     """
@@ -44,7 +44,7 @@ async def get_user_service(
 
 
 async def validate_user_auth(
-    login_data: LogingData,
+    login_data: LoginData,
     user_service: UserService = Depends(get_user_service),
 ) -> bool:
     """
