@@ -9,11 +9,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /schemas/. ./schemas/.
 COPY /shared_config/. ./shared_config/.
-COPY /certificates/. ./certificates/.
 COPY /cache/. ./cache/.
 COPY /auth/. ./auth/.
 COPY /bridge/. .
 
 EXPOSE 80
+VOLUME [ "/certificates" ]
 
 CMD [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80" ]

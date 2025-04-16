@@ -39,6 +39,8 @@ services:
 
     ports:
       - "8004:80"
+    volumes:
+      - ./certificates:/certificates
     depends_on:
       history-db:
         condition: service_healthy
@@ -124,6 +126,8 @@ services:
     restart: always
     ports:
       - "8002:80"
+    volumes:
+      - ./certificates:/certificates
     depends_on:
       core-db:
         condition: service_healthy
@@ -149,6 +153,8 @@ services:
     restart: always
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+    volumes:
+      - ./certificates:/certificates
     ports:
       - 8003:80
 
