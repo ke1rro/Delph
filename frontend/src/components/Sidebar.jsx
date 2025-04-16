@@ -31,7 +31,7 @@ export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick }) => {
 
   return (
     <aside className={`sidebar ${className}`}>
-      <img className="logo" src="logo.webp" alt="Logo" />
+      <img className="logo" src="logo.svg" alt="Logo" />
       <nav className="sidebar-nav">
         {icons.map((icon, index) => (
           <IconButton

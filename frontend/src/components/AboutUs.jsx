@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../styles/AboutUs.css"; // Assuming the CSS file is created for styling
+import "../styles/AboutUs.css";
 
 const AboutUs = () => {
   return (
     <div className="about-us-container">
       <div className="about-us-header">
         <img
-          src="/logo.webp" // Assuming the logo is located in the public folder
+          src="/logo.svg"
           alt="Delph Logo"
           className="about-us-logo"
         />
