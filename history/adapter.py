@@ -4,7 +4,9 @@ Adapter main module.
 
 import asyncio
 import logging
+import signal
 from contextlib import asynccontextmanager
+from functools import partial
 from typing import AsyncGenerator
 
 from config import settings
@@ -34,17 +36,43 @@ async def with_queue_repository() -> AsyncGenerator[QueueSubscription, None]:
         yield queue_subscription
 
 
+def handle_shutdown(event: asyncio.Event) -> None:
+    """
+    Handle shutdown signals (SIGINT, SIGTERM) to gracefully shut down the service.
+    """
+    logger.info("Shutdown signal received. Preparing to exit...")
+    event.set()
+
+
 async def main():
     """
     Main function to run the adapter service.
     """
+    shutdown_event = asyncio.Event()
+
+    loop = asyncio.get_running_loop()
+    for sig in (signal.SIGINT, signal.SIGTERM):
+        loop.add_signal_handler(sig, partial(handle_shutdown, shutdown_event))
+
+    logger.info("Adapter service is starting...")
+
     async with (
         with_history_repository() as history_repository,
         with_queue_repository() as queue_repository,
     ):
         service = AdapterService(queue_repository, history_repository)
         logger.info("Adapter service started")
-        await service.process()
+
+        service_task = asyncio.create_task(service.process())
+
+        await shutdown_event.wait()
+        service_task.cancel()
+        try:
+            await service_task
+        except asyncio.CancelledError:
+            logger.info("Adapter task was cancelled.")
+
+    logger.info("Adapter service shut down gracefully.")
 
 
 if __name__ == "__main__":
