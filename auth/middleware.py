@@ -59,15 +59,12 @@ class JWTAuthBackend(AuthenticationBackend):
         token = request.cookies.get("access_token")
 
         if not token:
-            logger.error("No access token found in cookies", extra={"request": request})
-            return None
+            if "authenticated" in request.scope.get("auth_required", []):
+                logger.error(
+                    "No access token found in cookies", extra={"request": request}
+                )
 
-        # jwt_payload
-        # "sub": user.user_id.hex,
-        # "user_id": user.user_id.hex,
-        # "user_name": user.name,
-        # "user_surname": user.surname,
-        # "is_admin": user.is_admin,
+            return None
 
         payload = await decode_jwt(token)
         exp = payload.get("exp")
