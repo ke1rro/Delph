@@ -44,7 +44,6 @@ class QueuePublishRepository(Repository):
         Disconnect repository from the message queue.
         """
         await self.producer.stop()
-        logger.info("Queue producer disconnected")
 
     async def publish(self, message: Message):
         """
@@ -95,7 +94,6 @@ class QueueSubscription(Repository):
         Disconnect repository from the message queue.
         """
         await self.consumer.stop()
-        logger.info("Queue consumer disconnected")
 
     def __aiter__(self):
         return self
@@ -138,11 +136,9 @@ class QueueSubscribeRepository(Repository):
         """
         Disconnect repository from the message queue.
         """
-        logger.info("Queue subscription removed")
 
     def subscribe(self):
         """
         Subscribe to the message queue.
         """
-        logger.info("New subscription to the queue")
         return QueueSubscription(self.topic, self.config)

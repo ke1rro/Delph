@@ -6,6 +6,7 @@ import time
 import uuid
 from typing import AsyncGenerator
 
+from logger import logger
 from models.user import User
 from repositories.queue import QueuePublishRepository, QueueSubscribeRepository
 from services.user import UserService
@@ -72,7 +73,6 @@ class QueuePublishService:
             NoPermissionError: If the user does not have permission to write to the
                 specified location.
         """
-        # TODO: Previous message_id/location mismatch
         if not await self.user_service.check_can_write(
             user, Point(location.longitude, location.latitude)
         ):
@@ -123,6 +123,9 @@ class QueueSubscribeService:
             Message that the user can read.
         """
         async with self.repo.subscribe() as subscription:
+            logger.info(
+                "Subscribing to messages for user %s with ID %s", user.username, user.id
+            )
             async for message in subscription:
                 if await self.user_service.check_can_read(
                     user, Point(message.location.longitude, message.location.latitude)
