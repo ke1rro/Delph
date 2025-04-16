@@ -73,17 +73,18 @@ async def validate_user_auth(
         logger.warning("Invalid user ID: %s", login_data.user_id)
         raise unauthed_exc
 
-    if await validate_password(login_data.password, hashed_password=user.password):
-        logger.info("User ID %s authenticated successfully", login_data.user_id)
-        return UserLogin(
-            user_id=user.user_id.hex,
-            name=user.name,
-            surname=user.surname,
-            is_admin=user.is_admin,
-            password=user.password,
-        )
+    if not await validate_password(login_data.password, hashed_password=user.password):
+        logger.warning("Invalid password for user ID: %s", login_data.user_id)
+        raise unauthed_exc
 
-    logger.warning("Invalid password for user ID: %s", login_data.user_id)
+    logger.info("User ID %s authenticated successfully", login_data.user_id)
+    return UserLogin(
+        user_id=user.user_id.hex,
+        name=user.name,
+        surname=user.surname,
+        is_admin=user.is_admin,
+        password=user.password,
+    )
 
 
 async def create_jwt_token(user: UserLogin, response: Response) -> TokenInfo:
