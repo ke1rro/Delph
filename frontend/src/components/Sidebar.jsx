@@ -1,29 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {
-  FiBox,
-  FiClock,
-  FiGlobe,
-  FiCamera,
-  FiImage,
-  FiAlertTriangle,
-  FiList,
-  FiFilter,
-  FiPlusCircle
-} from "react-icons/fi";
+import { FiFilter, FiPlusCircle } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
-const icons = [
-  { Icon: FiBox, alt: "Stack" },
-  { Icon: FiClock, alt: "Clock counter" },
-  { Icon: FiGlobe, alt: "Globe" },
-  { Icon: FiCamera, alt: "Security Camera" },
-  { Icon: FiImage, alt: "Image" },
-  { Icon: FiAlertTriangle, alt: "Warning" },
-  { Icon: FiList, alt: "List dashes" },
-  { Icon: FiFilter, alt: "Funnel" }
-  // Removed PlusCircle from icons array to handle it separately
-];
+const icons = [{ Icon: FiFilter, alt: "Time Filter", id: "timeFilter" }];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
   return (
@@ -40,7 +20,15 @@ IconButton.propTypes = {
   className: PropTypes.string
 };
 
-export const Sidebar = ({ className = "", onPlusClick }) => {
+export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick }) => {
+  const handleIconClick = (icon) => {
+    if (icon.id === "timeFilter" && onTimeFilterClick) {
+      onTimeFilterClick();
+    } else {
+      alert(`${icon.alt} clicked`);
+    }
+  };
+
   return (
     <aside className={`sidebar ${className}`}>
       <img className="logo" src="logo.webp" alt="Logo" />
@@ -51,7 +39,7 @@ export const Sidebar = ({ className = "", onPlusClick }) => {
             Icon={icon.Icon}
             title={icon.alt}
             className={icon.className}
-            onClick={() => alert(`${icon.alt} clicked`)}
+            onClick={() => handleIconClick(icon)}
           />
         ))}
         {/* Add the plus icon separately at the bottom */}
@@ -68,5 +56,6 @@ export const Sidebar = ({ className = "", onPlusClick }) => {
 
 Sidebar.propTypes = {
   className: PropTypes.string,
-  onPlusClick: PropTypes.func
+  onPlusClick: PropTypes.func,
+  onTimeFilterClick: PropTypes.func
 };

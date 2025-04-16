@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiMap, FiUser, FiMessageSquare, FiHome } from "react-icons/fi";
+import { FiMap, FiUser, FiHome } from "react-icons/fi";
 import "../styles/Navbar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -32,7 +32,7 @@ export const Navbar = ({ className = "" }) => {
   return (
     <nav className={`navbar ${className}`}>
       <div className="navbar-brand">
-        <span className="brand-name">DELTA</span>
+        <span className="brand-name">DELPH</span>
         <span className="separator">/</span>
         <span className="brand-subtitle">MONITOR</span>
         <div className="left-icons">
@@ -57,7 +57,6 @@ export const Navbar = ({ className = "" }) => {
           onClick={() => navigate("/profile")}
           isActive={currentPath === "/profile"}
         />
-        <IconButton Icon={FiMessageSquare} title="Chat" onClick={() => alert("Chat clicked")} />
       </div>
     </nav>
   );

@@ -2,55 +2,58 @@
 History data service API routers.
 """
 
-from fastapi import APIRouter, Depends
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query
 from fastapi.requests import Request
-from models.event import Event
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from repositories.history import HistoryRepository
 from starlette.authentication import requires
 
 from api.dependencies import get_history_repository
+from schemas.message import Message
 
-router = APIRouter(tags=["test"])
+router = APIRouter(tags=["history"])
 
 
-class CreateEvent(BaseModel):
+class MessageRow(BaseModel):
     """
-    Create message request schema.
-    """
-
-    event: Event
-
-
-@router.get("/")
-@requires(["authenticated"])
-async def get_data(
-    request: Request, db: HistoryRepository = Depends(get_history_repository)
-):
-    """
-    Get history data.
+    Message row schema encapsulating the message data.
     """
 
-    return await db.get_all_events()
+    message: Message
 
 
-@router.get("/{id}")
-@requires(["authenticated"])
-async def get_active_event_by_message_id(
-    request: Request, id: str, timestamp: int, db=Depends(get_history_repository)
-):
+@router.get("/events")
+async def filter_events_by_time_stamp(
+    request: Request,
+    start_timestamp: Annotated[int | None, Query()] = None,
+    end_timestamp: Annotated[int | None, Query()] = None,
+    entities: Annotated[list[str] | None, Query()] = None,
+    statuses: Annotated[list[str] | None, Query()] = None,
+    affiliations: Annotated[list[str] | None, Query()] = None,
+    repo: HistoryRepository = Depends(get_history_repository),
+) -> list[MessageRow]:
     """
-    Get active event by message_id
-    """
-    return await db.get_active_event_by_message_id(id, timestamp)
+    Returns the events that match the timestamp
 
+    Args:
+        request: The request object.
+        filters: The filters to apply.
+        repo: The history repository.
 
-@router.get("/active/")
-@requires(["authenticated"])
-async def get_active_events(
-    request: Request, timestamp: int, db=Depends(get_history_repository)
-):
+    Returns:
+        A list of message rows that match the filters.
     """
-    Get all active events
-    """
-    return await db.get_active_events(timestamp)
+    if start_timestamp is not None:
+        start_timestamp = start_timestamp * 1000
+    if end_timestamp is not None:
+        end_timestamp = end_timestamp * 1000
+
+    return await repo.filter_events(
+        start_timestamp=start_timestamp,
+        end_timestamp=end_timestamp,
+        entities=entities,
+        statuses=statuses,
+        affiliations=affiliations,
+    )

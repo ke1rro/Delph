@@ -68,16 +68,12 @@ async def auth_user(
             }
 
     token = await create_jwt_token(user, response)
-    user_data = user.model_dump()
+    user_data = user.model_dump(exclude={"password"})
     user_data["user_id"] = str(user_data["user_id"])
     expire_seconds = int((token.expires - datetime.now(timezone.utc)).total_seconds())
     await redis_client.whitelist_user(
         token=token.access_token, payload=user_data, expire=expire_seconds
     )
-    logging.info(
-        f"User session with token {token.access_token} added to the whitelist."
-    )
-
     return {
         "message": "Successfully logged in",
         "user_id": user.user_id,

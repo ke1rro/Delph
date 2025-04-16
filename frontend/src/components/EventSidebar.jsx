@@ -9,7 +9,8 @@ import {
   FiActivity,
   FiEdit,
   FiZap,
-  FiCrosshair
+  FiCrosshair,
+  FiClock
 } from "react-icons/fi";
 import "../styles/EventSidebar.css";
 import "../styles/SidebarStyles.css";
@@ -25,7 +26,8 @@ const EventSidebar = ({
   onUpdate = null,
   onTogglePickLocation,
   pickedLocation,
-  isPickingLocation
+  isPickingLocation,
+  isHistoricalMode = false // Add this prop
 }) => {
   const [sidcData, setSidcData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -363,7 +365,6 @@ const EventSidebar = ({
     }
   }, [sidcData, eventData.entity]);
 
-  // Effect to update location fields when pickedLocation changes
   useEffect(() => {
     if (pickedLocation) {
       setEventData((prevData) => ({
@@ -384,14 +385,57 @@ const EventSidebar = ({
     onTogglePickLocation(!isPickingLocation);
   };
 
+  const headerTitle = () => {
+    if (isHistoricalMode) {
+      return (
+        <>
+          <FiClock /> Historical Event
+        </>
+      );
+    } else if (isEditMode) {
+      return (
+        <>
+          <FiEdit /> Update Event
+        </>
+      );
+    } else {
+      return (
+        <>
+          <FiCalendar /> Add New Event
+        </>
+      );
+    }
+  };
+
+  const renderActionButtons = () => {
+    if (isHistoricalMode) {
+      return (
+        <div className="historical-notice">
+          <FiClock /> This is a historical event and cannot be edited
+        </div>
+      );
+    } else {
+      return (
+        <button type="submit" className="submit-button" disabled={submitLoading}>
+          {submitLoading
+            ? isEditMode
+              ? "Updating..."
+              : "Creating..."
+            : isEditMode
+              ? "Update Event"
+              : "Create Event"}
+        </button>
+      );
+    }
+  };
+
   return (
     <>
-      <div className={`sidebar-container event-sidebar ${isOpen ? "open" : ""}`}>
+      <div
+        className={`sidebar-container event-sidebar ${isOpen ? "open" : ""} ${isHistoricalMode ? "historical-mode" : ""}`}
+      >
         <div className="event-sidebar-header">
-          <h2>
-            {isEditMode ? <FiEdit /> : <FiCalendar />}
-            {isEditMode ? "Update Event" : "Add New Event"}
-          </h2>
+          <h2>{headerTitle()}</h2>
           <button className="close-button" onClick={onClose}>
             <FiX />
           </button>
@@ -410,7 +454,8 @@ const EventSidebar = ({
                 onChange={handleChange}
                 placeholder="Latitude"
                 required
-                readOnly={isPickingLocation}
+                readOnly={isHistoricalMode || isPickingLocation}
+                disabled={isHistoricalMode || isPickingLocation}
               />
               <input
                 type="text"
@@ -419,18 +464,23 @@ const EventSidebar = ({
                 onChange={handleChange}
                 placeholder="Longitude"
                 required
-                readOnly={isPickingLocation}
+                readOnly={isHistoricalMode || isPickingLocation}
+                disabled={isHistoricalMode || isPickingLocation}
               />
             </div>
-            <button
-              type="button"
-              className={`pick-location-button ${isPickingLocation ? "active" : ""}`}
-              onClick={handlePickLocationClick}
-              title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
-            >
-              <FiCrosshair />{" "}
-              {isPickingLocation ? "Picking Location... (Click on Map)" : "Pick Location from Map"}
-            </button>
+            {!isHistoricalMode && (
+              <button
+                type="button"
+                className={`pick-location-button ${isPickingLocation ? "active" : ""}`}
+                onClick={handlePickLocationClick}
+                title={isPickingLocation ? "Cancel Picking" : "Pick Location from Map"}
+              >
+                <FiCrosshair />{" "}
+                {isPickingLocation
+                  ? "Picking Location... (Click on Map)"
+                  : "Pick Location from Map"}
+              </button>
+            )}
           </div>
 
           <div className="form-group">
@@ -444,6 +494,8 @@ const EventSidebar = ({
                 value={eventData.velocity.speed}
                 onChange={handleChange}
                 placeholder="Speed (km/h)"
+                readOnly={isHistoricalMode}
+                disabled={isHistoricalMode}
               />
               <input
                 type="number"
@@ -453,6 +505,8 @@ const EventSidebar = ({
                 placeholder="Direction (degrees)"
                 min="0"
                 max="359"
+                readOnly={isHistoricalMode}
+                disabled={isHistoricalMode}
               />
             </div>
           </div>
@@ -472,6 +526,7 @@ const EventSidebar = ({
                     className="entity-select"
                     value={selectedValues[level] || ""}
                     onChange={(e) => handleEntitySelect(e.target.value, level)}
+                    disabled={isHistoricalMode}
                   >
                     <option value="">Select {level === 0 ? "Type" : "Subtype"}</option>
                     {options.map((option) => (
@@ -493,6 +548,7 @@ const EventSidebar = ({
               name="entity.affiliation"
               value={eventData.entity.affiliation}
               onChange={handleChange}
+              disabled={isHistoricalMode}
             >
               <option value="assumed_friend">Assumed Friend</option>
               <option value="friend">Friend</option>
@@ -508,7 +564,12 @@ const EventSidebar = ({
             <label>
               <FiActivity /> Status
             </label>
-            <select name="entity.status" value={eventData.entity.status} onChange={handleChange}>
+            <select
+              name="entity.status"
+              value={eventData.entity.status}
+              onChange={handleChange}
+              disabled={isHistoricalMode}
+            >
               <option value="active">Active</option>
               <option value="destroyed">Destroyed</option>
               <option value="disabled">Disabled</option>
@@ -526,20 +587,14 @@ const EventSidebar = ({
               onChange={handleChange}
               placeholder="Event description or comment"
               rows="4"
+              readOnly={isHistoricalMode}
+              disabled={isHistoricalMode}
             />
           </div>
 
           {submitError && <div className="error-message">{submitError}</div>}
 
-          <button type="submit" className="submit-button" disabled={submitLoading}>
-            {submitLoading
-              ? isEditMode
-                ? "Updating..."
-                : "Creating..."
-              : isEditMode
-                ? "Update Event"
-                : "Create Event"}
-          </button>
+          {renderActionButtons()}
         </form>
       </div>
 

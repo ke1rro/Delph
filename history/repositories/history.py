@@ -2,6 +2,8 @@
 User repository to interact with the database.
 """
 
+import re
+
 from models.event import Event
 from motor.motor_asyncio import AsyncIOMotorCollection
 
@@ -32,28 +34,6 @@ class HistoryRepository:
             upsert=True,
         )
 
-    async def get_all_events(self):
-        """
-        Get all events from the database.
-        """
-
-        data = await self.client.find().to_list()
-        events = [Event.model_validate(event) for event in data]
-        return events
-
-    async def get_event_by_id(self, event_id: str) -> Event | None:
-        """
-        Get an event by its ID.
-
-        Args:
-            event_id: ID of the event.
-
-        Returns:
-            Event object if found, None otherwise.
-        """
-        data = await self.client.find_one({"id": event_id})
-        return data and Event.model_validate(data)
-
     async def get_active_event_by_message_id(
         self, message_id: str, timestamp: int
     ) -> Event | None:
@@ -80,26 +60,107 @@ class HistoryRepository:
         )
         return data and Event.model_validate(data)
 
-    async def get_active_events(self, timestamp: int) -> Event | None:
+    def _build_filters(
+        self,
+        start_timestamp: int | None = None,
+        end_timestamp: int | None = None,
+        entity_filters: list[str] | None = None,
+        status_filters: list[str] | None = None,
+        affiliation_filters: list[str] | None = None,
+    ):
+        filters = []
+        if start_timestamp is not None and end_timestamp is not None:
+            filters.append(
+                {
+                    "$or": [
+                        {
+                            "created_at": {
+                                "$gte": start_timestamp,
+                                "$lte": end_timestamp,
+                            }
+                        },
+                        {
+                            "outdated_at": {
+                                "$gte": start_timestamp,
+                                "$lte": end_timestamp,
+                            }
+                        },
+                    ]
+                }
+            )
+        elif start_timestamp is not None:
+            filters.append({"outdated_at": {"$gte": start_timestamp}})
+        elif end_timestamp is not None:
+            filters.append({"created_at": {"$lte": end_timestamp}})
+
+        if status_filters:
+            filters.append({"message.entity.status": {"$in": status_filters}})
+        if affiliation_filters:
+            filters.append({"message.entity.affiliation": {"$in": affiliation_filters}})
+        if entity_filters:
+            pattern = "|".join(["^" + re.escape(entity) for entity in entity_filters])
+            filters.append({"message.entity.entity": {"$regex": pattern}})
+
+        return filters
+
+    async def filter_events(
+        self,
+        start_timestamp: int | None = None,
+        end_timestamp: int | None = None,
+        entities: list[str] | None = None,
+        statuses: list[str] | None = None,
+        affiliations: list[str] | None = None,
+    ) -> list[dict]:
         """
-        Get an active event (that is created but not outdated) by message ID and timestamp.
+        Get only message objects from events within a time range with specified
+        entity, status, and affiliation. Returns only the message field from the
+        latest version of each message.
 
         Args:
-            message_id: ID of the message.
-            timestamp: Timestamp to check against.
+            start_timestamp: Start timestamp for the filter.
+            end_timestamp: End timestamp for the filter.
+            entities: List of entity filters.
+            statuses: List of status filters.
+            affiliations: List of affiliation filters.
 
         Returns:
-            Event object if found, None otherwise.
+            List of message objects only
         """
-        data = await self.client.find(
+        filters = self._build_filters(
+            start_timestamp,
+            end_timestamp,
+            entities,
+            statuses,
+            affiliations,
+        )
+
+        pipeline = []
+        if filters:
+            pipeline.append(
+                {
+                    "$match": {
+                        "$and": filters,
+                    }
+                }
+            ),
+
+        pipeline += [
             {
-                "created_at": {
-                    "$lte": timestamp,
-                },
-                "outdated_at": {
-                    "$gte": timestamp,
-                },
-            }
-        ).to_list()
-        # Convert each dictionary to Event model
-        return [Event.model_validate(d) for d in data]
+                "$sort": {
+                    "created_at": -1,
+                    "outdated_at": -1,
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$message.id",
+                    "latest_event": {"$first": "$$ROOT"},
+                }
+            },
+            {"$replaceRoot": {"newRoot": "$latest_event"}},
+            {"$project": {"_id": 0, "message": 1}},
+            {"$limit": 1000},
+        ]
+
+        print(pipeline)
+        return await self.client.aggregate(pipeline).to_list(length=None)
