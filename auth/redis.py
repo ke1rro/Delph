@@ -47,7 +47,8 @@ class RedisClient:
             field (str): The field to retrieve.
 
         Returns:
-            dict | str | None: The value of the field (deserialized if JSON), or None if the field does not exist.
+            dict | str | None: The value of the field (deserialized if JSON), or None if the
+                               field does not exist.
         """
         value = await self.redis.hget(key, field)
         if value is not None:
@@ -79,7 +80,8 @@ class RedisClient:
 
         Args:
             token (str): The user's JWT token (used as the key).
-            payload (dict): The JWT payload containing user details (name, surname, user_id, iat, expire).
+            payload (dict): The JWT payload containing user details (name, surname, user_id,
+                            iat, expire).
             expire (int, optional): Expiration time for the whitelist entry in seconds.
 
         Returns:

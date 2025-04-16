@@ -40,7 +40,7 @@ class CreateMessage(BaseModel):
 @requires("authenticated")
 async def create_message(
     request: Request,
-    create_message: CreateMessage,
+    body: CreateMessage,
     user_service: UserService = Depends(get_user_service),
     queue_service: QueuePublishService = Depends(get_queue_publish_service),
 ) -> Message:
@@ -57,17 +57,17 @@ async def create_message(
     try:
         return await queue_service.publish(
             user,
-            create_message.entity,
-            create_message.location,
-            create_message.velocity,
-            create_message.ttl,
-            create_message.message_id,
-            create_message.comment,
+            body.entity,
+            body.location,
+            body.velocity,
+            body.ttl,
+            body.message_id,
+            body.comment,
         )
     except NoPermissionError as e:
         logger.exception(
             "User with ID %s does not have permission to publish to location %s",
             user.id,
-            create_message.location,
+            body.location,
         )
         raise HTTPException(status_code=403, detail="Location is forbidden") from e

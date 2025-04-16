@@ -76,6 +76,11 @@ class QueuePublishService:
         if not await self.user_service.check_can_write(
             user, Point(location.longitude, location.latitude)
         ):
+            logger.warning(
+                "User %s does tried to publish to %s, but does not have a permission",
+                user.id,
+                location,
+            )
             raise NoPermissionError
 
         if message_id is None:

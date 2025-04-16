@@ -6,14 +6,10 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any
 
-from dependencies.auth import (
-    create_jwt_token,
-    get_user_service,
-    validate_jwt_token,
-    validate_user_auth,
-)
+from dependencies.auth import create_jwt_token, get_user_service, validate_user_auth
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.requests import Request
+from logger import logger
 from services.user_service import UserService
 from starlette.authentication import requires
 
@@ -25,17 +21,9 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.get("/me")
 @requires(["authenticated"])
-async def validate_token(
-    request: Request, payload=Depends(validate_jwt_token)
-) -> dict[str, Any]:
+async def get_me(request: Request) -> dict[str, Any]:
     """
-    Represents a simple endpoint to validate the JWT token.
-
-    Args:
-        payload (validate_jwt_token): payload of the jwt token Defaults to Depends(validate_jwt_token).
-
-    Returns:
-        dics[str,]: User information if validation is valid.
+    Returns the current user's information.
     """
     user = request.user
     return {
@@ -101,6 +89,7 @@ async def write_user(
     """
     existing_user = await user_service.check_if_already_exists(user_data)
     if existing_user:
+        logger.warning("Tried to register an existing user: %s", user_data)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User already exists",

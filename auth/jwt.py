@@ -60,9 +60,9 @@ async def decode_jwt(
             options={"require": ["exp", "iat"]},
         )
         return payload
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
         logger.exception("Token %s has expired", token)
-        raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token has expired") from e
+    except jwt.InvalidTokenError as e:
         logger.exception("Token %s is invalid", token)
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail="Invalid token") from e
