@@ -7,7 +7,7 @@ const AboutUs = () => {
     <div className="about-us-container">
       <div className="about-us-header">
         <img
-          src="/logo.svg"
+          src="/logo_title.svg"
           alt="Delph Logo"
           className="about-us-logo"
         />

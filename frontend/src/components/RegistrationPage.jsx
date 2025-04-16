@@ -86,9 +86,7 @@ const Registration = () => {
   return (
     <div>
       <div className={`component ${userId ? "blurred" : ""}`}>
-        <img className="logo_login" src="logo.svg" alt="Delph Logo" />
-        <h1 className="title">DELPH</h1>
-
+        <img className="logo_login" src="logo_title2.svg" alt="Delph Logo" />
         <form className="login-form" onSubmit={handleSubmit}>
           <input
             className="input-field"

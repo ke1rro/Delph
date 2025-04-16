@@ -1,9 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Manual.css"; // Add specific styles for the Manual page
 
 const Manual = () => {
+  const navigate = useNavigate();
+
+  const handleReturnToLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="manual-container">
+      <div className="return-button-container">
+        <button className="manual-button" onClick={handleReturnToLogin}>
+          Return to Login
+        </button>
+      </div>
       <section className="manual-section">
         <h1>Manual</h1>
         <p>

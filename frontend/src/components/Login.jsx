@@ -36,9 +36,7 @@ const Login = () => {
 
   return (
     <div className="component">
-      <img className="logo_login" src="logo.svg" alt="Delta Logo" />
-      <h1 className="title">DELPH</h1>
-
+      <img className="logo_login" src="logo_title2.svg" alt="Delta Logo" />
       <form className="login-form" onSubmit={handleSubmit}>
         <input
           className="input-field"

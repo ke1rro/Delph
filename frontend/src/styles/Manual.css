@@ -48,6 +48,13 @@ html, body {
   box-sizing: border-box;
 }
 
+.return-button-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+
 .manual-section:first-child {
   margin-top: 60px;
 }
@@ -67,7 +74,7 @@ html, body {
 
 .manual-section h2 {
   font-size: 1.8rem;
-  color: #a3c1f9; 
+  color: #a3c1f9;
   margin-bottom: 1rem;
   border-bottom: 2px solid #a3c1f9;
   padding-bottom: 0.5rem;
