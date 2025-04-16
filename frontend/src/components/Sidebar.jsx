@@ -1,12 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiClock, FiFilter, FiPlusCircle } from "react-icons/fi";
+import { FiFilter, FiPlusCircle } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
-const icons = [
-  { Icon: FiClock, alt: "Time Filter", id: "timeFilter" },
-  { Icon: FiFilter, alt: "Funnel", id: "funnel" }
-];
+const icons = [{ Icon: FiFilter, alt: "Time Filter", id: "timeFilter" }];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
   return (
