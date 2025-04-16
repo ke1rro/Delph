@@ -9,8 +9,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 RUN chmod 755 .
 
-COPY /shared_config/. ./shared_config/.
-COPY /cache/. ./cache/.
 COPY /auth/. ./auth/.
 COPY /api/. .
 

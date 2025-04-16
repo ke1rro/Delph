@@ -4,7 +4,7 @@ User repository to interact with the database.
 
 from repositories.base import Repository
 
-from cache.redis import RedisClient
+from auth.redis import RedisClient
 
 
 class UserRepository(Repository):

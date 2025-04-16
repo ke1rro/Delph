@@ -5,7 +5,7 @@ Module provides user blacklisting functionality via Redis.
 from fastapi import APIRouter, HTTPException, Request, status
 from starlette.authentication import requires
 
-from cache.redis import redis_client
+from auth.redis import redis_client
 from schemas.user import BlacklistUserRequest
 
 router = APIRouter(prefix="/blacklist", tags=["blacklist"])

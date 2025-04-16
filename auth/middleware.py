@@ -10,7 +10,7 @@ from starlette.authentication import AuthCredentials, AuthenticationBackend, Sim
 from starlette.requests import Request
 
 from auth.jwt import decode_jwt
-from cache.redis import redis_client
+from auth.redis import redis_client
 
 
 class SimpleUser(SimpleUser):

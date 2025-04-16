@@ -8,8 +8,6 @@ RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY /schemas/. ./schemas/.
-COPY /shared_config/. ./shared_config/.
-COPY /cache/. ./cache/.
 COPY /auth/. ./auth/.
 COPY /bridge/. .
 

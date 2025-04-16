@@ -7,7 +7,7 @@ import logging
 
 from redis.asyncio import Redis
 
-from shared_config.config import settings
+from auth.config import settings
 
 
 class RedisClient:

@@ -18,7 +18,7 @@ from fastapi.requests import Request
 from services.user_service import UserService
 from starlette.authentication import requires
 
-from cache.redis import redis_client
+from auth.redis import redis_client
 from schemas.user import LoginResponse, UserLogin, UserReg
 
 router = APIRouter(prefix="/auth", tags=["auth"])

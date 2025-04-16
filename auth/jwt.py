@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from fastapi import HTTPException
 
-from shared_config.config import settings
+from auth.config import settings
 
 PR_KEY = settings.auth_jwt.private_key_path.read_text()
 PUB_KEY = settings.auth_jwt.public_key_path.read_text()
