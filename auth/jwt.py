@@ -4,11 +4,12 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 from fastapi import HTTPException
+from logger import logger
 
 from auth.config import settings
 
-PR_KEY = settings.auth_jwt.private_key_path.read_text()
-PUB_KEY = settings.auth_jwt.public_key_path.read_text()
+PR_KEY = settings.auth_jwt.private_key_path.read_text(encoding="utf-8")
+PUB_KEY = settings.auth_jwt.public_key_path.read_text(encoding="utf-8")
 ALGORITHM = settings.auth_jwt.algorithm
 EXPIRES = settings.auth_jwt.access_token_expire
 
@@ -50,10 +51,6 @@ async def decode_jwt(
 
     Returns:
         Dict[str, Any]: The decoded payload of the JWT.
-
-    Raises:
-        jwt.ExpiredSignatureError: If the token has expired.
-        jwt.InvalidTokenError: If the token is invalid.
     """
     try:
         payload = jwt.decode(
@@ -64,6 +61,8 @@ async def decode_jwt(
         )
         return payload
     except jwt.ExpiredSignatureError:
+        logger.exception("Token %s has expired", token)
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.InvalidTokenError as e:
-        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
+    except jwt.InvalidTokenError:
+        logger.exception("Token %s is invalid", token)
+        raise HTTPException(status_code=401, detail="Invalid token")

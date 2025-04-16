@@ -49,17 +49,14 @@ class RedisClient:
         Returns:
             dict | str | None: The value of the field (deserialized if JSON), or None if the field does not exist.
         """
-        try:
-            value = await self.redis.hget(key, field)
-            if value is not None:
-                try:
-                    return json.loads(value)
-                except json.JSONDecodeError:
-                    return value
-            return None
-        except Exception as e:
-            logger.exception("Failed to get hash field %s in key %s", field, key)
-            raise e
+        value = await self.redis.hget(key, field)
+        if value is not None:
+            try:
+                return json.loads(value)
+            except json.JSONDecodeError:
+                return value
+
+        return None
 
     async def delete_hash_field(self, key: str, field: str) -> None:
         """
@@ -72,11 +69,7 @@ class RedisClient:
         Returns:
             None
         """
-        try:
-            await self.redis.hdel(key, field)
-        except Exception as e:
-            logger.exception("Failed to delete hash field %s in key %s", field, key)
-            raise e
+        await self.redis.hdel(key, field)
 
     async def whitelist_user(
         self, token: str, payload: dict, expire: int = None
@@ -92,13 +85,9 @@ class RedisClient:
         Returns:
             None
         """
-        try:
-            key = f"user_whitelist:{token}"
-            value = json.dumps(payload)
-            await self.redis.set(key, value, ex=expire)
-        except Exception as e:
-            logger.exception("Failed to whitelist user with token %s", token)
-            raise e
+        key = f"user_whitelist:{token}"
+        value = json.dumps(payload)
+        await self.redis.set(key, value, ex=expire)
 
     async def is_user_whitelisted(self, token: str) -> bool:
         """
@@ -110,12 +99,8 @@ class RedisClient:
         Returns:
             bool: True if the user is whitelisted, False otherwise.
         """
-        try:
-            key = f"user_whitelist:{token}"
-            return await self.redis.exists(key) > 0
-        except Exception as e:
-            logger.exception("Failed to check whitelist status for token %s", token)
-            raise e
+        key = f"user_whitelist:{token}"
+        return await self.redis.exists(key) > 0
 
     async def get_whitelist_payload(self, token: str) -> dict | None:
         """
@@ -127,15 +112,12 @@ class RedisClient:
         Returns:
             dict | None: The JWT payload if the user is whitelisted, or None if not.
         """
-        try:
-            key = f"user_whitelist:{token}"
-            value = await self.redis.get(key)
-            if value:
-                return json.loads(value)
-            return None
-        except Exception as e:
-            logger.exception("Failed to get whitelist payload for token %s", token)
-            raise e
+        key = f"user_whitelist:{token}"
+        value = await self.redis.get(key)
+        if value:
+            return json.loads(value)
+
+        return None
 
     async def remove_user_from_whitelist(self, token: str) -> None:
         """
@@ -147,14 +129,8 @@ class RedisClient:
         Returns:
             None
         """
-        try:
-            key = f"user_whitelist:{token}"
-            await self.redis.delete(key)
-        except Exception as e:
-            logger.exception(
-                "Failed to remove user with token %s from whitelist", token
-            )
-            raise e
+        key = f"user_whitelist:{token}"
+        await self.redis.delete(key)
 
 
 redis_client = RedisClient()
