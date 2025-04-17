@@ -4,6 +4,7 @@ from typing import AsyncIterator
 
 from core.config import settings
 from core.database import Base
+from logger import logger
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 
@@ -36,9 +37,9 @@ class PostgresDatabase:
             None
         """
         async with self.engine.begin() as connection:
-            await connection.run_sync(
-                lambda sync_conn: Base.metadata.create_all(sync_conn)
-            )
+            await connection.run_sync(Base.metadata.create_all)
+
+        logger.info("Database tables created/updated successfully")
 
 
 database = PostgresDatabase()

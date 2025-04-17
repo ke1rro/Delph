@@ -3,6 +3,7 @@ Posting service to send messages to the message broker.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from logger import logger
 from models.user import User
 from pydantic import BaseModel, Field
 from services.queue import NoPermissionError, QueuePublishService
@@ -39,7 +40,7 @@ class CreateMessage(BaseModel):
 @requires("authenticated")
 async def create_message(
     request: Request,
-    create_message: CreateMessage,
+    body: CreateMessage,
     user_service: UserService = Depends(get_user_service),
     queue_service: QueuePublishService = Depends(get_queue_publish_service),
 ) -> Message:
@@ -56,12 +57,17 @@ async def create_message(
     try:
         return await queue_service.publish(
             user,
-            create_message.entity,
-            create_message.location,
-            create_message.velocity,
-            create_message.ttl,
-            create_message.message_id,
-            create_message.comment,
+            body.entity,
+            body.location,
+            body.velocity,
+            body.ttl,
+            body.message_id,
+            body.comment,
         )
     except NoPermissionError as e:
+        logger.exception(
+            "User with ID %s does not have permission to publish to location %s",
+            user.id,
+            body.location,
+        )
         raise HTTPException(status_code=403, detail="Location is forbidden") from e

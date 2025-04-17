@@ -1,5 +1,6 @@
 """Main FastAPI application file"""
 
+import logging.config
 from contextlib import asynccontextmanager
 
 from core.postgres_database import database
@@ -7,7 +8,9 @@ from fastapi import FastAPI
 from routers.auth import router as auth_router
 from starlette.middleware.authentication import AuthenticationMiddleware
 
-from middleware.jwt_auth import JWTAuthBackend
+from auth.middleware import JWTAuthBackend
+
+logging.config.fileConfig("/config/logging.ini", disable_existing_loggers=False)
 
 
 @asynccontextmanager

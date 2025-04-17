@@ -7,8 +7,6 @@ from typing import ClassVar
 
 from pydantic_settings import BaseSettings
 
-BASE_DIR = Path(__file__).parent.parent
-
 
 class AuthJWT(BaseSettings):
     """
@@ -16,8 +14,8 @@ class AuthJWT(BaseSettings):
     To generate the certificates check the documentation
     """
 
-    private_key_path: Path = BASE_DIR / "certificates" / "jwt-private.pem"
-    public_key_path: Path = BASE_DIR / "certificates" / "jwt-public.pem"
+    private_key_path: Path = Path("/certificates/jwt-private.pem")
+    public_key_path: Path = Path("/certificates/jwt-public.pem")
     algorithm: str = "RS256"
     access_token_expire: int = 20
 

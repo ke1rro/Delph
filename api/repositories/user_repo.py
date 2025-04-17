@@ -50,7 +50,7 @@ class UserRepository:
                 select(User).where(User.user_id == user_id)
             )
             return result.one_or_none()
-        except ValueError as e:
+        except ValueError:
             return None
 
     async def write_user(self, user_obj: User) -> uuid.UUID:

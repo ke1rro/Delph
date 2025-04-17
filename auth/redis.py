@@ -3,11 +3,11 @@ Redis client module for interacting with Redis hash tables.
 """
 
 import json
-import logging
 
 from redis.asyncio import Redis
 
-from shared_config.config import settings
+from auth.config import settings
+from auth.logger import logger
 
 
 class RedisClient:
@@ -35,10 +35,8 @@ class RedisClient:
                 value = json.dumps(value)
             await self.redis.hset(key, field, value)
         except Exception as e:
-            logging.error(
-                f"Failed to set hash field: {field} in key: {key}. Error: {e}"
-            )
-            raise
+            logger.exception("Failed to set hash field %s in key %s", field, key)
+            raise e
 
     async def get_hash(self, key: str, field: str) -> dict | str | None:
         """
@@ -49,21 +47,17 @@ class RedisClient:
             field (str): The field to retrieve.
 
         Returns:
-            dict | str | None: The value of the field (deserialized if JSON), or None if the field does not exist.
+            dict | str | None: The value of the field (deserialized if JSON), or None if the
+                               field does not exist.
         """
-        try:
-            value = await self.redis.hget(key, field)
-            if value is not None:
-                try:
-                    return json.loads(value)
-                except json.JSONDecodeError:
-                    return value
-            return None
-        except Exception as e:
-            logging.error(
-                f"Failed to get hash field: {field} from key: {key}. Error: {e}"
-            )
-            raise
+        value = await self.redis.hget(key, field)
+        if value is not None:
+            try:
+                return json.loads(value)
+            except json.JSONDecodeError:
+                return value
+
+        return None
 
     async def delete_hash_field(self, key: str, field: str) -> None:
         """
@@ -76,13 +70,7 @@ class RedisClient:
         Returns:
             None
         """
-        try:
-            await self.redis.hdel(key, field)
-        except Exception as e:
-            logging.error(
-                f"Failed to delete hash field: {field} from key: {key}. Error: {e}"
-            )
-            raise
+        await self.redis.hdel(key, field)
 
     async def whitelist_user(
         self, token: str, payload: dict, expire: int = None
@@ -92,19 +80,16 @@ class RedisClient:
 
         Args:
             token (str): The user's JWT token (used as the key).
-            payload (dict): The JWT payload containing user details (name, surname, user_id, iat, expire).
+            payload (dict): The JWT payload containing user details (name, surname, user_id,
+                            iat, expire).
             expire (int, optional): Expiration time for the whitelist entry in seconds.
 
         Returns:
             None
         """
-        try:
-            key = f"user_whitelist:{token}"
-            value = json.dumps(payload)
-            await self.redis.set(key, value, ex=expire)
-        except Exception as e:
-            logging.error(f"Failed to whitelist user with token {token}. Error: {e}")
-            raise
+        key = f"user_whitelist:{token}"
+        value = json.dumps(payload)
+        await self.redis.set(key, value, ex=expire)
 
     async def is_user_whitelisted(self, token: str) -> bool:
         """
@@ -116,14 +101,8 @@ class RedisClient:
         Returns:
             bool: True if the user is whitelisted, False otherwise.
         """
-        try:
-            key = f"user_whitelist:{token}"
-            return await self.redis.exists(key) > 0
-        except Exception as e:
-            logging.error(
-                f"Failed to check whitelist status for token {token}. Error: {e}"
-            )
-            raise
+        key = f"user_whitelist:{token}"
+        return await self.redis.exists(key) > 0
 
     async def get_whitelist_payload(self, token: str) -> dict | None:
         """
@@ -135,17 +114,12 @@ class RedisClient:
         Returns:
             dict | None: The JWT payload if the user is whitelisted, or None if not.
         """
-        try:
-            key = f"user_whitelist:{token}"
-            value = await self.redis.get(key)
-            if value:
-                return json.loads(value)
-            return None
-        except Exception as e:
-            logging.error(
-                f"Failed to get whitelist payload for token {token}. Error: {e}"
-            )
-            raise
+        key = f"user_whitelist:{token}"
+        value = await self.redis.get(key)
+        if value:
+            return json.loads(value)
+
+        return None
 
     async def remove_user_from_whitelist(self, token: str) -> None:
         """
@@ -157,15 +131,8 @@ class RedisClient:
         Returns:
             None
         """
-        try:
-            key = f"user_whitelist:{token}"
-            await self.redis.delete(key)
-            logging.info(f"User with token {token} removed from whitelist")
-        except Exception as e:
-            logging.error(
-                f"Failed to remove user with token {token} from whitelist. Error: {e}"
-            )
-            raise
+        key = f"user_whitelist:{token}"
+        await self.redis.delete(key)
 
 
 redis_client = RedisClient()

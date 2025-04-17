@@ -29,6 +29,8 @@ services:
       interval: 25s
       retries: 1
       start_period: 5s
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "history-db", "service": "history-db"}]'
 
   history:
     build:
@@ -39,9 +41,14 @@ services:
 
     ports:
       - "8004:80"
+    volumes:
+      - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     depends_on:
       history-db:
         condition: service_healthy
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "history", "service": "history"}]'
 
   history-adapter:
     build:
@@ -49,11 +56,15 @@ services:
     container_name: history-adapter
     env_file:
       - .env
+    volumes:
+      - ./logging.ini:/config/logging.ini
     depends_on:
       history-db:
         condition: service_healthy
       kafka:
         condition: service_healthy
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "history-adapter", "service": "history-adapter"}]'
 
   redis:
     build: redis
@@ -71,6 +82,8 @@ services:
       interval: 5s
       retries: 5
       start_period: 10s
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "redis", "service": "redis"}]'
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -78,6 +91,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: ${ZOOKEEPER_CLIENT_PORT}
       ZOOKEEPER_TICK_TIME: ${ZOOKEEPER_TICK_TIME}
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "zookeeper", "service": "zookeeper"}]'
 
   kafka:
     image: confluentinc/cp-kafka:latest
@@ -96,6 +111,8 @@ services:
       interval: 5s
       retries: 5
       start_period: 10s
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "kafka", "service": "kafka"}]'
 
   core-db:
     image: postgres:latest
@@ -114,6 +131,8 @@ services:
       interval: 5s
       retries: 5
       start_period: 10s
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "core-db", "service": "core-db"}]'
 
   core:
     build:
@@ -124,17 +143,25 @@ services:
     restart: always
     ports:
       - "8002:80"
+    volumes:
+      - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     depends_on:
       core-db:
         condition: service_healthy
       redis:
         condition: service_healthy
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "core", "service": "core"}]'
 
   frontend:
     container_name: frontend
     build: frontend
     ports:
       - "8001:80"
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "frontend", "service": "frontend"}]'
+
   bridge:
     build:
       dockerfile: bridge/Dockerfile
@@ -149,8 +176,13 @@ services:
     restart: always
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
+    volumes:
+      - ./certificates:/certificates
+      - ./logging.ini:/config/logging.ini
     ports:
       - 8003:80
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "bridge", "service": "bridge"}]'
 
   nginx:
     build: server
@@ -162,3 +194,21 @@ services:
       - core
       - bridge
       - frontend
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "nginx"}]'
+
+  datadog:
+    image: datadog/agent:latest
+    container_name: dd-agent
+    environment:
+     - DD_API_KEY=${DATADOG_API_KEY}
+     - DD_AGENT_HOST=dd-agent
+     - DD_SITE=us5.datadoghq.com
+     - DD_CONTAINER_EXCLUDE=name:dd-agent
+     - DD_LOGS_ENABLED=true
+     - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=false
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+     - /proc/:/host/proc/:ro
+     - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+     - /var/lib/docker/containers:/var/lib/docker/containers:ro

@@ -2,11 +2,15 @@
 Main application file for the service.
 """
 
+import logging.config
+
 from fastapi import FastAPI
 from starlette.middleware.authentication import AuthenticationMiddleware
 
 from api.router import router
-from middleware.jwt_auth import JWTAuthBackend
+from auth.middleware import JWTAuthBackend
+
+logging.config.fileConfig("/config/logging.ini", disable_existing_loggers=False)
 
 app = FastAPI(root_path="/api/history")
 app.include_router(router)

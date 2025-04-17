@@ -3,14 +3,14 @@ This module contains the JWTAuthBackend class, which is an authentication
 backend that validates a JWT token provided either in the Authorization header
 """
 
-import logging
 from datetime import datetime, timezone
 
 from starlette.authentication import AuthCredentials, AuthenticationBackend, SimpleUser
 from starlette.requests import Request
 
-from cache.redis import redis_client
-from utils.utils import decode_jwt
+from auth.jwt import decode_jwt
+from auth.logger import logger
+from auth.redis import redis_client
 
 
 class SimpleUser(SimpleUser):
@@ -59,15 +59,12 @@ class JWTAuthBackend(AuthenticationBackend):
         token = request.cookies.get("access_token")
 
         if not token:
-            logging.error("No access token found in cookies")
-            return None
+            if "authenticated" in request.scope.get("auth_required", []):
+                logger.error(
+                    "No access token found in cookies", extra={"request": request}
+                )
 
-        # jwt_payload
-        # "sub": user.user_id.hex,
-        # "user_id": user.user_id.hex,
-        # "user_name": user.name,
-        # "user_surname": user.surname,
-        # "is_admin": user.is_admin,
+            return None
 
         payload = await decode_jwt(token)
         exp = payload.get("exp")
@@ -76,16 +73,27 @@ class JWTAuthBackend(AuthenticationBackend):
         if not exp or datetime.fromtimestamp(exp, tz=timezone.utc) < datetime.now(
             timezone.utc
         ):
-            logging.error("JWT token is expired")
+            logger.error(
+                "JWT token is expired", extra={"request": request, "payload": payload}
+            )
             return None
+
         is_whitelisted = await redis_client.is_user_whitelisted(token)
         if not is_whitelisted:
-            logging.error("JWT token is not in the whitelist")
+            logger.error(
+                "JWT token is not in the whitelist",
+                extra={"request": request, "payload": payload},
+            )
             return None
+
         user_id = payload.get("sub")
         if not user_id:
-            logging.error("User ID is missing in the JWT payload")
+            logger.error(
+                "User ID is missing in the JWT payload",
+                extra={"request": request, "payload": payload},
+            )
             return None
+
         return AuthCredentials(["authenticated"]), SimpleUser(
             username=name, user_id=user_id, user_surname=surname, token=token
         )

@@ -1,16 +1,15 @@
 """Utils to work with JWT"""
 
-import asyncio
 from datetime import datetime, timedelta, timezone
 
-import bcrypt
 import jwt
 from fastapi import HTTPException
+from logger import logger
 
-from shared_config.config import settings
+from auth.config import settings
 
-PR_KEY = settings.auth_jwt.private_key_path.read_text()
-PUB_KEY = settings.auth_jwt.public_key_path.read_text()
+PR_KEY = settings.auth_jwt.private_key_path.read_text(encoding="utf-8")
+PUB_KEY = settings.auth_jwt.public_key_path.read_text(encoding="utf-8")
 ALGORITHM = settings.auth_jwt.algorithm
 EXPIRES = settings.auth_jwt.access_token_expire
 
@@ -52,10 +51,6 @@ async def decode_jwt(
 
     Returns:
         Dict[str, Any]: The decoded payload of the JWT.
-
-    Raises:
-        jwt.ExpiredSignatureError: If the token has expired.
-        jwt.InvalidTokenError: If the token is invalid.
     """
     try:
         payload = jwt.decode(
@@ -65,34 +60,9 @@ async def decode_jwt(
             options={"require": ["exp", "iat"]},
         )
         return payload
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.ExpiredSignatureError as e:
+        logger.exception("Token %s has expired", token)
+        raise HTTPException(status_code=401, detail="Token has expired") from e
     except jwt.InvalidTokenError as e:
-        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
-
-
-async def hash_password(password: str) -> bytes:
-    """
-    Hashes a password using bcrypt.
-
-    Args:
-        password (str): The password to hash.
-
-    Returns:
-        bytes: The hashed password.
-    """
-    salt = bcrypt.gensalt()
-    return await asyncio.to_thread(bcrypt.hashpw, password.encode(), salt)
-
-
-async def validate_password(password: str, hashed_password: bytes) -> bool:
-    """
-    Validates a password against a hashed password.
-    Args:
-        password (str): a password to validate
-        hashed_password (bytes): a hashed password to validate against
-
-    Returns:
-        bool: True if the password is valid, False otherwise.
-    """
-    return await asyncio.to_thread(bcrypt.checkpw, password.encode(), hashed_password)
+        logger.exception("Token %s is invalid", token)
+        raise HTTPException(status_code=401, detail="Invalid token") from e

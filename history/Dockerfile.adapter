@@ -9,7 +9,9 @@ RUN pip install --upgrade setuptools
 RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r requirements.adapter.txt
 
-COPY history/. .
-COPY schemas/. ./schemas/.
+COPY /history/. .
+COPY /schemas/. ./schemas/.
+
+VOLUME [ "/config" ]
 
 CMD [ "python", "adapter.py" ]

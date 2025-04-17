@@ -2,15 +2,12 @@
 Repositories for subscribing to the message queue.
 """
 
-import logging
-
 from aiokafka import AIOKafkaConsumer
+from logger import logger
 from pydantic import ValidationError
 from repositories.base import Repository
 
 from schemas.message import Message
-
-logger = logging.getLogger("delta")
 
 
 class QueueSubscription(Repository):
@@ -24,6 +21,8 @@ class QueueSubscription(Repository):
     """
 
     def __init__(self, topic: str, config: dict):
+        self.config = config
+        self.topic = topic
         self.consumer = AIOKafkaConsumer(
             topic,
             **config,
@@ -35,7 +34,11 @@ class QueueSubscription(Repository):
         Connect repository to the message queue.
         """
         await self.consumer.start()
-        logger.info("Queue consumer connected")
+        logger.info(
+            "Queue consumer connected to topic %s",
+            self.topic,
+            extra={"config": self.config},
+        )
 
     async def disconnect(self):
         """

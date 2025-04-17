@@ -4,6 +4,7 @@ User repository to interact with the database.
 
 import re
 
+from logger import logger
 from models.event import Event
 from motor.motor_asyncio import AsyncIOMotorCollection
 
@@ -162,5 +163,5 @@ class HistoryRepository:
             {"$limit": 1000},
         ]
 
-        print(pipeline)
+        logger.info("Applying aggregation pipeline: %s", pipeline)
         return await self.client.aggregate(pipeline).to_list(length=None)

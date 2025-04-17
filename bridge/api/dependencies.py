@@ -10,7 +10,7 @@ from repositories.user import UserRepository
 from services.queue import QueuePublishService, QueueSubscribeService
 from services.user import UserService
 
-from cache.redis import redis_client
+from auth.redis import redis_client
 
 user_repository = UserRepository(redis_client)
 user_service = UserService(
