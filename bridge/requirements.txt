@@ -8,3 +8,4 @@ starlette==0.45.3
 redis==5.2.1
 PyJWT[crypto]==2.10.1
 bcrypt==4.3.0
+python-json-logger==3.3.0
