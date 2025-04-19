@@ -4,6 +4,7 @@ Module provides dependencies for the authentication.
 
 from datetime import datetime, timezone
 
+from core.config import settings
 from core.postgres_database import database
 from fastapi import Depends, HTTPException, Response, status
 from logger import logger
@@ -111,10 +112,9 @@ async def create_jwt_token(user: UserLogin, response: Response) -> TokenInfo:
     response.set_cookie(
         key="access_token",
         value=token,
-        httponly=True,
-        secure=True,
+        httponly=settings.cookies.cookie_httponly,
+        secure=settings.cookies.cookie_secure,
         samesite=None,
-        max_age=int((expires - datetime.now(timezone.utc)).total_seconds()),
         expires=expires,
     )
 

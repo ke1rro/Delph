@@ -40,6 +40,15 @@ class CORS(BaseSettings):
     cors_allow_origin: str
 
 
+class Cookies(BaseSettings):
+    """
+    Class with the cookies configuration.
+    """
+
+    cookie_secure: bool = True
+    cookie_httponly: bool = True
+
+
 class Settings(BaseSettings):
     """
     Class to store the project configuration instances.
@@ -47,6 +56,7 @@ class Settings(BaseSettings):
 
     database: ClassVar[Database] = Database()
     cors: ClassVar[CORS] = CORS()
+    cookies: ClassVar[Cookies] = Cookies()
 
 
 settings = Settings()
