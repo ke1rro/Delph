@@ -23,13 +23,12 @@ class EventStorage {
                 return;
             }
 
-            if(event.timestamp < this.events[event.id].timestamp) {
+            if(event.timestamp < existing.timestamp) {
                 return;
             }
 
-            const previous_event = this.events[event.id];
             this.events[event.id] = event;
-            await this.callbacks.update(previous_event, event);
+            await this.callbacks.update(existing, event);
 
             if(event.ttl + event.timestamp < time) {
                 delete this.events[event.id];
