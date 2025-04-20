@@ -301,8 +301,9 @@ const Map = () => {
     console.log("Event data:", eventData);
 
     setSelectedEventId(eventId);
-    setSidebarOpen(true);
+    setTimeFilterSidebarOpen(false);
     setAddEventSidebarOpen(false);
+    setSidebarOpen(true);
 
     if (isHistorical) {
       setHistoricalMarkers((prevMarkers) => {
