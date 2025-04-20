@@ -1,19 +1,30 @@
 import React from "react";
+import "../styles/PageLayout.css";
 import { Sidebar } from "./Sidebar";
 import { Navbar } from "./Navbar";
-import "../styles/PageLayout.css";
+import PropTypes from "prop-types";
 
-const PageLayout = ({ children, onPlusClick, onTimeFilterClick }) => {
+const PageLayout = ({ children, onPlusClick, onTimeFilterClick, onSymbolLegendClick }) => {
   return (
     <div className="page-layout">
-      {/* Pass onTimeFilterClick down to Sidebar */}
-      <Sidebar onPlusClick={onPlusClick} onTimeFilterClick={onTimeFilterClick} />
+      <Sidebar
+        onPlusClick={onPlusClick}
+        onTimeFilterClick={onTimeFilterClick}
+        onSymbolLegendClick={onSymbolLegendClick}
+      />
       <div className="main-content">
         <Navbar />
         <div className="content">{children}</div>
       </div>
     </div>
   );
+};
+
+PageLayout.propTypes = {
+  children: PropTypes.node,
+  onPlusClick: PropTypes.func,
+  onTimeFilterClick: PropTypes.func,
+  onSymbolLegendClick: PropTypes.func
 };
 
 export default PageLayout;

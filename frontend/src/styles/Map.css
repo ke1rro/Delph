@@ -93,8 +93,47 @@ body {
   filter: drop-shadow(0 0 8px rgba(52, 152, 219, 0.8)) !important;
 }
 
+.event-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.event-icon svg {
+  transition: filter 0.3s ease;
+  outline: none;
+}
+
+.event-icon.selected svg {
+  filter: drop-shadow(0px 0px 3px yellow) drop-shadow(0px 0px 5px yellow);
+}
+
+.custom-icon {
+  background: none;
+  border: none;
+}
+
 .custom-icon.historical.selected {
   animation: historical-glow 2s infinite;
+}
+
+.custom-icon.selected {
+}
+
+.historical {
+  opacity: 0.6;
+}
+
+.historical.selected svg {
+  filter: drop-shadow(0px 0px 3px orange) drop-shadow(0px 0px 5px orange);
+  opacity: 1;
+}
+
+.event-icon.selected svg {
+  stroke: #2196f3;
+  stroke-width: 2px;
+  fill: none;
+  shape-rendering: geometricPrecision;
 }
 
 @keyframes historical-glow {
