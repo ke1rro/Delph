@@ -325,12 +325,17 @@ const Map = () => {
   const handleAddEventClick = () => {
     setSelectedEventId(null);
     setSidebarOpen(false);
+    setTimeFilterSidebarOpen(false)
     setAddEventSidebarOpen(true);
     setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
     handleTogglePickLocation(false);
   };
 
   const handleTimeFilterClick = () => {
+    setSelectedEventId(null);
+    setSidebarOpen(false)
+    setAddEventSidebarOpen(false)
+    setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
     setTimeFilterSidebarOpen(true);
   };
   const handleCloseTimeFilterSidebar = () => {
