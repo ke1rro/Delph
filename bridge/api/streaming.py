@@ -36,6 +36,12 @@ async def websocket_send(
     try:
         async for message in queue_service.subscribe(user):
             await websocket.send_json(message.model_dump())
+    except asyncio.CancelledError:
+        pass
+    except Exception as e:
+        logger.exception("Error while sending message to user ID %s", user.id)
+        await websocket.close(code=1011)
+        raise e
     finally:
         logger.info("WebSocket sender closed for user ID %s", user.id)
 
@@ -54,6 +60,12 @@ async def websocket_receive(
     try:
         async for _ in websocket.iter_text():
             pass
+    except asyncio.CancelledError:
+        pass
+    except Exception as e:
+        logger.exception("Error while receiving message from user ID %s", user.id)
+        await websocket.close(code=1011)
+        raise e
     finally:
         logger.info("WebSocket receiver closed for user ID %s", user.id)
 

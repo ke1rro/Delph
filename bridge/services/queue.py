@@ -128,9 +128,7 @@ class QueueSubscribeService:
             Message that the user can read.
         """
         async with self.repo.subscribe() as subscription:
-            logger.info(
-                "Subscribing to messages for user %s with ID %s", user.username, user.id
-            )
+            logger.info("Subscribing to messages for user ID %s", user.id)
             async for message in subscription:
                 if await self.user_service.check_can_read(
                     user, Point(message.location.longitude, message.location.latitude)
