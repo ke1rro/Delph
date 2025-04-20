@@ -37,6 +37,7 @@ const DashboardPage = () => {
     disabledStatus: 0,
     lastUpdate: new Date().toISOString()
   });
+  const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
 
   const storageRef = useRef(null);
@@ -113,6 +114,16 @@ const DashboardPage = () => {
       }
     };
   }, [navigate]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   const connectBridgeClient = async () => {
     if (!clientRef.current) return;
@@ -256,7 +267,7 @@ const DashboardPage = () => {
             <p>Here's what's happening across your monitoring systems</p>
           </div>
           <div className="current-time">
-            <FiClock /> {new Date().toLocaleTimeString()}
+            <FiClock /> {currentTime.toLocaleTimeString()}
           </div>
         </div>
 
