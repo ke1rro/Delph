@@ -10,6 +10,7 @@ import ms from "milsymbol";
 import SidcDataService from "../utils/SidcDataService";
 import EventSidebar from "./EventSidebar";
 import TimeFilterSidebar from "./TimeFilterSidebar";
+import LegendPopup from "./LegendPopup";
 import "../styles/EventSidebar.css";
 import "../styles/TimeFilterSidebar.css";
 import "../styles/Map.css";
@@ -61,6 +62,7 @@ const Map = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [addEventSidebarOpen, setAddEventSidebarOpen] = useState(false);
   const [timeFilterSidebarOpen, setTimeFilterSidebarOpen] = useState(false);
+  const [isLegendOpen, setIsLegendOpen] = useState(false);
   const [storage] = useState(() => new EventStorage());
   const navigate = useNavigate();
   const location = useLocation();
@@ -339,6 +341,11 @@ const Map = () => {
     setMarkers((prevMarkers) => updateMarkerSelectionClass(prevMarkers, null)); // Deselect markers visually
     setTimeFilterSidebarOpen(true);
   };
+
+  const handleSymbolLegendClick = () => {
+    setIsLegendOpen(true);
+  };
+
   const handleCloseTimeFilterSidebar = () => {
     setTimeFilterSidebarOpen(false);
   };
@@ -433,7 +440,11 @@ const Map = () => {
   };
 
   return (
-    <PageLayout onPlusClick={handleAddEventClick} onTimeFilterClick={handleTimeFilterClick}>
+    <PageLayout
+      onPlusClick={handleAddEventClick}
+      onTimeFilterClick={handleTimeFilterClick}
+      onSymbolLegendClick={handleSymbolLegendClick}
+    >
       <div className="map-container">
         {isHistoricalMode && (
           <div className="historical-mode-banner">
@@ -523,6 +534,11 @@ const Map = () => {
           isOpen={timeFilterSidebarOpen}
           onClose={handleCloseTimeFilterSidebar}
           onFilterApplied={handleFilterApplied}
+        />
+
+        <LegendPopup
+          isOpen={isLegendOpen}
+          onClose={() => setIsLegendOpen(false)}
         />
       </div>
     </PageLayout>

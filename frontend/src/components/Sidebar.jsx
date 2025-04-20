@@ -1,9 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiFilter, FiPlusCircle } from "react-icons/fi";
+import { FiFilter, FiPlusCircle, FiInfo } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
-const icons = [{ Icon: FiFilter, alt: "Time Filter", id: "timeFilter" }];
+const icons = [
+  { Icon: FiFilter, alt: "Time Filter", id: "timeFilter" },
+  { Icon: FiInfo, alt: "Military Symbol Legend", id: "symbolLegend" }
+];
 
 const IconButton = ({ Icon, title, onClick, className }) => {
   return (
@@ -20,10 +23,12 @@ IconButton.propTypes = {
   className: PropTypes.string
 };
 
-export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick }) => {
+export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick, onSymbolLegendClick }) => {
   const handleIconClick = (icon) => {
     if (icon.id === "timeFilter" && onTimeFilterClick) {
       onTimeFilterClick();
+    } else if (icon.id === "symbolLegend" && onSymbolLegendClick) {
+      onSymbolLegendClick();
     } else {
       alert(`${icon.alt} clicked`);
     }
@@ -57,5 +62,6 @@ export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick }) => {
 Sidebar.propTypes = {
   className: PropTypes.string,
   onPlusClick: PropTypes.func,
-  onTimeFilterClick: PropTypes.func
+  onTimeFilterClick: PropTypes.func,
+  onSymbolLegendClick: PropTypes.func
 };
