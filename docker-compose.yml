@@ -1,14 +1,9 @@
 # Available ports:
 
-# 8000 - entry point (nginx)
 # 8001 - frontend service
 # 8002 - core service
 # 8003 - bridge service
 # 8004 - history service
-
-# 27017 - history-db
-# 6380 - redis
-# 5433 - core db
 
 services:
 
@@ -20,8 +15,6 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
     restart: always
-    ports:
-      - "27017:27017"
     volumes:
       - ./data/history-db:/data/db
     healthcheck:
@@ -71,8 +64,6 @@ services:
     container_name: redis
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-    ports:
-      - "6380:6379"
     volumes:
       - ./data/redis:/data
     restart: always
@@ -99,8 +90,6 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
-    ports:
-      - "9092:9092"
     environment:
       KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
       KAFKA_ZOOKEEPER_CONNECT: ${KAFKA_ZOOKEEPER_CONNECT}
@@ -121,8 +110,6 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
-      - "5433:5432"
     volumes:
       - ./data/core-db:/var/lib/postgresql/data
     restart: always
@@ -183,19 +170,6 @@ services:
       - 8003:80
     labels:
       com.datadoghq.ad.logs: '[{"source": "bridge", "service": "bridge"}]'
-
-  nginx:
-    build: server
-    container_name: nginx
-    restart: always
-    ports:
-      - "8000:80"
-    depends_on:
-      - core
-      - bridge
-      - frontend
-    labels:
-      com.datadoghq.ad.logs: '[{"source": "nginx", "service": "nginx"}]'
 
   datadog:
     image: datadog/agent:latest

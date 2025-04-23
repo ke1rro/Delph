@@ -21,7 +21,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-            cd delph
+            cd Delph
             git pull origin deployment
             docker-compose down
             docker-compose up --build -d
