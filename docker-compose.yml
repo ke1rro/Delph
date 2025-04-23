@@ -90,7 +90,10 @@ services:
     container_name: kafka
     depends_on:
       - zookeeper
+    volumes:
+      - ./log4j.properties:/opt/kafka/config/log4j.properties
     environment:
+      KAFKA_LOG4J_OPTS: "-Dlog4j.configuration=file:/opt/kafka/config/log4j.properties"
       KAFKA_BROKER_ID: ${KAFKA_BROKER_ID}
       KAFKA_ZOOKEEPER_CONNECT: ${KAFKA_ZOOKEEPER_CONNECT}
       KAFKA_ADVERTISED_LISTENERS: ${KAFKA_ADVERTISED_LISTENERS}
