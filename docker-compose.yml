@@ -35,8 +35,8 @@ services:
     ports:
       - "127.0.0.1:8004:80"
     volumes:
-      - ./certificates:/certificates
-      - ./logging.ini:/config/logging.ini
+      - ./certificates:/certificates:ro
+      - ./logging.ini:/config/logging.ini:ro
     depends_on:
       history-db:
         condition: service_healthy
@@ -50,7 +50,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./logging.ini:/config/logging.ini
+      - ./logging.ini:/config/logging.ini:ro
     depends_on:
       history-db:
         condition: service_healthy
@@ -131,8 +131,8 @@ services:
     ports:
       - "127.0.0.1:8002:80"
     volumes:
-      - ./certificates:/certificates
-      - ./logging.ini:/config/logging.ini
+      - ./certificates:/certificates:ro
+      - ./logging.ini:/config/logging.ini:ro
     depends_on:
       core-db:
         condition: service_healthy
@@ -164,8 +164,8 @@ services:
     environment:
       KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS}
     volumes:
-      - ./certificates:/certificates
-      - ./logging.ini:/config/logging.ini
+      - ./certificates:/certificates:ro
+      - ./logging.ini:/config/logging.ini:ro
     ports:
       - "127.0.0.1:8003:80"
     labels:
@@ -186,5 +186,5 @@ services:
      - /proc/:/host/proc/:ro
      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-     - ./nginx.yaml:/etc/datadog-agent/conf.d/nginx.d/conf.yaml:ro
      - /var/log/nginx:/var/log/nginx:ro
+     - ./datadog/nginx.yml:/etc/datadog-agent/conf.d/nginx.d/conf.yaml:ro
