@@ -186,3 +186,5 @@ services:
      - /proc/:/host/proc/:ro
      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+     - ./nginx.yaml:/etc/datadog-agent/conf.d/nginx.d/conf.yaml:ro
+     - /var/log/nginx:/var/log/nginx:ro
