@@ -27,4 +27,3 @@ jobs:
             git pull origin deployment
             docker-compose down
             docker-compose up --build -d
-    
