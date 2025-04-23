@@ -17,9 +17,7 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.VPS_HOST }}
-          port: ${{ secrets.VPS_PORT }}
-          username: ${{ secrets.VPS_USER }}
+          host: ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd Delph
