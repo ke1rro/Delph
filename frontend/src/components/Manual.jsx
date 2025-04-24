@@ -32,7 +32,6 @@ const Manual = () => {
         </p>
         <img src="registrarion_page_2.png" alt="Registration Page Screenshot" />
       </section>
-
       <section className="manual-section">
         <h2>Unique ID</h2>
         <p>
@@ -40,6 +39,16 @@ const Manual = () => {
         </p>
         <img src="regestration_info_ex_3.png" alt="Registration Info Screenshot" />
       </section>
+
+      <section className="manual-section">
+        <h2>Registration Completion</h2>
+        <p>
+          After successfully completing the registration process, you will see a confirmation screen. This screen will display your unique ID, which you must save for future logins.
+        </p>
+        <img src="registration_finish_4.png" alt="Registration Completion Screenshot" />
+      </section>
+
+
 
       <section className="manual-section">
         <h2>Login</h2>
