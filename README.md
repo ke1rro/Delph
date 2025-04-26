@@ -143,7 +143,8 @@ The system uses standardized military symbology based on APP-6B specifications t
 ### Real-time Operational Map
 <div align="center">
   <img src=".github/example.png" alt="Real-time Operational Map" width="100%" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-  <p>Live visualization of military entities using NATO APP-6B symbology, with focus on the Eastern European theater</p>
+  <p>Live visualization of military entities using NATO APP-6B symbology
+  </p>
 </div>
 
 ### Dashboard Overview
