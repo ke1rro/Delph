@@ -47,7 +47,8 @@ const TimeFilterSidebar = ({ isOpen, onClose, onFilterApplied }) => {
           { id: "air", label: "Air", prefix: "air:" },
           { id: "ground", label: "Ground", prefix: "ground:" },
           { id: "water", label: "Water", prefix: "water:" },
-          { id: "subsurface", label: "Subsurface", prefix: "subsurface:" }
+          { id: "subsurface", label: "Subsurface", prefix: "subsurface:" },
+          { id: "sof", label: "SOF", prefix: "sof:" }
         ]);
       } catch (error) {
         console.error("Error fetching SIDC data:", error);
