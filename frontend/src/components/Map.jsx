@@ -512,7 +512,15 @@ const Map = () => {
           </div>
         )}
 
-        <MapContainer center={[0, 0]} zoom={2} style={{ height: "100vh", width: "100%" }}>
+        <MapContainer
+          center={[0, 0]}
+          zoom={2}
+          minZoom={2}
+          maxBounds={[[-90, -180], [90, 180]]}
+          maxBoundsViscosity={1.0}
+          worldCopyJump={true}
+          style={{ height: "100vh", width: "100%" }}
+        >
           <TileLayer
             url={mapTiles[mapType].url}
             attribution={mapTiles[mapType].attribution}
