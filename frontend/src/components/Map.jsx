@@ -74,7 +74,7 @@ const Map = () => {
   const [filterParams, setFilterParams] = useState(null);
 
   // Add state for map type
-  const [mapType, setMapType] = useState("osm");
+  const [mapType, setMapType] = useState("satellite");
   const [mapTypeSelectorVisible, setMapTypeSelectorVisible] = useState(true);
 
   const mapTilerKey = "gDZXLN81ddWbbYqBpQOZ";
