@@ -2,7 +2,7 @@ import React from "react";
 import { FiMap, FiGlobe, FiHome, FiNavigation } from "react-icons/fi";
 import "../styles/MapTypeSelector.css";
 
-const MapTypeSelector = ({ selectedMapType, onSelectMapType }) => {
+const MapTypeSelector = ({ selectedMapType, onSelectMapType, isVisible = true }) => {
   const mapTypes = [
     { id: "osm", name: "OpenStreetMap", icon: FiGlobe },
     { id: "satellite", name: "Satellite", icon: FiNavigation },
@@ -11,7 +11,7 @@ const MapTypeSelector = ({ selectedMapType, onSelectMapType }) => {
   ];
 
   return (
-    <div className="map-type-selector">
+    <div className={`map-type-selector ${!isVisible ? 'hidden' : ''}`}>
       <div className="map-type-header">Map Style</div>
       <div className="map-type-options">
         {mapTypes.map((type) => {

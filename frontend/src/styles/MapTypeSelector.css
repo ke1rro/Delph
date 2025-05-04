@@ -11,6 +11,13 @@
   backdrop-filter: blur(5px);
   color: white;
   font-family: "Inter", sans-serif;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.map-type-selector.hidden {
+  transform: translateX(-180px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .map-type-header {

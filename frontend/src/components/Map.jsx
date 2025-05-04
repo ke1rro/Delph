@@ -75,6 +75,7 @@ const Map = () => {
 
   // Add state for map type
   const [mapType, setMapType] = useState("osm");
+  const [mapTypeSelectorVisible, setMapTypeSelectorVisible] = useState(true);
 
   const mapTilerKey = "gDZXLN81ddWbbYqBpQOZ";
 
@@ -470,11 +471,16 @@ const Map = () => {
     setMapType(type);
   };
 
+  const toggleMapTypeSelector = () => {
+    setMapTypeSelectorVisible(!mapTypeSelectorVisible);
+  };
+
   return (
     <PageLayout
       onPlusClick={handleAddEventClick}
       onTimeFilterClick={handleTimeFilterClick}
       onSymbolLegendClick={handleSymbolLegendClick}
+      onMapLayersClick={toggleMapTypeSelector}
     >
       <div className="map-container">
         {isHistoricalMode && (
@@ -552,6 +558,7 @@ const Map = () => {
         <MapTypeSelector
           selectedMapType={mapType}
           onSelectMapType={handleMapTypeChange}
+          isVisible={mapTypeSelectorVisible}
         />
 
         <EventSidebar
