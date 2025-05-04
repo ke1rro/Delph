@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { FiFilter, FiPlusCircle, FiInfo } from "react-icons/fi";
+import { FiFilter, FiPlusCircle, FiInfo, FiLayers } from "react-icons/fi";
 import "../styles/Sidebar.css";
 
 const icons = [
   { Icon: FiFilter, alt: "Time Filter", id: "timeFilter" },
+  { Icon: FiLayers, alt: "Map Layers", id: "mapLayers" },
   { Icon: FiInfo, alt: "Military Symbol Legend", id: "symbolLegend" }
 ];
 
@@ -23,12 +24,14 @@ IconButton.propTypes = {
   className: PropTypes.string
 };
 
-export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick, onSymbolLegendClick }) => {
+export const Sidebar = ({ className = "", onPlusClick, onTimeFilterClick, onSymbolLegendClick, onMapLayersClick }) => {
   const handleIconClick = (icon) => {
     if (icon.id === "timeFilter" && onTimeFilterClick) {
       onTimeFilterClick();
     } else if (icon.id === "symbolLegend" && onSymbolLegendClick) {
       onSymbolLegendClick();
+    } else if (icon.id === "mapLayers" && onMapLayersClick) {
+      onMapLayersClick();
     } else {
       alert(`${icon.alt} clicked`);
     }
@@ -63,5 +66,6 @@ Sidebar.propTypes = {
   className: PropTypes.string,
   onPlusClick: PropTypes.func,
   onTimeFilterClick: PropTypes.func,
-  onSymbolLegendClick: PropTypes.func
+  onSymbolLegendClick: PropTypes.func,
+  onMapLayersClick: PropTypes.func
 };
