@@ -11,9 +11,11 @@ import SidcDataService from "../utils/SidcDataService";
 import EventSidebar from "./EventSidebar";
 import TimeFilterSidebar from "./TimeFilterSidebar";
 import LegendPopup from "./LegendPopup";
+import MapTypeSelector from "./MapTypeSelector";
 import "../styles/EventSidebar.css";
 import "../styles/TimeFilterSidebar.css";
 import "../styles/Map.css";
+import "../styles/MapTypeSelector.css";
 
 async function createEventSVG(event) {
   const sidcDataService = SidcDataService.getInstance();
@@ -70,6 +72,31 @@ const Map = () => {
   const [pickedCoords, setPickedCoords] = useState(null);
   const [isHistoricalMode, setIsHistoricalMode] = useState(false);
   const [filterParams, setFilterParams] = useState(null);
+
+  // Add state for map type
+  const [mapType, setMapType] = useState("osm");
+
+  const mapTilerKey = "gDZXLN81ddWbbYqBpQOZ";
+
+  // Map type configurations
+  const mapTiles = {
+    osm: {
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    },
+    satellite: {
+      url: `https://api.maptiler.com/maps/satellite/{z}/{x}/{y}.jpg?key=${mapTilerKey}`,
+      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    },
+    streets: {
+      url: `https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=${mapTilerKey}`,
+      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    },
+    basic: {
+      url: `https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=${mapTilerKey}`,
+      attribution: '&copy; <a href="https://www.maptiler.com/">MapTiler</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }
+  };
 
   const updateMarkerSelectionClass = (currentMarkers, newSelectedEventId) => {
     return currentMarkers.map((marker) => {
@@ -439,6 +466,10 @@ const Map = () => {
     setSidebarOpen(false);
   };
 
+  const handleMapTypeChange = (type) => {
+    setMapType(type);
+  };
+
   return (
     <PageLayout
       onPlusClick={handleAddEventClick}
@@ -477,8 +508,8 @@ const Map = () => {
 
         <MapContainer center={[0, 0]} zoom={2} style={{ height: "100vh", width: "100%" }}>
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url={mapTiles[mapType].url}
+            attribution={mapTiles[mapType].attribution}
           />
           <MapClickHandler />
           <MapController
@@ -517,6 +548,11 @@ const Map = () => {
                 />
               ))}
         </MapContainer>
+
+        <MapTypeSelector
+          selectedMapType={mapType}
+          onSelectMapType={handleMapTypeChange}
+        />
 
         <EventSidebar
           isOpen={isSidebarEffectivelyOpen}

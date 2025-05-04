@@ -1,0 +1,71 @@
+.map-type-selector {
+  position: absolute;
+  top: 120px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  padding: 12px;
+  z-index: 1000;
+  width: 160px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  color: white;
+  font-family: "Inter", sans-serif;
+}
+
+.map-type-header {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #fff;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.map-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.map-type-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.map-type-option:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.map-type-option.active {
+  background-color: rgba(52, 152, 219, 0.6);
+  font-weight: 500;
+}
+
+.map-type-icon {
+  font-size: 16px;
+}
+
+.map-type-name {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .map-type-selector {
+    width: 120px;
+  }
+
+  .map-type-name {
+    font-size: 12px;
+  }
+}

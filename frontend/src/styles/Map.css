@@ -147,3 +147,26 @@ body {
     filter: drop-shadow(0 0 5px rgba(52, 152, 219, 0.7));
   }
 }
+
+
+.leaflet-top.leaflet-left {
+  margin-top: 220px;
+}
+
+@media (max-width: 768px) {
+  .map-type-selector {
+    top: 80px;
+    left: 5px;
+  }
+
+  .leaflet-top.leaflet-left {
+    margin-top: 180px;
+  }
+
+  .historical-mode-banner {
+    top: 50px;
+    left: 10px;
+    right: 10px;
+    padding: 8px 10px;
+  }
+}
