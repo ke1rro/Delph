@@ -123,12 +123,12 @@ def main():
     """
     Main function to create a battlefield and simulate tank movements.
     """
-    user_id = "aabb78734fb34946920fac8069ec2503"
+    user_id = "d6d6f0dd-385c-4540-b1af-7d312e41eed5"
     password = "StrongPass!2"
 
     objects = load_deepstate_objects()
 
-    client = HttpClient("http://localhost:8000/")
+    client = HttpClient("https://delph.live")
     bf = Battlefield(
         client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(20000)
     )

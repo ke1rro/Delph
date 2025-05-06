@@ -71,10 +71,10 @@ def main():
     longitude_delta = 0.01
     speed = 20
     speed_delta = 5
-    user_id = "81ab4d00-dd83-4b42-8301-e82c6bf5372f"
+    user_id = "d6d6f0dd-385c-4540-b1af-7d312e41eed5"
     password = "StrongPass!2"
 
-    client = HttpClient("http://localhost:8000/")
+    client = HttpClient("https://delph.live")
 
     bf = Battlefield(
         client=client, noise=NoiseNone(), message_builder=SimpleMessageBuilder(1000)
