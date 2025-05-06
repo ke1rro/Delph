@@ -31,9 +31,9 @@ class Missile:
         self.target_lat = target_lat
         self.target_lon = target_lon
         self.target_alt = target_alt
-        self.speed = 100.0
+        self.speed = 150.0
         self.created_at = time.time()
-        self.lifetime = 4.0
+        self.lifetime = 6.0
         self.lat_diff = target_lat - source_lat
         self.lon_diff = target_lon - source_lon
         self.alt_diff = target_alt - source_alt
@@ -165,7 +165,7 @@ class SimplePlane:
                 "entity": self.entity.entity,
                 "status": self.entity.status,
             },
-            "ttl": 1000,
+            "ttl": 10000,
         }
 
         if self.is_leader:
@@ -276,10 +276,10 @@ def main():
     """
     Main function to create multiple planes and simulate their movements.
     """
-    user_id = "aabb78734fb34946920fac8069ec2503"
+    user_id = "d6d6f0dd-385c-4540-b1af-7d312e41eed5"
     password = "StrongPass!2"
 
-    client = HttpClient("http://localhost:8000/")
+    client = HttpClient("https://delph.live")
     hostile_planes = create_hostile_formation(client)
     friendly_planes = create_friendly_formation(client)
     all_planes = hostile_planes + friendly_planes
@@ -294,7 +294,7 @@ def main():
         password=password,
     ):
         duration = 600
-        interval = 0.05
+        interval = 0.01
         start_time = time.time()
         while time.time() - start_time < duration:
             for plane in all_planes:
