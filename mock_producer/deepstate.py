@@ -123,7 +123,7 @@ def main():
     """
     Main function to create a battlefield and simulate tank movements.
     """
-    user_id = "81ab4d00-dd83-4b42-8301-e82c6bf5372f"
+    user_id = "aabb78734fb34946920fac8069ec2503"
     password = "StrongPass!2"
 
     objects = load_deepstate_objects()
